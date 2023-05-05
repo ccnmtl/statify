@@ -1,31 +1,35 @@
 const path = require('path');
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const devMode = process.env.NODE_ENV !== "production";
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
+        publicPath: '/dist/'
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js']
+        extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
     module: {
-        rules: [{
-            test: /\.(ts|js)x?$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader'
-        },
-        {
-            test: /\.css$/,
-            use: [devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader']
-        },
-        {
-            test: /\.(gif|png|jpe?g|svg)$/i,
-            type: 'asset/resource',
-        }]
+        rules: [
+            {
+                test: /\.(ts|js)x?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            },
+            {
+                test: /\.css$/,
+                use: [devMode ?
+                    'style-loader' : MiniCssExtractPlugin.loader, 'css-loader']
+            },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                type: 'asset/resource',
+            }
+        ]
     },
     plugins: [
         new webpack.DefinePlugin({
