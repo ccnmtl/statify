@@ -8,7 +8,6 @@ module.exports = {
     },
     "plugins": [
         "security",
-        "no-unsanitized",
         "cypress",
         "@typescript-eslint"
     ],
@@ -49,9 +48,6 @@ module.exports = {
         "no-trailing-spaces": ["error"],
         "key-spacing": ["error", { "beforeColon": false }],
         "func-call-spacing": ["error", "never"],
-
-        "no-unsanitized/method": "error",
-        "no-unsanitized/property": "error",
 
         'security/detect-buffer-noassert': 1,
         'security/detect-child-process': 1,

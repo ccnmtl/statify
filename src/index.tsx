@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './main.css';
+import { App } from './app';
 
 if (process.env.NODE_ENV === 'production') {
     Sentry.init({
@@ -18,10 +19,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 const container = document.getElementById('react-root');
 const root = ReactDOMClient.createRoot(container);
-
-const App: React.FC = () => {
-    return (<h1 className='text-danger'>Hello World!</h1>);
-};
 
 root.render(
     <App />
