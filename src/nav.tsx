@@ -1,4 +1,5 @@
 import React from 'react';
+import Logo from './images/logo.svg';
 
 export const Nav: React.FC = () => {
 
@@ -8,7 +9,7 @@ export const Nav: React.FC = () => {
                 data-bs-theme="dark">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">
-                        <img src="src/logo.svg" alt="Logo" height="80"
+                        <img src={Logo} alt="Logo" height="80"
                             className="d-inline-block align-text-top"></img>
                     </a>
                     <button className="navbar-toggler" type="button"
