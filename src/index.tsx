@@ -5,6 +5,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './main.css';
 import { App } from './app';
+import { BrowserRouter } from 'react-router-dom';
 
 if (process.env.NODE_ENV === 'production') {
     Sentry.init({
@@ -21,5 +22,9 @@ const container = document.getElementById('react-root');
 const root = ReactDOMClient.createRoot(container);
 
 root.render(
-    <App />
+    <React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </React.StrictMode>
 );

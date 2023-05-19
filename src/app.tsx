@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
+import { Route, Routes  } from 'react-router-dom';
 import { Nav } from './nav';
 import { DescriptiveStats} from './descriptiveStats';
 import { Home} from './home';
@@ -11,23 +11,21 @@ import { ConfidenceIntervals } from './confidenceIntervals';
 export const App: React.FC = () => {
 
     return (
-        <Router>
+        <>
+            <Nav />
+
             <Routes>
                 <Route path='*' element={<h1>404</h1>} />
-                <Route path="/" element={<><Nav /><Home /></>} />
+                <Route path="/" element={<Home />} />
                 <Route path="/descriptive"
-                    element={<><Nav /><DescriptiveStats /></>} />
-
+                    element={<DescriptiveStats />} />
                 <Route path="/inferential"
-                    element={<><Nav /><InferentialStats /></>} />
-
+                    element={<InferentialStats />} />
                 <Route path="/comparative"
-                    element={<><Nav /><ComparingGenres /></>} />
-
+                    element={<ComparingGenres />} />
                 <Route path="/confidence"
-                    element={<><Nav /><ConfidenceIntervals /></>} />
-
+                    element={<ConfidenceIntervals />} />
             </Routes>
-        </Router>
+        </>
     );
 };
