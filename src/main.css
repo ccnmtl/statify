@@ -1,8 +1,21 @@
-* { font-family: 'Poppins', sans-serif; }
-h1, .navbar-brand { font-weight: 700; }
-.navbar-brand { font-size: 1.75em; }
+* {
+    font-family: 'Poppins', sans-serif;
+}
 
-body { background-color: #000; }
+h1, .navbar-brand
+{
+    font-weight: 700;
+}
+
+.navbar-brand
+{
+    font-size: 1.75em;
+}
+
+body
+{
+    background-color: #000;
+}
 
 #nav-global
 {
@@ -10,15 +23,45 @@ body { background-color: #000; }
     border-bottom: 1px solid #1e1e1e;
 }
 
-#nav-global a { font-weight: 600; }
-
-
-.alert-success
+#nav-global a
 {
-    color: #000;
-    background-color: #37D247;
-    border: 0;
+    font-weight: 600;
 }
 
-form select {background-color: #0f0f0f!important; color: #fff!important; border: 1px solid #2c2c2c!important;}
-	
+form select
+{
+    background-color: #0f0f0f!important;
+    color: #fff!important;
+    border: 1px solid #2c2c2c!important;
+}
+
+.nav-pills
+{
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.nav-pills .nav-link
+{
+    border: 1px solid #1e1e1e;
+    margin-right: .5em;
+    color: #37D247!important;
+}
+
+.nav-pills .nav-link.active
+{
+    color: #000!important;
+    background-color: #efefef;
+    border: 1px solid #1e1e1e;
+}
+
+.nav-pills .nav-link.active:hover
+{
+    color: #000!important;
+    background-color: #fff;
+}
+
+.nav-pills .nav-link:hover
+{
+    border: 1px solid #333;
+    background-color: #222;
+}

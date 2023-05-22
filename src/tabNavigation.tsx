@@ -1,37 +1,39 @@
 import React from 'react';
+import { TabData } from './common';
 
-export const TabNav: React.FC = () => {
+interface TabNavProps {
+    tabsInfo: TabData[];
+    activeTab: number;
+    setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export const TabNav: React.FC<TabNavProps> = (
+    {tabsInfo, activeTab, setActiveTab}: TabNavProps
+) => {
+    const handleSetActiveTab = (
+        e: React.MouseEvent<HTMLAnchorElement>): void => {
+        e.preventDefault();
+        setActiveTab(Number(e.currentTarget.dataset.activeTab));
+    };
 
     return (
         <>
             <ul className="nav nav-pills">
-                <li className="nav-item">
-                    <a className="nav-link " href="#">
-                    Draw Data Points
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">
-                    Compare Genres
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" aria-current="page" href="#">
-                    Observe Feature Changes</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">
-                    Observe Histograms</a>
-                </li>
-            </ul><p className="p-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                dictum, elit ac cursus pharetra, tellus dui interdum lorem, ut
-                gravida diam nibh id dui. Quisque ut augue est. Proin quam
-                velit, vulputate id ullamcorper non, dapibus eu dui. Donec
-                cursus dolor at nisl lacinia hendrerit. In eros magna,
-                dignissim in nibh nec, bibendum eleifend dui. Cras ut sapien eu
-                quam placerat luctus id ut lectus. Morbi quis pretium mauris.
-                Sed sed magna quis nisi molestie faucibus.
+                {tabsInfo.map((tab: TabData, idx) => {
+                    return (
+                        <li key={idx} className='nav-item'>
+                            <a className={activeTab == idx ?
+                                'nav-link active' : 'nav-link'} href='#'
+                            data-active-tab={idx}
+                            onClick={handleSetActiveTab}>
+                                {tab.title}
+                            </a>
+                        </li>
+                    );
+                })}
+            </ul>
+            <p className="p-3">
+                {tabsInfo[activeTab].info}
             </p>
         </>
 
