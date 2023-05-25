@@ -65,3 +65,46 @@ form select
     border: 1px solid #333;
     background-color: #222;
 }
+
+#top
+{
+    background-color: #0f0f0f!important;
+    border-bottom: 1px solid #1e1e1e;
+}
+
+#graph
+{
+    background-color: #000;
+}
+
+#graph-inputs
+{
+    border-radius: 6px;
+    background-color: #0f0f0f;
+    border: 1px solid #1e1e1e;
+}
+
+form select
+{
+    background-color: #0f0f0f!important;
+    color: #fff!important;
+    border: 1px solid #2c2c2c!important;
+}
+
+#submit-btn
+{
+    padding: .75em 1.5em .75em 1.5em;
+    font-weight: 600;
+    --bs-btn-color: #000;
+    --bs-btn-border-radius: 100px;
+    --bs-btn-bg: #37D247;
+    --bs-btn-border-color: 0;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #32CA44;
+    --bs-btn-hover-border-color: #0;
+    --bs-btn-focus-shadow-rgb: 0;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #fff;
+    --bs-btn-active-border-color: #0;
+    --bs-btn-active-shadow: 0;
+}

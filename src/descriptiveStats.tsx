@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TabNav } from './tabNavigation';
 import { TabData } from './common';
+import { GraphForm } from './graphForm';
 
 const descriptiveTabs: TabData[] = [
     {title: 'Part 1', info: 'Etiam sagittis ornare libero, vitae blandit.'}
@@ -19,6 +20,22 @@ export const DescriptiveStats: React.FC = () => {
                         activeTab={activeTab}
                         setActiveTab={setActiveTab} />
                 </div>
+            </section>
+            <section id="graph" className="mt-4">
+                <div className="container-fluid">
+                    <div className="row">
+                        <GraphForm
+                            genre1Field={true}
+                            genre2Field={false}
+                            audioFeatureField={false}
+                            dataPointsField={false} />
+
+                        <p>
+                            Q/A here
+                        </p>
+                    </div>
+                </div>
+
             </section>
         </>
     );

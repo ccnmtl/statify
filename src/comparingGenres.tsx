@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TabNav } from './tabNavigation';
 import { TabData } from './common';
+import { GraphForm } from './graphForm';
 
 const comparingTabs: TabData[] = [
     {title: 'Part 3.1', info: 'Fusce nec mi ac odio finibus tristique.'},
@@ -22,6 +23,22 @@ export const ComparingGenres: React.FC = () => {
                         activeTab={activeTab}
                         setActiveTab={setActiveTab} />
                 </div>
+            </section>
+            <section id="graph" className="mt-4">
+                <div className="container-fluid">
+                    <div className="row">
+                        <GraphForm
+                            genre1Field={true}
+                            genre2Field={true}
+                            audioFeatureField={true}
+                            dataPointsField={true} />
+
+                        <p>
+                            Q/A here
+                        </p>
+                    </div>
+                </div>
+
             </section>
         </>
     );
