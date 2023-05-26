@@ -1,6 +1,7 @@
 {
   "name": "statify",
   "version": "0.1.0",
+  "main": "index.js",
   "scripts": {
     "build:dev": "webpack --node-env development",
     "build:prod": "webpack --node-env production",
