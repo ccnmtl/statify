@@ -29,10 +29,12 @@ export const ConfidenceIntervals: React.FC = () => {
                             genre2Field={true}
                             audioFeatureField={true}
                             dataPointsField={false} />
-
-                        <p>
+                        <div className='mt-4'>
+                            <h2>Questions</h2>
+                            <p>
                             Q/A here
-                        </p>
+                            </p>
+                        </div>
                     </div>
                 </div>
 

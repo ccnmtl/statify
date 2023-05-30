@@ -1,5 +1,6 @@
 import React from 'react';
 import genres from '../data/trackDataByGenre.json';
+import { Graph } from './graphs';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -22,7 +23,9 @@ export const GraphForm: React.FC<GraphFormProps>  = (
     return (
         <>
             <div className="col-md-9">
-        Graph here
+                <div>
+                    <Graph />
+                </div>
             </div>
             <div className="col-md-3">
                 <form id='graph-inputs' className='sticky-top p-3'>

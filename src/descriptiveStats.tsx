@@ -29,10 +29,12 @@ export const DescriptiveStats: React.FC = () => {
                             genre2Field={false}
                             audioFeatureField={false}
                             dataPointsField={false} />
-
-                        <p>
+                        <div className='mt-4'>
+                            <h2>Questions</h2>
+                            <p>
                             Q/A here
-                        </p>
+                            </p>
+                        </div>
                     </div>
                 </div>
 

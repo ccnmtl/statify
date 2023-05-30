@@ -32,10 +32,12 @@ export const ComparingGenres: React.FC = () => {
                             genre2Field={true}
                             audioFeatureField={true}
                             dataPointsField={true} />
-
-                        <p>
+                        <div className='mt-4'>
+                            <h2>Questions</h2>
+                            <p>
                             Q/A here
-                        </p>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
