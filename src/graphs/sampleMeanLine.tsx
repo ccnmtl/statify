@@ -1,7 +1,16 @@
 import React from 'react';
 
-export const CumulativeSampleMean: React.FC  = () => {
+interface CumulativeSampleMeanProps {
+    genre1: string
+    genre2: string | null;
+    audioFeature: string | null;
+    dataPoints: number;
+}
 
+
+export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
+    {genre1, genre2, audioFeature, dataPoints}
+) => {
 
     return (
         <>
