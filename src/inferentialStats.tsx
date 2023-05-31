@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TabNav } from './tabNavigation';
 import { TabData } from './common';
 import { GraphForm } from './graphForm';
@@ -11,6 +11,15 @@ const inferentialTabs: TabData[] = [
 
 export const InferentialStats: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
+    const [graphTypes, setGraphTypes] = useState([1, 2]);
+
+    useEffect(() => {
+        if (activeTab === 2) {
+            setGraphTypes([1, 2, 3]);
+        } else {
+            setGraphTypes([1, 2]);
+        }
+    }, [activeTab]);
 
     return (
         <>
@@ -30,11 +39,14 @@ export const InferentialStats: React.FC = () => {
                             genre1Field={true}
                             genre2Field={false}
                             audioFeatureField={false}
-                            dataPointsField={true} />
-
-                        <p>
+                            dataPointsField={true}
+                            graphTypes={graphTypes} />
+                        <div className='mt-4'>
+                            <h2>Questions</h2>
+                            <p>
                             Q/A here
-                        </p>
+                            </p>
+                        </div>
                     </div>
                 </div>
 

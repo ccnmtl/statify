@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabNav } from './tabNavigation';
 import { TabData } from './common';
 import { GraphForm } from './graphForm';
@@ -12,7 +12,15 @@ const comparingTabs: TabData[] = [
 
 export const ComparingGenres: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
+    const [graphTypes, setGraphTypes] = useState([2]);
 
+    useEffect(() => {
+        if (activeTab === 3) {
+            setGraphTypes([2, 3]);
+        } else {
+            setGraphTypes([2]);
+        }
+    }, [activeTab]);
     return (
         <>
             <section id="top">
@@ -31,11 +39,14 @@ export const ComparingGenres: React.FC = () => {
                             genre1Field={true}
                             genre2Field={true}
                             audioFeatureField={true}
-                            dataPointsField={true} />
-
-                        <p>
+                            dataPointsField={true}
+                            graphTypes={graphTypes} />
+                        <div className='mt-4'>
+                            <h2>Questions</h2>
+                            <p>
                             Q/A here
-                        </p>
+                            </p>
+                        </div>
                     </div>
                 </div>
 

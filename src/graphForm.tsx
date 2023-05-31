@@ -1,11 +1,15 @@
 import React from 'react';
 import genres from '../data/trackDataByGenre.json';
+import { SampleDataHistogram } from './graphs/sampleDataHistogram';
+import { CumulativeSampleMean } from './graphs/sampleMeanLine';
+import { SamplingDistributionHistogram } from './graphs/distributionHistogram';
 
 interface GraphFormProps {
     genre1Field: boolean;
     genre2Field: boolean;
     audioFeatureField: boolean;
     dataPointsField: boolean;
+    graphTypes: number[];
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
@@ -14,15 +18,32 @@ const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
 const dataPoints: number[] = [1, 10, 25, 50, 75, 100];
 
 export const GraphForm: React.FC<GraphFormProps>  = (
-    {genre1Field, genre2Field, audioFeatureField, dataPointsField}:
+    {genre1Field, genre2Field, audioFeatureField, dataPointsField, graphTypes}:
     GraphFormProps) => {
-    const genresText: string[] = Object.keys(genres);
 
+    const genresText: string[] = Object.keys(genres);
+    const SAMPLEDATA = 1;
+    const SAMPLEMEAN = 2;
+    const DISTRIBUTION = 3;
+    const SAMPLEDATA2 = 4;
 
     return (
         <>
             <div className="col-md-9">
-        Graph here
+                <div className='row'>
+                    {graphTypes.includes(SAMPLEDATA) && (
+                        <SampleDataHistogram />
+                    )}
+                    {graphTypes.includes(SAMPLEDATA2) && (
+                        <SampleDataHistogram />
+                    )}
+                    {graphTypes.includes(SAMPLEMEAN) && (
+                        <CumulativeSampleMean />
+                    )}
+                    {graphTypes.includes(DISTRIBUTION) && (
+                        <SamplingDistributionHistogram />
+                    )}
+                </div>
             </div>
             <div className="col-md-3">
                 <form id='graph-inputs' className='sticky-top p-3'>
