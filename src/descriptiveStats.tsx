@@ -14,7 +14,11 @@ export const DescriptiveStats: React.FC = () => {
         <>
             <section id="top">
                 <div className="container-fluid">
-                    <h1 className={'py-4 px-3'}>Descriptive Stats</h1>
+                    <h1 className={'py-4 px-3'}>1.Descriptive Statistics</h1>
+                    <p className='lead py-4 px-3'>
+                        This copy describes what this Descriptive Statistics
+                        unit is all about.
+                    </p>
                     <TabNav
                         tabsInfo={descriptiveTabs}
                         activeTab={activeTab}

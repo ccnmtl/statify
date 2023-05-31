@@ -46,6 +46,17 @@ export const GraphForm: React.FC<GraphFormProps>  = (
                 </div>
             </div>
             <div className="col-md-3">
+                <h2>
+                    <small>Instructions</small>
+                </h2>
+                <p>
+                    <small> Lorem ipsum dolor sit amet, consectetur adipiscing
+                         elit. Donec dictum, elit ac cursus pharetra, tellus
+                         dui interdum lorem, ut gravida diam nibh id dui.
+                         Quisque ut augue est.
+                    </small>
+                </p>
+
                 <form id='graph-inputs' className='sticky-top p-3'>
                     {genre1Field && (
                         <div className='mb-3'>
@@ -121,7 +132,6 @@ export const GraphForm: React.FC<GraphFormProps>  = (
                                 })}
                             </select>
                         </div>
-
                     )}
                     <button type='submit' id='submit-btn'
                         className='btn btn-primary'>
