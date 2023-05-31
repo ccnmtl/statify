@@ -25,7 +25,11 @@ export const InferentialStats: React.FC = () => {
         <>
             <section id="top">
                 <div className="container-fluid">
-                    <h1 className={'py-4 px-3'}>Inferential Stats</h1>
+                    <h1 className={'py-4 px-3'}>2.Inferential Stats</h1>
+                    <p className='lead py-4 px-3'>
+                        This copy describes what this Inferential Statistics
+                        unit is all about.
+                    </p>
                     <TabNav
                         tabsInfo={inferentialTabs}
                         activeTab={activeTab}

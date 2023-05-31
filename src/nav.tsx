@@ -34,25 +34,25 @@ export const Nav: React.FC = () => {
                             <li className='nav-item'>
                                 <Link to='/descriptive'
                                     className='nav-link'>
-                                    Descriptive Statistics
+                                    1.Descriptive Statistics
                                 </Link>
                             </li>
                             <li className='nav-item'>
                                 <Link to='/inferential'
                                     className='nav-link'>
-                                    Inferential Statistics
+                                    2.Inferential Statistics
                                 </Link>
                             </li>
                             <li className='nav-item'>
                                 <Link to='/comparative'
                                     className='nav-link'>
-                                    Comparing Genres
+                                    3.Comparing Genres
                                 </Link>
                             </li>
                             <li className='nav-item'>
                                 <Link to='/confidence'
                                     className='nav-link'>
-                                    Confidence Intervals
+                                    4.Confidence Intervals
                                 </Link>
                             </li>
                         </ul>
