@@ -4,7 +4,7 @@ import { TabData } from './common';
 import { GraphForm } from './graphForm';
 
 const descriptiveTabs: TabData[] = [
-    {title: 'Part 1', info: 'Etiam sagittis ornare libero, vitae blandit.'}
+    {title: 'Part 1.1', info: 'Etiam sagittis ornare libero, vitae blandit.'}
 ];
 
 export const DescriptiveStats: React.FC = () => {
@@ -28,7 +28,8 @@ export const DescriptiveStats: React.FC = () => {
                             genre1Field={true}
                             genre2Field={false}
                             audioFeatureField={false}
-                            dataPointsField={false} />
+                            dataPointsField={false}
+                            graphTypes={[1]} />
                         <div className='mt-4'>
                             <h2>Questions</h2>
                             <p>

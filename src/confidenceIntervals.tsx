@@ -4,7 +4,8 @@ import { TabData } from './common';
 import { GraphForm } from './graphForm';
 
 const confidenceTabs: TabData[] = [
-    {title: 'Part 4', info: 'Nunc eget laoreet orci, convallis maximus purus.'}
+    {title: 'Part 4.1',
+        info: 'Nunc eget laoreet orci, convallis maximus purus.'}
 ];
 
 export const ConfidenceIntervals: React.FC = () => {
@@ -28,7 +29,8 @@ export const ConfidenceIntervals: React.FC = () => {
                             genre1Field={true}
                             genre2Field={true}
                             audioFeatureField={true}
-                            dataPointsField={false} />
+                            dataPointsField={false}
+                            graphTypes={[1, 3, 4]} />
                         <div className='mt-4'>
                             <h2>Questions</h2>
                             <p>
