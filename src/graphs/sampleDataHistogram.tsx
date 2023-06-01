@@ -1,7 +1,15 @@
 import React from 'react';
 
-export const SampleDataHistogram: React.FC  = () => {
+interface SampleDataHistogramProps {
+    genre1: string
+    genre2: string | null;
+    audioFeature: string | null;
+    dataPoints: number;
+}
 
+export const SampleDataHistogram: React.FC<SampleDataHistogramProps>  = (
+    {genre1, genre2, audioFeature, dataPoints}
+) => {
 
     return (
         <>
