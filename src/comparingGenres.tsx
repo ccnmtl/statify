@@ -26,6 +26,10 @@ export const ComparingGenres: React.FC = () => {
             <section id="top">
                 <div className="container-fluid">
                     <h1 className={'py-4 px-3'}>Comparing Genres</h1>
+                    <p className='lead py-4 px-3'>
+                        This copy describes what this Comparing Genres
+                        unit is all about.
+                    </p>
                     <TabNav
                         tabsInfo={comparingTabs}
                         activeTab={activeTab}

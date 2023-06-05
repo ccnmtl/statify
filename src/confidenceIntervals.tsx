@@ -15,7 +15,11 @@ export const ConfidenceIntervals: React.FC = () => {
         <>
             <section id="top">
                 <div className="container-fluid">
-                    <h1 className={'py-4 px-3'}>Confidence Intervals</h1>
+                    <h1 className={'py-4 px-3'}>4.Confidence Intervals</h1>
+                    <p className='lead py-4 px-3'>
+                        This copy describes what this Confidence Intervals
+                        unit is all about.
+                    </p>
                     <TabNav
                         tabsInfo={confidenceTabs}
                         activeTab={activeTab}
