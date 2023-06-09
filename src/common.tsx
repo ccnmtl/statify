@@ -1,4 +1,4 @@
-export interface TabData {
+export type TabData = {
     title: string;
     info: string;
 }
