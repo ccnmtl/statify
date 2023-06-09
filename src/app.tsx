@@ -16,14 +16,14 @@ export const App: React.FC = () => {
 
             <Routes>
                 <Route path='*' element={<h1>404</h1>} />
-                <Route path="/" element={<Home />} />
-                <Route path="/descriptive"
+                <Route path='/' element={<Home />} />
+                <Route path='/descriptive'
                     element={<DescriptiveStats />} />
-                <Route path="/inferential"
+                <Route path='/inferential'
                     element={<InferentialStats />} />
-                <Route path="/comparative"
+                <Route path='/comparative'
                     element={<ComparingGenres />} />
-                <Route path="/confidence"
+                <Route path='/confidence'
                     element={<ConfidenceIntervals />} />
             </Routes>
         </>

@@ -50,10 +50,10 @@ export const InferentialStats: React.FC = () => {
 
     return (
         <>
-            <section id={'top'}>
+            <section className={'statify-section'}>
                 <div className={'container-fluid'}>
                     <h1 className={'py-4 px-3'}>
-                        2.Inferential Stats
+                        2.Inferential Statistics
                     </h1>
                     <p className='lead py-4 px-3'>
                         This copy describes what this Inferential Statistics
@@ -65,7 +65,7 @@ export const InferentialStats: React.FC = () => {
                         setActiveTab={setActiveTab} />
                 </div>
             </section>
-            <section id={'graph'} className={'mt-4'}>
+            <section className={'mt-4 graph'}>
                 <div className={'container-fluid'}>
                     <div className={'row'}>
                         <GraphForm
