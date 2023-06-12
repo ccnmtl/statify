@@ -2,12 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { TabNav } from './tabNavigation';
 import { TabData } from './common';
 import { GraphForm } from './graphForm';
+import { Assignment } from './assignments/assignment';
 
 const comparingTabs: TabData[] = [
     {title: 'Part 3.1', info: 'Fusce nec mi ac odio finibus tristique.'},
     {title: 'Part 3.2', info: 'Quisque tempus sem at ligula luctus lacinia.'},
     {title: 'Part 3.3', info: 'Ut lacinia blandit orci, eu viverra nulla.'},
     {title: 'Part 3.4', info: 'Sed pulvinar urna orci, id dictum elit hendrer'}
+];
+
+const questions: string[] = [
+    'Etiam sagittis ornare libero, vitae blandit orci sodales nec. Quisque tem'
+    + 'pus sem at ligula luctus lacinia. Aenean nec elementum nisl, sit amet v'
+    + 'olutpat mi. Sed quis purus nec sapien aliquam tristique. Sed',
+    'vitae lorem quis elit scelerisque sodales. Nulla ante libero, t'
+    + 'empus sit amet eros nec, convallis suscipit augue. Nam tempus'
+    + 'rutrum cursus. Ut lacinia blandit orci, eu viverra nulla. Sed '
+    + 'pulvinar urna orci, id dictum elit hendrerit a.'
 ];
 
 export const ComparingGenres: React.FC = () => {
@@ -45,12 +56,11 @@ export const ComparingGenres: React.FC = () => {
                             audioFeatureField={true}
                             dataPointsField={true}
                             graphTypes={graphTypes} />
-                        <div className='mt-4'>
-                            <h2>Questions</h2>
-                            <p>
-                            Q/A here
-                            </p>
-                        </div>
+                    </div>
+                    <div className='row'>
+                        <Assignment
+                            questions={questions}
+                        />
                     </div>
                 </div>
 
