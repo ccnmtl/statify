@@ -56,6 +56,18 @@ export const GraphForm: React.FC<GraphFormProps> = (
     return (
         <>
             <div className="col-md-9">
+                <div className="alert statify-alert" role="alert">
+                    {(genre1 && !genre2) && (
+                        `You are sampling from ${genre1}`
+                    )}
+                    {(genre1 && genre2) && (
+                        `You are sampling from ${genre1} and ${genre2}`
+                    )}
+                    {!(genre1 || genre2) && (
+                        'The copy in this alert depends on the form '
+                        + 'input on the right—check it out!'
+                    )}
+                </div>
                 <div className='row'>
                     {graphTypes.includes(SAMPLEDATA) && (
                         <SampleDataHistogram
