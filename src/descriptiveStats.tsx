@@ -23,8 +23,8 @@ export const DescriptiveStats: React.FC = () => {
 
     return (
         <>
-            <section id="top">
-                <div className="container-fluid">
+            <section className={'statify-section'}>
+                <div className={'container-fluid'}>
                     <h1 className={'py-4 px-3'}>1.Descriptive Statistics</h1>
                     <p className='lead py-4 px-3'>
                         This copy describes what this Descriptive Statistics
@@ -36,9 +36,9 @@ export const DescriptiveStats: React.FC = () => {
                         setActiveTab={setActiveTab} />
                 </div>
             </section>
-            <section id="graph" className="mt-4">
-                <div className="container-fluid">
-                    <div className="row">
+            <section className={'mt-4 graph'}>
+                <div className={'container-fluid'}>
+                    <div className={'row'}>
                         <GraphForm
                             genre1Field={true}
                             genre2Field={false}

@@ -18,7 +18,7 @@ export const TabNav: React.FC<TabNavProps> = (
 
     return (
         <>
-            <ul className="nav nav-pills">
+            <ul className={'nav nav-pills'}>
                 {tabsInfo.map((tab: TabData, idx) => {
                     return (
                         <li key={idx} className='nav-item'>
@@ -32,7 +32,7 @@ export const TabNav: React.FC<TabNavProps> = (
                     );
                 })}
             </ul>
-            <p className="p-3">
+            <p className={'p-3'}>
                 {tabsInfo[activeTab].info}
             </p>
         </>

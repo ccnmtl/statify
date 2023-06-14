@@ -34,10 +34,10 @@ export const ComparingGenres: React.FC = () => {
     }, [activeTab]);
     return (
         <>
-            <section id="top">
-                <div className="container-fluid">
-                    <h1 className={'py-4 px-3'}>Comparing Genres</h1>
-                    <p className='lead py-4 px-3'>
+            <section className={'statify-section'}>
+                <div className={'container-fluid'}>
+                    <h1 className={'py-4 px-3'}>3.Comparing Genres</h1>
+                    <p className={'lead py-4 px-3'}>
                         This copy describes what this Comparing Genres
                         unit is all about.
                     </p>
@@ -47,9 +47,9 @@ export const ComparingGenres: React.FC = () => {
                         setActiveTab={setActiveTab} />
                 </div>
             </section>
-            <section id="graph" className="mt-4">
-                <div className="container-fluid">
-                    <div className="row">
+            <section className={'mt-4 graph'}>
+                <div className={'container-fluid'}>
+                    <div className={'row'}>
                         <GraphForm
                             genre1Field={true}
                             genre2Field={true}

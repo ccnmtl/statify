@@ -66,18 +66,18 @@ form select
     background-color: #222;
 }
 
-#top
+.statify-section
 {
     background-color: #0f0f0f!important;
     border-bottom: 1px solid #1e1e1e;
 }
 
-#graph
+.graph
 {
     background-color: #000;
 }
 
-#graph-inputs
+.graph-inputs
 {
     border-radius: 6px;
     background-color: #0f0f0f;
