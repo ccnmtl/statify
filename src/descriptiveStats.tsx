@@ -2,9 +2,20 @@ import React, { useState } from 'react';
 import { TabNav } from './tabNavigation';
 import { TabData } from './common';
 import { GraphForm } from './graphForm';
+import { Assignment } from './assignments/assignment';
 
 const descriptiveTabs: TabData[] = [
     {title: 'Part 1.1', info: 'Etiam sagittis ornare libero, vitae blandit.'}
+];
+
+const questions: string[] = [
+    'Etiam sagittis ornare libero, vitae blandit orci sodales nec. Quisque tem'
+    + 'pus sem at ligula luctus lacinia. Aenean nec elementum nisl, sit amet v'
+    + 'olutpat mi. Sed quis purus nec sapien aliquam tristique. Sed',
+    'vitae lorem quis elit scelerisque sodales. Nulla ante libero, t'
+    + 'empus sit amet eros nec, convallis suscipit augue. Nam tempus'
+    + 'rutrum cursus. Ut lacinia blandit orci, eu viverra nulla. Sed '
+    + 'pulvinar urna orci, id dictum elit hendrerit a.'
 ];
 
 export const DescriptiveStats: React.FC = () => {
@@ -34,12 +45,11 @@ export const DescriptiveStats: React.FC = () => {
                             audioFeatureField={false}
                             dataPointsField={false}
                             graphTypes={[1]} />
-                        <div className='mt-4'>
-                            <h2>Questions</h2>
-                            <p>
-                            Q/A here
-                            </p>
-                        </div>
+                    </div>
+                    <div className='row'>
+                        <Assignment
+                            questions={questions}
+                        />
                     </div>
                 </div>
 

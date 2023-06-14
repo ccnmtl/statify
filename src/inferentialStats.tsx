@@ -79,7 +79,6 @@ export const InferentialStats: React.FC = () => {
                         <Assignment
                             questions={questions}
                         />
-
                     </div>
                 </div>
             </section>
