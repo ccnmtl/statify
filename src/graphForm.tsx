@@ -3,6 +3,7 @@ import genres from '../data/trackDataByGenre.json';
 import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { SamplingDistribution } from './graphs/distributionHistogram';
+import { InstructionData } from './common';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -10,6 +11,8 @@ interface GraphFormProps {
     audioFeatureField: boolean;
     dataPointsField: boolean;
     graphTypes: number[];
+    activeTab: number;
+    instructions: InstructionData[];
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
@@ -19,7 +22,8 @@ const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 
 export const GraphForm: React.FC<GraphFormProps> = (
     {
-        genre1Field, genre2Field, audioFeatureField, dataPointsField, graphTypes
+        genre1Field, genre2Field, audioFeatureField, dataPointsField,
+        graphTypes, instructions, activeTab
     }:
         GraphFormProps) => {
     const [genre1, setGenre1] = useState<string>();
@@ -105,10 +109,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         <small>Instructions</small>
                     </h2>
                     <p>
-                        <small> Lorem ipsum dolor sit amet, consectetur
-                        adipiscing elit. Donec dictum, elit ac cursus pharetra,
-                        tellus dui interdum lorem, ut gravida diam nibh id dui.
-                        Quisque ut augue est.
+                        <small>
+                            {instructions[activeTab].instruction}
                         </small>
                     </p>
 
