@@ -3,7 +3,9 @@ import genres from '../data/trackDataByGenre.json';
 import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { SamplingDistribution } from './graphs/distributionHistogram';
+import { Histogram } from './graphs/Histogram';
 import { InstructionData } from './common';
+import { AudioFeature, Genre, toTitleCase } from './common';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -20,31 +22,92 @@ const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
 
 const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 
+const boxMullerTransform = function() {
+    const u1 = Math.random();
+    const u2 = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+};
+
 export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
         graphTypes, instructions, activeTab
     }:
         GraphFormProps) => {
-    const [genre1, setGenre1] = useState<string>();
-    const [genre2, setGenre2] = useState<string>();
-    const [audioFeature, setAudioFeature] = useState<string>();
-    const [dataPoints, setDataPoints] = useState(1);
-
     const genresText: string[] = Object.keys(genres);
+
+    const [audioFeature, setAudioFeature] = useState<string>(audioFeatures[0]);
+    const [data1, setData1] = useState<number[]>([]);
+    const [data2, setData2] = useState<number[]>([]);
+    const [dataPoints, setDataPoints] = useState(1);
+    const [genre1, setGenre1] = useState<string>(genresText[0]);
+    const [genre2, setGenre2] = useState<string>();
+
     const SAMPLEDATA = 1;
     const SAMPLEMEAN = 2;
     const DISTRIBUTION = 3;
     const SAMPLEDATA2 = 4;
 
+    /**
+     * Produces a set of randomized numbers based on normal (Gaussian)
+     * distribution. The range of numbers generated is determined by the
+     * preprocessed mean and standard deviation of the selected genre and audio
+     * feature.
+     * @param genre The selected music genre ('latin' by default)
+     * @param feature The selected audio feature ('danceability' by default)
+     * @param amount The number of datapoints to generate (1 by default)
+     * @returns And array of new data points
+     */
+    const randomGaussianSet = function(
+        genre:string, feature:string, amount:number) {
+
+        const data:number[] = [];
+        for (let i = 0; i < amount; i++) {
+            const genreData = genres[genre] as Genre;
+            const featureData = genreData[feature] as AudioFeature;
+            data.push(featureData.sd * boxMullerTransform() + featureData.mean);
+        }
+        return data;
+    };
+
+    const handleDataUpdate = function() {
+        let amount = dataPoints;
+        if (data1.length + dataPoints > 100) {
+            amount = 100 - data1.length;
+            setData1([
+                ...randomGaussianSet(genre1, audioFeature, amount)
+            ]);
+            if (genre2) {
+                setData2([
+                    ...randomGaussianSet(genre2, audioFeature, amount)
+                ]);
+            }
+        } else {
+            setData1([
+                ...data1,
+                ...randomGaussianSet(genre1, audioFeature, amount)
+            ]);
+            if (genre2) {
+                setData2([
+                    ...data2,
+                    ...randomGaussianSet(genre2, audioFeature, amount)
+                ]);
+            }
+        }
+    };
+
     const handleGenre1Select = (
         evt: React.ChangeEvent<HTMLSelectElement>): void => {
         setGenre1(evt.target.value);
+        setData1([]);
+        setData2([]);
     };
 
     const handleGenre2Select = (
         evt: React.ChangeEvent<HTMLSelectElement>): void => {
         setGenre2(evt.target.value);
+        setData1([]);
+        setData2([]);
     };
 
     const handleAudioFeatureSelect = (
@@ -62,10 +125,11 @@ export const GraphForm: React.FC<GraphFormProps> = (
             <div className={'col-md-9'}>
                 <div className={'alert statify-alert'}role={'alert'}>
                     {(genre1 && !genre2) && (
-                        `You are sampling from ${genre1}`
+                        `You are sampling from ${toTitleCase(genre1)}`
                     )}
                     {(genre1 && genre2) && (
-                        `You are sampling from ${genre1} and ${genre2}`
+                        `You are sampling from ${toTitleCase(genre1)}
+                        and ${toTitleCase(genre2)}`
                     )}
                     {!(genre1 || genre2) && (
                         'The copy in this alert depends on the form '
@@ -74,11 +138,12 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 </div>
                 <div className='row'>
                     {graphTypes.includes(SAMPLEDATA) && (
-                        <SampleDataHistogram
+                        <Histogram
+                            data1={data1}
+                            data2={data2}
                             genre1={genre1}
                             genre2={genre2}
-                            audioFeature={audioFeature}
-                            dataPoints={dataPoints} />
+                            audioFeature={audioFeature}/>
                     )}
                     {graphTypes.includes(SAMPLEDATA2) && (
                         <SampleDataHistogram
@@ -114,7 +179,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         </small>
                     </p>
 
-                    <form className='p-2 graph-inputs'>
+                    <div className='p-2 graph-inputs'>
                         {genre1Field && (
                             <div className='mb-3'>
                                 <label htmlFor='genre1'
@@ -196,10 +261,12 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             </div>
                         )}
                         <button type='submit' id='submit-btn'
-                            className='btn btn-primary'>
-                        Submit
+                            className='btn btn-primary'
+                            onClick={handleDataUpdate}
+                        >
+                            Submit
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </>
