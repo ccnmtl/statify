@@ -1,29 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { TabNav } from './tabNavigation';
-import { TabData } from './common';
+import { TabData, InstructionData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 
 const inferentialTabs: TabData[] = [
     {title: 'Part 2.1', info:
-    'Now lets add a plot to help us track variability in the sample mean ' +
-    'across separate samples. The line plot shows the number of data points' +
-    ' drawn on the X axis and the sample mean on the Y axis. The histogram '
-    + 'still shows the distribution of data points for an individual sample. '
-    + 'Click the "draw data point” button a few dozen times. What happens?'},
+    'The purpose of the simulation in Part 2.1 is to introduce you to the “Cu'
+    + 'mulative Sample Mean” plot. The plot will help you to track variability'
+    + ' in the sample mean across separate samples. The line plot shows the ' +
+    'number of data points drawn on the X axis and the sample mean on the Y' +
+    ' axis.'},
 
     {title: 'Part 2.2', info:
-    'The line plot will store sample means from ' +
-    'multiple samples. Increase the # of data points to draw, then keep ' +
-    'clicking the “Draw data point” button until you have drawn more than ' +
-    '100 data points. What happens on the line plot?'},
+    'The purpose of the simulation in Part 2.2 is for you to use the ' +
+    '“Cumulative Sample Mean” plot to investigate the relationship between ' +
+    'sample size and the dispersion of sample means. The line plot will store '
+    + 'sample means from multiple samples.'},
 
     {title: 'Part 2.3', info:
-    'One more piece of complexity! The histogram at the bottom now shows' +
-    ' the distribution of sample means (for samples containing 100 data ' +
-    'points). Increase the number of data points drawn to 25 and press the ' +
-    '“draw data point” button a bunch of times. What happens on the bottom ' +
-    'histogram?'}
+    'The purpose of the simulation in Part 2.3 is to introduce you to a ' +
+    'sampling distribution and to highlight 1) that the dispersion of a ' +
+    'sampling distribution is smaller than that for the sample distribution,' +
+    ' and 2) that the sampling distribution is at least normal-ish compared to '
+    + 'the sample distribution when the sample size is sufficiently large. A ' +
+    'third graph, a histogram, now shows the distribution of sample means (for '
+    + 'samples containing 100 data points)'}
+];
+
+const instructions: InstructionData[] = [
+    {instruction:
+    'Click the “Draw data point” button to generate a sample that is added to '
+    + 'the graph. The “Sample Data” histogram shows the distribution of data ' +
+    'points within the sample, while the “Cumulative Sample Mean” line plot ' +
+    'shows the average value in the sample as more samples are added. For this'
+    + ' part start with adding and drawing just 1 sample point at a time.'},
+    {instruction:
+    'Click the “Draw data point” to draw 100 data points at a time. The ' +
+    'cumulative sample mean plot shows how the mean changes within each sample'
+    + ' as more data points are added. By comparing results for separate ' +
+    'samples students can see how the dispersion of sample means decreases as '
+    + 'the number of data points in a sample increases. '},
+    {instruction:
+    'Increase the number of data points drawn to 25 and click the “draw data ' +
+    'point” button a repetitively many times to see the distribution forming. '}
 ];
 
 const questions: string[] = [
@@ -73,7 +93,9 @@ export const InferentialStats: React.FC = () => {
                             genre2Field={false}
                             audioFeatureField={false}
                             dataPointsField={true}
-                            graphTypes={graphTypes} />
+                            graphTypes={graphTypes}
+                            instructions={instructions}
+                            activeTab={activeTab} />
                     </div>
                     <div className='row'>
                         <Assignment
