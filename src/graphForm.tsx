@@ -40,7 +40,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [data1, setData1] = useState<number[]>([]);
     const [data2, setData2] = useState<number[]>([]);
     const [dataPoints, setDataPoints] = useState(1);
-    const [genre1, setGenre1] = useState<string>(genresText[0]);
+    const [genre1, setGenre1] = useState<string>();
     const [genre2, setGenre2] = useState<string>();
 
     const SAMPLEDATA = 1;
