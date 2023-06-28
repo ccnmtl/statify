@@ -136,7 +136,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         + 'input on the right—check it out!'
                     )}
                 </div>
-                <div className='row'>
+                <div className='row' id='capture'>
                     {graphTypes.includes(SAMPLEDATA) && (
                         <Histogram
                             data1={data1}

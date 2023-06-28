@@ -10,10 +10,6 @@ const styles = StyleSheet.create({
         paddingBottom: 65,
         paddingHorizontal: 35,
     },
-    viewer: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-    },
     questionTitle: {
         fontSize: 15,
         marginBottom: 10
@@ -27,7 +23,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     image: {
-        marginVertical: 15,
+        marginVertical: 100,
         marginHorizontal: 100,
     }
 });
@@ -35,7 +31,7 @@ const styles = StyleSheet.create({
 interface AssignmentDocumentProps {
     questions: string[];
     answers: object;
-    screenshot: any;
+    screenshot: string;
 }
 
 
@@ -46,14 +42,8 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
     const createQA = questions.map((question, index) => {
         return (
             <>
-                <Image
-                    style={styles.image}
-                    // eslint-disable-next-line max-len
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    src={screenshot} />
-
                 <Text style={styles.questionTitle}>
-                Question #{index + 1}
+                Question {index + 1}
                 </Text>
                 <Text style={styles.question}>
                     {question}
@@ -69,6 +59,9 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
     return (
         <Document>
             <Page size='A4' style={styles.page}>
+                <Image
+                    style={styles.image}
+                    source={screenshot} />
                 {createQA}
             </Page>
         </Document>

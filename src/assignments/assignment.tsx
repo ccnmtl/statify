@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import { Answer } from './answer';
@@ -14,22 +14,27 @@ interface AssignmentProps {
 export const Assignment: React.FC<AssignmentProps>  = (
     {questions}
 ) => {
-    const [answers, setAnswers] = React.useState({});
+    const [answers, setAnswers] = useState({});
+    const [screenshot, setScreenshot] = useState<string>();
 
     const generatePdfDocument = async() => {
         const blob = await pdf((
             <AssignmentDocument
                 questions={questions}
                 answers={answers}
-                screenshot={''}
+                screenshot={screenshot}
             />
         )).toBlob();
         saveAs(blob, 'test-pdfs');
     };
 
     const generateScreenshot = async() => {
-        await html2canvas(document.querySelector('#capture')).then(canvas => {
+        await html2canvas(document.querySelector('#capture'), {
+            backgroundColor: '#00000'
+        }).then(canvas => {
+
             const dataURL = canvas.toDataURL('image/png');
+            setScreenshot(dataURL);
         });
     };
 
@@ -45,7 +50,6 @@ export const Assignment: React.FC<AssignmentProps>  = (
         <>
             <div className='col-md-9'>
                 <h2>Questions</h2>
-
                 {questions.map((question, index) => {
                     return (
                         <div key={index}>
@@ -68,14 +72,15 @@ export const Assignment: React.FC<AssignmentProps>  = (
                         className={'form-label'}>3. Build a report
                     </label> <br />
                     <button
+                        onClick={() => void generateScreenshot()}
+                        className={'btn btn-primary btn-statify me-2'}>
+                                Screenshot Graph
+                    </button>
+                    <button
+                        disabled={!screenshot}
                         onClick={() => void generatePdfDocument()}
                         className={'btn btn-primary btn-statify'}>
                                 Create PDF
-                    </button>
-                    <button
-                        onClick={() => void generateScreenshot()}
-                        className={'btn btn-primary btn-statify'}>
-                                Create Screenshot
                     </button>
                 </div>
             </div>
