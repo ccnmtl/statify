@@ -3,7 +3,7 @@ import genres from '../data/trackDataByGenre.json';
 import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { SamplingDistribution } from './graphs/distributionHistogram';
-import { Histogram } from './graphs/Histogram';
+import { Histogram } from './graphs/histogram';
 import { InstructionData } from './common';
 import { AudioFeature, Genre, toTitleCase } from './common';
 

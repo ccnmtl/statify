@@ -96,7 +96,7 @@ export const Histogram: React.FC<binsProps>  = (
     }, [selection, data1, data2, genre1, genre2, audioFeature]);
 
     return (
-        <>
+        <div className='col-sm-8'>
             <svg
                 id="bins"
                 className="col"
@@ -106,6 +106,6 @@ export const Histogram: React.FC<binsProps>  = (
                 height="20rem"
                 // preserveAspectRatio="xMidYMid meet"
             />
-        </>
+        </div>
     );
 };
