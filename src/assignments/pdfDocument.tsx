@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Document, Page, Text, StyleSheet
+    Document, Page, Text, StyleSheet, Image
 } from '@react-pdf/renderer';
 
 // Create styles
@@ -25,22 +25,33 @@ const styles = StyleSheet.create({
     question: {
         fontSize: 13,
         marginBottom: 5
+    },
+    image: {
+        marginVertical: 15,
+        marginHorizontal: 100,
     }
 });
 
 interface AssignmentDocumentProps {
     questions: string[];
     answers: object;
+    screenshot: any;
 }
 
 
 export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
-    {questions, answers}
+    {questions, answers, screenshot}
 ) =>
 {
     const createQA = questions.map((question, index) => {
         return (
             <>
+                <Image
+                    style={styles.image}
+                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    src={screenshot} />
+
                 <Text style={styles.questionTitle}>
                 Question #{index + 1}
                 </Text>

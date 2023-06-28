@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import { Answer } from './answer';
 import { AssignmentDocument } from './pdfDocument';
+import html2canvas from 'html2canvas';
 
 
 interface AssignmentProps {
@@ -20,9 +21,16 @@ export const Assignment: React.FC<AssignmentProps>  = (
             <AssignmentDocument
                 questions={questions}
                 answers={answers}
+                screenshot={''}
             />
         )).toBlob();
         saveAs(blob, 'test-pdfs');
+    };
+
+    const generateScreenshot = async() => {
+        await html2canvas(document.querySelector('#capture')).then(canvas => {
+            const dataURL = canvas.toDataURL('image/png');
+        });
     };
 
     const handleLocalStorage = () => {
@@ -63,6 +71,11 @@ export const Assignment: React.FC<AssignmentProps>  = (
                         onClick={() => void generatePdfDocument()}
                         className={'btn btn-primary btn-statify'}>
                                 Create PDF
+                    </button>
+                    <button
+                        onClick={() => void generateScreenshot()}
+                        className={'btn btn-primary btn-statify'}>
+                                Create Screenshot
                     </button>
                 </div>
             </div>
