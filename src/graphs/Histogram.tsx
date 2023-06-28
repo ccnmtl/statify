@@ -1,0 +1,111 @@
+import React, { useRef, useEffect, useState } from 'react';
+import { bin, min } from 'd3-array';
+import { select, Selection } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { BinData, graphBins, toTitleCase } from '../common';
+import { axisBottom, axisLeft } from 'd3';
+
+interface binsProps {
+    data1: number[];
+    data2: number[];
+    genre1: string;
+    genre2: string | null;
+    audioFeature: string | null;
+}
+
+const BUCKET_PADDING = 4;
+const FONT_SIZE = 14;
+const MARGIN = 30;
+
+export const Histogram: React.FC<binsProps>  = (
+    {data1, data2, genre1, genre2, audioFeature}
+) => {
+    const svgRef = useRef(null);
+    const binData = graphBins[audioFeature] as BinData;
+
+    const [selection, setSelection] = useState<null | Selection<
+        null,
+        unknown,
+        null,
+        undefined
+    >>(null);
+
+    useEffect(() => {
+        if (!selection) {
+            setSelection(select(svgRef.current));
+        } else {
+            selection.selectAll('g').remove();
+            // selection.select('g#y').remove();
+            // Generate the bins buckets
+            const bins = bin()
+                .domain([binData.min, binData.max])
+                .thresholds(
+                    (binData.max - binData.min) / binData.ticks)(
+                    data1); // Data goes here
+
+            const max = Math.max(...bins.map(col => col.length));
+            const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
+            const height =
+                Number.parseInt(selection.style('height')) - MARGIN * 2;
+
+            const x = scaleLinear()
+                .domain([binData.min, binData.max]).nice()
+                .range([MARGIN, gWidth]);
+            const y = scaleLinear()
+                .domain([0, max])
+                .range([height, MARGIN]);
+
+            // Construct graph bars
+            selection.append('g')
+                .attr('fill', '#55b95d')
+                .selectAll()
+                .data(bins)
+                .join('rect')
+                .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
+                .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
+                .attr('y', (d) => y(d.length))
+                .attr('height', (d) => y(0) - y(d.length));
+
+            // Construct the Y-axis
+            selection.append('g')
+                .attr('transform', `translate(${MARGIN}, 0)`)
+                .call(axisLeft(y)
+                    .ticks(min([10, max]))
+                    .tickSizeOuter(0))
+                .call((g) => g.select('.domain').remove())
+                .call((g) => g.append('text')
+                    .attr('x', -MARGIN)
+                    .attr('y', 10)
+                    .attr('fill', 'white')
+                    .attr('text-anchor', 'start')
+                    .text('Freq.'))
+                .attr('font-size', FONT_SIZE);
+
+            // Construct the X-axis
+            selection.append('g')
+                .attr('transform', `translate(0, ${height})`)
+                .call(axisBottom(x).ticks(6).tickSizeOuter(6))
+                .call((g) => g.append('text')
+                    .attr('x', gWidth-MARGIN)
+                    .attr('y', MARGIN+10)
+                    .attr('fill', 'white')
+                    .attr('text-anchor', 'right')
+                    .text(toTitleCase(audioFeature)))
+                .attr('font-size', FONT_SIZE);
+        }
+    }, [selection, data1, data2, genre1, genre2, audioFeature]);
+
+    return (
+        <>
+            <svg
+                id="bins"
+                className="col"
+                ref={svgRef}
+                // viewBox="0 0 940 450"
+                width="100%"
+                height="20rem"
+                // preserveAspectRatio="xMidYMid meet"
+            />
+        </>
+    );
+};
