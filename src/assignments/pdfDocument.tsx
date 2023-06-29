@@ -23,8 +23,11 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     image: {
-        marginVertical: 100,
-        marginHorizontal: 100,
+        width: '100%',
+        height: '50%',
+        borderColor: 'black',
+        backgroundColor: 'black',
+        marginBottom: 10
     }
 });
 

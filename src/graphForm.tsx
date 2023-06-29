@@ -4,8 +4,7 @@ import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { SamplingDistribution } from './graphs/distributionHistogram';
 import { Histogram } from './graphs/histogram';
-import { InstructionData } from './common';
-import { AudioFeature, Genre, toTitleCase } from './common';
+import { AudioFeature, Genre, toTitleCase, InstructionData  } from './common';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -192,7 +191,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     {genresText.map((genre, index) => {
                                         return (
                                             <option key={index} value={genre}>
-                                                {genre}
+                                                {toTitleCase(genre)}
                                             </option>
                                         );
                                     })}
