@@ -28,6 +28,15 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         backgroundColor: 'black',
         marginBottom: 10
+    },
+    name: {
+        fontSize: 12,
+        textAlign: 'right'
+    },
+    uni: {
+        fontSize: 12,
+        textAlign: 'right',
+        marginBottom: 40,
     }
 });
 
@@ -35,11 +44,13 @@ interface AssignmentDocumentProps {
     questions: string[];
     answers: object;
     screenshot: string;
+    uni: string;
+    name: string;
 }
 
 
 export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
-    {questions, answers, screenshot}
+    {questions, answers, screenshot, name, uni}
 ) =>
 {
     const createQA = questions.map((question, index) => {
@@ -62,6 +73,12 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
     return (
         <Document>
             <Page size='A4' style={styles.page}>
+                <Text style={styles.name}>
+                    {name}
+                </Text>
+                <Text style={styles.uni}>
+                    {uni}
+                </Text>
                 <Image
                     style={styles.image}
                     source={screenshot} />
