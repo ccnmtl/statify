@@ -100,6 +100,7 @@ export const InferentialStats: React.FC = () => {
                     <div className='row'>
                         <Assignment
                             questions={questions}
+                            module={'InferentialStatistics'}
                         />
                     </div>
                 </div>

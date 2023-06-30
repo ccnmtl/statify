@@ -77,6 +77,7 @@ export const ComparingGenres: React.FC = () => {
                     <div className='row'>
                         <Assignment
                             questions={questions}
+                            module={'ComparingGenres'}
                         />
                     </div>
                 </div>

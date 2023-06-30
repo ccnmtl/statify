@@ -8,11 +8,12 @@ import html2canvas from 'html2canvas';
 
 interface AssignmentProps {
     questions: string[];
+    module: string;
 }
 
 
 export const Assignment: React.FC<AssignmentProps>  = (
-    {questions}
+    {questions, module}
 ) => {
     const [answers, setAnswers] = useState({});
     const [screenshot, setScreenshot] = useState<string>();
@@ -37,7 +38,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
                 uni={uni}
             />
         )).toBlob();
-        saveAs(blob, 'test-pdfs');
+        saveAs(blob, `${name}_${module}`);
     };
 
     const generateScreenshot = async() => {
