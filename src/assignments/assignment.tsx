@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import { Answer } from './answer';
-import { AssignmentDocument } from './pdfDocument';
+import { AssignmentDocument } from './assignmentDocument';
 import html2canvas from 'html2canvas';
 
 
@@ -16,6 +16,16 @@ export const Assignment: React.FC<AssignmentProps>  = (
 ) => {
     const [answers, setAnswers] = useState({});
     const [screenshot, setScreenshot] = useState<string>();
+    const [name, setName] = useState<string>();
+    const [uni, setUni] = useState<string>();
+
+    const handleName = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+        setName(evt.target.value);
+    };
+
+    const handleUni = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+        setUni(evt.target.value);
+    };
 
     const generatePdfDocument = async() => {
         const blob = await pdf((
@@ -23,6 +33,8 @@ export const Assignment: React.FC<AssignmentProps>  = (
                 questions={questions}
                 answers={answers}
                 screenshot={screenshot}
+                name={name}
+                uni={uni}
             />
         )).toBlob();
         saveAs(blob, 'test-pdfs');
@@ -71,6 +83,32 @@ export const Assignment: React.FC<AssignmentProps>  = (
                     <label htmlFor={'exampleFormControlTextarea1'}
                         className={'form-label'}>3. Build a report
                     </label> <br />
+                    <div className='row'>
+                        <div className='col-4'>
+                            <label htmlFor={'name-input'}
+                                className={'form-label'}>
+                            Name:
+                            </label>
+                            <input type="text"
+                                className="form-control w-100 mb-4"
+                                id="name-input"
+                                placeholder="Name"
+                                onChange={handleName}
+                                name="name" />
+                        </div>
+                        <div className='col-4'>
+                            <label htmlFor={'uni-input'}
+                                className={'form-label'}>
+                            Uni:
+                            </label>
+                            <input type="text"
+                                className="form-control w-100 mb-4"
+                                id="uni-input"
+                                placeholder="Uni"
+                                onChange={handleUni}
+                                name="uni" />
+                        </div>
+                    </div>
                     <button
                         onClick={() => void generateScreenshot()}
                         className={'btn btn-primary btn-statify me-2'}>
