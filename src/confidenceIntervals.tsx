@@ -67,6 +67,7 @@ export const ConfidenceIntervals: React.FC = () => {
                     <div className='row'>
                         <Assignment
                             questions={questions}
+                            module={'ConfidenceIntervals'}
                         />
                     </div>
                 </div>

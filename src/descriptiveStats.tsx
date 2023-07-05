@@ -66,6 +66,7 @@ export const DescriptiveStats: React.FC = () => {
                     <div className='row'>
                         <Assignment
                             questions={questions}
+                            module={'DescriptiveStatistics'}
                         />
                     </div>
                 </div>
