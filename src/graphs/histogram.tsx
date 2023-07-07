@@ -1,27 +1,28 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { bin, min } from 'd3-array';
-import { select, Selection } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
 import { BinData, graphBins, toTitleCase } from '../common';
 import { axisBottom, axisLeft } from 'd3';
+import { bin, min } from 'd3-array';
+import { scaleLinear } from 'd3-scale';
+import { select, Selection } from 'd3-selection';
 
-interface binsProps {
-    data1: number[];
-    data2: number[];
-    genre1: string;
-    genre2: string | null;
-    audioFeature: string | null;
-}
 
 const BUCKET_PADDING = 4;
 const FONT_SIZE = 14;
 const MARGIN = 30;
 
-export const Histogram: React.FC<binsProps>  = (
-    {data1, data2, genre1, genre2, audioFeature}
+
+interface histogramProps {
+    color: string;
+    data: number[];
+    genre1: string;
+    genre2: string | null;
+    audioFeature: string | null;
+}
+
+export const Histogram: React.FC<histogramProps>  = (
+    {data, genre1, genre2, audioFeature='tempo', color}
 ) => {
     const svgRef = useRef(null);
-    const binData = graphBins[audioFeature] as BinData;
 
     const [selection, setSelection] = useState<null | Selection<
         null,
@@ -34,14 +35,15 @@ export const Histogram: React.FC<binsProps>  = (
         if (!selection) {
             setSelection(select(svgRef.current));
         } else {
+            const binData = graphBins[audioFeature] as BinData;
+
             selection.selectAll('g').remove();
-            // selection.select('g#y').remove();
             // Generate the bins buckets
             const bins = bin()
                 .domain([binData.min, binData.max])
                 .thresholds(
                     (binData.max - binData.min) / binData.ticks)(
-                    data1); // Data goes here
+                    data); // Data goes here
 
             const max = Math.max(...bins.map(col => col.length));
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
@@ -57,7 +59,7 @@ export const Histogram: React.FC<binsProps>  = (
 
             // Construct graph bars
             selection.append('g')
-                .attr('fill', '#55b95d')
+                .attr('fill', color)
                 .selectAll()
                 .data(bins)
                 .join('rect')
@@ -74,7 +76,7 @@ export const Histogram: React.FC<binsProps>  = (
                     .tickSizeOuter(0))
                 .call((g) => g.select('.domain').remove())
                 .call((g) => g.append('text')
-                    .attr('x', -MARGIN)
+                    .attr('x', - MARGIN)
                     .attr('y', 10)
                     .attr('fill', 'white')
                     .attr('text-anchor', 'start')
@@ -86,14 +88,18 @@ export const Histogram: React.FC<binsProps>  = (
                 .attr('transform', `translate(0, ${height})`)
                 .call(axisBottom(x).ticks(6).tickSizeOuter(6))
                 .call((g) => g.append('text')
-                    .attr('x', gWidth-MARGIN)
-                    .attr('y', MARGIN+10)
+                    .attr('x', gWidth - MARGIN)
+                    .attr('y', MARGIN + 10)
                     .attr('fill', 'white')
                     .attr('text-anchor', 'right')
-                    .text(toTitleCase(audioFeature)))
+                    .text(
+                        audioFeature === 'tempo' ?
+                            'Tempo, Beats Per Minute (BPM)' :
+                            toTitleCase(audioFeature)
+                    ))
                 .attr('font-size', FONT_SIZE);
         }
-    }, [selection, data1, data2, genre1, genre2, audioFeature]);
+    }, [selection, data, genre1, genre2, audioFeature]);
 
     return (
         <div className='col-sm-8'>
@@ -101,10 +107,8 @@ export const Histogram: React.FC<binsProps>  = (
                 id="bins"
                 className="col"
                 ref={svgRef}
-                // viewBox="0 0 940 450"
                 width="100%"
                 height="20rem"
-                // preserveAspectRatio="xMidYMid meet"
             />
         </div>
     );
