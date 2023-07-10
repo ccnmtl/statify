@@ -47,7 +47,7 @@ const tempo: BinData = {
     min: 50,
     max: 200,
     width: 5,
-    ticks: 10
+    ticks: 5
 };
 
 const key: BinData = {
