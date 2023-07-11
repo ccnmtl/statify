@@ -17,10 +17,11 @@ interface histogramProps {
     genre1: string;
     genre2: string | null;
     audioFeature: string | null;
+    n: number | null;
 }
 
 export const Histogram: React.FC<histogramProps>  = (
-    {data, genre1, genre2, audioFeature='tempo', color}
+    {data, genre1, genre2, audioFeature='tempo', color, n}
 ) => {
     const svgRef = useRef(null);
 
@@ -80,7 +81,7 @@ export const Histogram: React.FC<histogramProps>  = (
                     .attr('y', 10)
                     .attr('fill', 'white')
                     .attr('text-anchor', 'start')
-                    .text('Freq.'))
+                    .text('Freq.' + (n ? ` -- Distribution, N = ${n}` : '')))
                 .attr('font-size', FONT_SIZE);
 
             // Construct the X-axis
