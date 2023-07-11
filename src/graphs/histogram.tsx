@@ -77,7 +77,7 @@ export const Histogram: React.FC<histogramProps>  = (
                 .call((g) => g.select('.domain').remove())
                 .call((g) => g.append('text')
                     .attr('x', - MARGIN)
-                    .attr('y', 10)
+                    .attr('y', 12)
                     .attr('fill', 'white')
                     .attr('text-anchor', 'start')
                     .text('Freq.'))
@@ -97,6 +97,16 @@ export const Histogram: React.FC<histogramProps>  = (
                             'Tempo, Beats Per Minute (BPM)' :
                             toTitleCase(audioFeature)
                     ))
+                .attr('font-size', FONT_SIZE);
+
+            // Construct Ticker Label
+            selection.append('g')
+                .call((g) => g.append('text')
+                    .attr('fill', 'white')
+                    .attr('text-anchor', 'end')
+                    .attr('x', gWidth)
+                    .attr('y', 12)
+                    .text(`Count: ${data.length}`))
                 .attr('font-size', FONT_SIZE);
         }
     }, [selection, data, genre1, genre2, audioFeature]);
