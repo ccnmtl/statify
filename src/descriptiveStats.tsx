@@ -59,6 +59,7 @@ export const DescriptiveStats: React.FC = () => {
                             genre2Field={false}
                             audioFeatureField={false}
                             dataPointsField={false}
+                            seedField={true}
                             graphTypes={[1]}
                             instructions={instructions}
                             activeTab={activeTab} />

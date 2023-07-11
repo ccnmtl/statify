@@ -70,6 +70,7 @@ export const ComparingGenres: React.FC = () => {
                             genre2Field={true}
                             audioFeatureField={true}
                             dataPointsField={true}
+                            seedField={true}
                             graphTypes={graphTypes}
                             instructions={instructions}
                             activeTab={activeTab} />

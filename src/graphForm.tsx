@@ -4,12 +4,14 @@ import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import { AudioFeature, Genre, toTitleCase, InstructionData  } from './common';
+import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 
 interface GraphFormProps {
     genre1Field: boolean;
     genre2Field: boolean;
     audioFeatureField: boolean;
     dataPointsField: boolean;
+    seedField: boolean;
     graphTypes: number[];
     activeTab: number;
     instructions: InstructionData[];
@@ -20,29 +22,39 @@ const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
 
 const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 
-const boxMullerTransform = function() {
-    const u1 = Math.random();
-    const u2 = Math.random();
-    return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
-};
-
 export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
-        graphTypes, instructions, activeTab
+        graphTypes, instructions, activeTab, seedField
     }:
-        GraphFormProps) => {
+    GraphFormProps) => {
     const genresText: string[] = Object.keys(genres);
+    const initialSeed = [...Array(8) as null[]].map(
+        () => Math.floor(Math.random() * 16).toString(16)).join(''); // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
 
-    const [audioFeature, setAudioFeature] =
-        useState<string>(audioFeatureField ? undefined : 'tempo');
+    const [audioFeature, setAudioFeature] = useState<string>(
+        audioFeatureField ? undefined : 'tempo');
     const [data1, setData1] = useState<number[]>([]);
     const [data2, setData2] = useState<number[]>([]);
     const [meanData, setMeanData] = useState<number[]>([]);
-    const [dataPoints, setDataPoints] =
-        useState<number>(dataPointsField ? undefined : 1);
+    const [dataPoints, setDataPoints] = useState<number>(
+        dataPointsField ? undefined : 1);
     const [genre1, setGenre1] = useState<string>();
     const [genre2, setGenre2] = useState<string>();
+    const [prng, setPRNG] = useState<seedrandom.PRNG>(
+        () => seedrandom(initialSeed));
+
+    const clearData = function() {
+        setData1([]);
+        setData2([]);
+        setMeanData([]);
+    };
+
+    const boxMullerTransform = function() {
+        const u1 = prng();
+        const u2 = prng();
+        return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+    };
 
     const SAMPLEDATA = 1;
     const SAMPLEMEAN = 2;
@@ -134,30 +146,30 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const handleGenre1Select = (
         evt: React.ChangeEvent<HTMLSelectElement>): void => {
         setGenre1(evt.target.value);
-        setData1([]);
-        setData2([]);
-        setMeanData([]);
+        clearData();
     };
 
     const handleGenre2Select = (
         evt: React.ChangeEvent<HTMLSelectElement>): void => {
         setGenre2(evt.target.value);
-        setData1([]);
-        setData2([]);
-        setMeanData([]);
+        clearData();
     };
 
     const handleAudioFeatureSelect = (
         evt: React.ChangeEvent<HTMLSelectElement>): void => {
         setAudioFeature(evt.target.value);
-        setData1([]);
-        setData2([]);
-        setMeanData([]);
+        clearData();
     };
 
     const handleDataPointsSelect = (
         evt: React.ChangeEvent<HTMLSelectElement>): void => {
         setDataPoints(Number(evt.target.value));
+    };
+
+    const handleSeed = (
+        evt: React.ChangeEvent<HTMLInputElement>): void => {
+        setPRNG(() => seedrandom(evt.target.value));
+        clearData();
     };
 
     return (
@@ -309,6 +321,21 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                         );
                                     })}
                                 </select>
+                            </div>
+                        )}
+                        {seedField && (
+                            <div className='mb-3'>
+                                <label htmlFor='seed'
+                                    className='form-label col-12'>
+                                Seed
+                                </label>
+                                <input name='seed' id='seed'
+                                    type='text'
+                                    className='form-input'
+                                    defaultValue={initialSeed}
+                                    onChange={handleSeed}
+                                    required>
+                                </input>
                             </div>
                         )}
                         <input
