@@ -186,7 +186,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             data={data1}
                             genre1={genre1}
                             genre2={genre2}
-                            audioFeature={audioFeature}/>
+                            audioFeature={audioFeature}
+                            n={null}/>
                     )}
                     {graphTypes.includes(SAMPLEDATA2) && (
                         <SampleDataHistogram
@@ -208,7 +209,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             color={'rgb(101, 188, 212)'}
                             genre1={genre1}
                             genre2={genre2}
-                            audioFeature={audioFeature}/>
+                            audioFeature={audioFeature}
+                            n={N}/>
                     )}
                 </div>
             </div>
