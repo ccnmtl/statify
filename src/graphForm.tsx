@@ -74,8 +74,26 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const handleDataUpdate = function(e) {
         (e as Event).preventDefault();
         if (genre1) {
-            let amount = dataPoints;
-            if (data1.length + dataPoints >= N) {
+            if (data1.length === N) {
+                if (dataPoints === N) {
+                    setMeanData([
+                        ...meanData,
+                        randomGaussianSet(
+                            genre1,
+                            audioFeature,
+                            N
+                        ).reduce((i, sum) => i + sum) / N]);
+                }
+                setData1([
+                    ...randomGaussianSet(genre1, audioFeature, dataPoints)
+                ]);
+                if (genre2) {
+                    setData2([
+                        ...randomGaussianSet(
+                            genre2, audioFeature, dataPoints)
+                    ]);
+                }
+            } else if (data1.length + dataPoints >= N) {
                 setMeanData([
                     ...meanData,
                     [
@@ -86,26 +104,27 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             N - data1.length
                         )
                     ].reduce((i, sum) => i + sum) / N]);
-            }
-            if (data1.length + dataPoints > N) {
-                amount = dataPoints - N + data1.length;
                 setData1([
-                    ...randomGaussianSet(genre1, audioFeature, amount)
+                    ...data1,
+                    ...randomGaussianSet(genre1, audioFeature, N - data1.length)
                 ]);
                 if (genre2) {
                     setData2([
-                        ...randomGaussianSet(genre2, audioFeature, amount)
+                        ...data2,
+                        ...randomGaussianSet(
+                            genre2, audioFeature, N - data1.length)
                     ]);
                 }
             } else {
                 setData1([
                     ...data1,
-                    ...randomGaussianSet(genre1, audioFeature, amount)
+                    ...randomGaussianSet(genre1, audioFeature, dataPoints)
                 ]);
                 if (genre2) {
                     setData2([
                         ...data2,
-                        ...randomGaussianSet(genre2, audioFeature, amount)
+                        ...randomGaussianSet(
+                            genre2, audioFeature, dataPoints)
                     ]);
                 }
             }
@@ -167,7 +186,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             data={data1}
                             genre1={genre1}
                             genre2={genre2}
-                            audioFeature={audioFeature}/>
+                            audioFeature={audioFeature}
+                            n={null}/>
                     )}
                     {graphTypes.includes(SAMPLEDATA2) && (
                         <SampleDataHistogram
@@ -189,7 +209,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             color={'rgb(101, 188, 212)'}
                             genre1={genre1}
                             genre2={genre2}
-                            audioFeature={audioFeature}/>
+                            audioFeature={audioFeature}
+                            n={N}/>
                     )}
                 </div>
             </div>
