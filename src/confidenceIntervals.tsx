@@ -60,6 +60,7 @@ export const ConfidenceIntervals: React.FC = () => {
                             genre2Field={true}
                             audioFeatureField={true}
                             dataPointsField={false}
+                            seedField={true}
                             graphTypes={[1, 3, 4]}
                             instructions={instructions}
                             activeTab={activeTab} />
