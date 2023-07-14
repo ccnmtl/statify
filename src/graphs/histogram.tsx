@@ -9,6 +9,7 @@ import { select, Selection } from 'd3-selection';
 const BUCKET_PADDING = 4;
 const FONT_SIZE = 14;
 const MARGIN = 30;
+const Y_LABEL = 20;
 const Y_CAP = 15;
 
 
@@ -53,7 +54,7 @@ export const Histogram: React.FC<histogramProps>  = (
 
             const x = scaleLinear()
                 .domain([binData.min, binData.max]).nice()
-                .range([MARGIN, gWidth]);
+                .range([MARGIN + Y_LABEL, gWidth]);
             const y = scaleLinear()
                 .domain([0, Y_CAP])
                 .range([height, MARGIN]);
@@ -71,15 +72,16 @@ export const Histogram: React.FC<histogramProps>  = (
 
             // Construct the Y-axis
             selection.append('g')
-                .attr('transform', `translate(${MARGIN}, 0)`)
+                .attr('transform', `translate(${MARGIN+Y_LABEL}, 0)`)
                 .call(axisLeft(y)
                     .ticks(Y_CAP))
                 .call((g) => g.select('.domain').remove())
                 .call((g) => g.append('text')
-                    .attr('x', - MARGIN)
-                    .attr('y', 12)
+                    .attr('x', -height/2)
+                    .attr('y', -MARGIN-5)
+                    .attr('transform', 'rotate(270)')
                     .attr('fill', 'white')
-                    .attr('text-anchor', 'start')
+                    .attr('text-anchor', 'center')
                     .text('Freq.' + (n ? ` -- Distribution, N = ${n}` : '')))
                 .attr('font-size', FONT_SIZE);
 
@@ -88,10 +90,10 @@ export const Histogram: React.FC<histogramProps>  = (
                 .attr('transform', `translate(0, ${height})`)
                 .call(axisBottom(x).ticks(6).tickSizeOuter(6))
                 .call((g) => g.append('text')
-                    .attr('x', gWidth - MARGIN)
+                    .attr('x', gWidth/2 + MARGIN)
                     .attr('y', MARGIN + 10)
                     .attr('fill', 'white')
-                    .attr('text-anchor', 'right')
+                    .attr('text-anchor', 'center')
                     .text(
                         audioFeature === 'tempo' ?
                             'Tempo, Beats Per Minute (BPM)' :
