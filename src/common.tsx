@@ -19,21 +19,16 @@ export function toTitleCase(text: string) {
         word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
-export interface AudioFeature {
-    mean: number,
-    sd: number
-}
-
 export interface Genre {
     count: number,
-    acousticness: AudioFeature,
-    danceability: AudioFeature,
-    energy: AudioFeature,
-    key: AudioFeature,
-    loudness: AudioFeature,
-    popularity: AudioFeature,
-    speechiness: AudioFeature,
-    tempo: AudioFeature
+    acousticness: number[],
+    danceability: number[],
+    energy: number[],
+    key: number[],
+    loudness: number[],
+    popularity: number[],
+    speechiness: number[],
+    tempo: number[]
 }
 
 export interface BinData {

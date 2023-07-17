@@ -3,7 +3,7 @@ import genres from '../data/trackDataByGenre.json';
 import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
-import { AudioFeature, Genre, toTitleCase, InstructionData  } from './common';
+import { Genre, toTitleCase, InstructionData  } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 
 interface GraphFormProps {
@@ -52,35 +52,20 @@ export const GraphForm: React.FC<GraphFormProps> = (
         setMeanData2([]);
     };
 
-    const boxMullerTransform = function() {
-        const u1 = prng();
-        const u2 = prng();
-        return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
-    };
-
     const SAMPLEDATA = 1;
     const SAMPLEMEAN = 2;
     const DISTRIBUTION = 3;
     const SAMPLEDATA2 = 4;
     const N = 100; // The number of datapoints to compile into the mean
 
-    /**
-     * Produces a set of randomized numbers based on normal (Gaussian)
-     * distribution. The range of numbers generated is determined by the
-     * preprocessed mean and standard deviation of the selected genre and audio
-     * feature.
-     * @param genre The selected music genre ('latin' by default)
-     * @param feature The selected audio feature ('danceability' by default)
-     * @param amount The number of datapoints to generate (1 by default)
-     * @returns And array of new data points
-     */
-    const randomGaussianSet = function(
-        genre:string, feature:string, amount:number) {
+    const getDataPoints = function(genre:string, feature:string , n:number) {
         const data:number[] = [];
-        for (let i = 0; i < amount; i++) {
-            const genreData = genres[genre] as Genre;
-            const featureData = genreData[feature] as AudioFeature;
-            data.push(featureData.sd * boxMullerTransform() + featureData.mean);
+        const chosenGenre = genres[genre] as Genre;
+        const chosenFeature = chosenGenre[feature] as number[];
+        for (let i = 0; i < n; i++) {
+            data.push(chosenFeature[
+                Math.floor(prng() * (chosenGenre.count-1))
+            ]);
         }
         return data;
     };
@@ -92,25 +77,25 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 if (dataPoints === N) {
                     setMeanData1([
                         ...meanData1,
-                        randomGaussianSet(
+                        getDataPoints(
                             genre1,
                             audioFeature,
                             N
                         ).reduce((i, sum) => i + sum) / N]);
                 }
                 setData1([
-                    ...randomGaussianSet(genre1, audioFeature, dataPoints)
+                    ...getDataPoints(genre1, audioFeature, dataPoints)
                 ]);
                 if (genre2) {
                     setMeanData2([
                         ...meanData2,
-                        randomGaussianSet(
+                        getDataPoints(
                             genre2,
                             audioFeature,
                             N
                         ).reduce((i, sum) => i + sum) / N]);
                     setData2([
-                        ...randomGaussianSet(
+                        ...getDataPoints(
                             genre2, audioFeature, dataPoints)
                     ]);
                 }
@@ -119,7 +104,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     ...meanData1,
                     [
                         ...data1,
-                        ...randomGaussianSet(
+                        ...getDataPoints(
                             genre1,
                             audioFeature,
                             N - data1.length
@@ -127,31 +112,31 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     ].reduce((i, sum) => i + sum) / N]);
                 setData1([
                     ...data1,
-                    ...randomGaussianSet(genre1, audioFeature, N - data1.length)
+                    ...getDataPoints(genre1, audioFeature, N - data1.length)
                 ]);
                 if (genre2) {
                     setMeanData2([
                         ...meanData2,
-                        randomGaussianSet(
+                        getDataPoints(
                             genre2,
                             audioFeature,
                             N - data1.length
                         ).reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...data2,
-                        ...randomGaussianSet(
+                        ...getDataPoints(
                             genre2, audioFeature, N - data1.length)
                     ]);
                 }
             } else {
                 setData1([
                     ...data1,
-                    ...randomGaussianSet(genre1, audioFeature, dataPoints)
+                    ...getDataPoints(genre1, audioFeature, dataPoints)
                 ]);
                 if (genre2) {
                     setData2([
                         ...data2,
-                        ...randomGaussianSet(
+                        ...getDataPoints(
                             genre2, audioFeature, dataPoints)
                     ]);
                 }

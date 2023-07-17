@@ -10,7 +10,7 @@ const BUCKET_PADDING = 4;
 const FONT_SIZE = 14;
 const MARGIN = 30;
 const Y_LABEL = 20;
-const Y_CAP = 15;
+const Y_CAP = 20;
 
 
 interface histogramProps {
@@ -93,8 +93,7 @@ export const Histogram: React.FC<histogramProps>  = (
             // Construct the Y-axis
             selection.append('g')
                 .attr('transform', `translate(${MARGIN+Y_LABEL}, 0)`)
-                .call(axisLeft(y)
-                    .ticks(Y_CAP))
+                .call(axisLeft(y).ticks(10))
                 .call((g) => g.select('.domain').remove())
                 .call((g) => g.append('text')
                     .attr('x', -height/2)
