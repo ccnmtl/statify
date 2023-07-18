@@ -36,7 +36,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
         audioFeatureField ? undefined : 'tempo');
     const [data1, setData1] = useState<number[]>([]);
     const [data2, setData2] = useState<number[]>([]);
-    const [meanData, setMeanData] = useState<number[]>([]);
+    const [meanData1, setMeanData1] = useState<number[]>([]);
+    const [meanData2, setMeanData2] = useState<number[]>([]);
     const [dataPoints, setDataPoints] = useState<number>(
         dataPointsField ? undefined : 1);
     const [genre1, setGenre1] = useState<string>();
@@ -47,7 +48,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const clearData = function() {
         setData1([]);
         setData2([]);
-        setMeanData([]);
+        setMeanData1([]);
+        setMeanData2([]);
     };
 
     const boxMullerTransform = function() {
@@ -88,8 +90,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
         if (genre1) {
             if (data1.length === N) {
                 if (dataPoints === N) {
-                    setMeanData([
-                        ...meanData,
+                    setMeanData1([
+                        ...meanData1,
                         randomGaussianSet(
                             genre1,
                             audioFeature,
@@ -100,14 +102,21 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     ...randomGaussianSet(genre1, audioFeature, dataPoints)
                 ]);
                 if (genre2) {
+                    setMeanData2([
+                        ...meanData2,
+                        randomGaussianSet(
+                            genre2,
+                            audioFeature,
+                            N
+                        ).reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...randomGaussianSet(
                             genre2, audioFeature, dataPoints)
                     ]);
                 }
             } else if (data1.length + dataPoints >= N) {
-                setMeanData([
-                    ...meanData,
+                setMeanData1([
+                    ...meanData1,
                     [
                         ...data1,
                         ...randomGaussianSet(
@@ -121,6 +130,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     ...randomGaussianSet(genre1, audioFeature, N - data1.length)
                 ]);
                 if (genre2) {
+                    setMeanData2([
+                        ...meanData2,
+                        randomGaussianSet(
+                            genre2,
+                            audioFeature,
+                            N - data1.length
+                        ).reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...data2,
                         ...randomGaussianSet(
@@ -194,8 +210,9 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 <div className='row' id='capture'>
                     {graphTypes.includes(SAMPLEDATA) && (
                         <Histogram
-                            color={'rgb(82, 208, 80)'}
-                            data={data1}
+                            color={'rgba(82, 208, 80, 1.0)'}
+                            data1={data1}
+                            data2={data2}
                             genre1={genre1}
                             genre2={genre2}
                             audioFeature={audioFeature}
@@ -217,8 +234,9 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(DISTRIBUTION) && (
                         <Histogram
-                            data={meanData}
-                            color={'rgb(101, 188, 212)'}
+                            data1={meanData1}
+                            data2={meanData2}
+                            color={'rgba(101, 188, 212, 1.0)'}
                             genre1={genre1}
                             genre2={genre2}
                             audioFeature={audioFeature}
@@ -274,7 +292,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     {genresText.map((genre, index) => {
                                         return (
                                             <option key={index} value={genre}>
-                                                {genre}
+                                                {toTitleCase(genre)}
                                             </option>
                                         );
                                     })}

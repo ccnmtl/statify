@@ -15,7 +15,8 @@ const Y_CAP = 15;
 
 interface histogramProps {
     color: string;
-    data: number[];
+    data1: number[];
+    data2: number[] | null;
     genre1: string;
     genre2: string | null;
     audioFeature: string | null;
@@ -23,7 +24,7 @@ interface histogramProps {
 }
 
 export const Histogram: React.FC<histogramProps>  = (
-    {data, genre1, genre2, audioFeature='tempo', color, n}
+    {data1, data2, genre1, genre2, audioFeature='tempo', n}
 ) => {
     const svgRef = useRef(null);
 
@@ -42,11 +43,11 @@ export const Histogram: React.FC<histogramProps>  = (
 
             selection.selectAll('g').remove();
             // Generate the bins buckets
-            const bins = bin()
+            const bins1 = bin()
                 .domain([binData.min, binData.max])
                 .thresholds(
                     (binData.max - binData.min) / binData.ticks)(
-                    data); // Data goes here
+                    data1); // First data goes here
 
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
             const height =
@@ -61,14 +62,33 @@ export const Histogram: React.FC<histogramProps>  = (
 
             // Construct graph bars
             selection.append('g')
-                .attr('fill', color)
+                .attr('id', 'genre1')
+                .attr('fill', 'rgba(82, 208, 80, 1.0)')
                 .selectAll()
-                .data(bins)
+                .data(bins1)
                 .join('rect')
                 .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
                 .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
                 .attr('y', (d) => y(d.length))
                 .attr('height', (d) => y(0) - y(d.length));
+
+            if (data2) {
+                const bins2 = bin()
+                    .domain([binData.min, binData.max])
+                    .thresholds(
+                        (binData.max - binData.min) / binData.ticks)(
+                        data2); //Second data set goes here
+                selection.append('g')
+                    .attr('id', 'genre2')
+                    .attr('fill', 'rgba(255, 100, 100, 0.7)')
+                    .selectAll()
+                    .data(bins2)
+                    .join('rect')
+                    .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
+                    .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
+                    .attr('y', (d) => y(d.length))
+                    .attr('height', (d) => y(0) - y(d.length));
+            }
 
             // Construct the Y-axis
             selection.append('g')
@@ -108,13 +128,13 @@ export const Histogram: React.FC<histogramProps>  = (
                     .attr('text-anchor', 'end')
                     .attr('x', gWidth)
                     .attr('y', 12)
-                    .text(`Count: ${data.length}`))
+                    .text(`Count: ${data1.length}`))
                 .attr('font-size', FONT_SIZE);
         }
-    }, [selection, data, genre1, genre2, audioFeature]);
+    }, [selection, data1, genre1, genre2, audioFeature]);
 
     return (
-        <div className='col-sm-8'>
+        <div className='col-sm-12'>
             <svg
                 id="bins"
                 className="col"

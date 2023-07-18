@@ -33,6 +33,9 @@ const instructions: InstructionData[] = [
     {instruction:
     'empus sit amet eros nec, convallis suscipit augue. Nam tempus'
     + 'rutrum cursus. Ut lacinia blandit orci, eu viverra nulla. Sed '
+    },
+    {instruction:
+    'pulvinar urna orci, id dictum elit hendrerit a.'
     }
 ];
 
