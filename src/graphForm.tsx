@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import genres from '../data/trackDataByGenre.json';
-import { SampleDataHistogram } from './graphs/sampleDataHistogram';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import { Genre, toTitleCase, InstructionData  } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
+import { Distribution } from './graphs/estimatedSampleDistribution';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -12,6 +12,7 @@ interface GraphFormProps {
     audioFeatureField: boolean;
     dataPointsField: boolean;
     seedField: boolean;
+    defaultPoints: number | null;
     graphTypes: number[];
     activeTab: number;
     instructions: InstructionData[];
@@ -25,7 +26,7 @@ const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
-        graphTypes, instructions, activeTab, seedField
+        graphTypes, instructions, activeTab, seedField, defaultPoints
     }:
     GraphFormProps) => {
     const genresText: string[] = Object.keys(genres);
@@ -39,7 +40,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [meanData1, setMeanData1] = useState<number[]>([]);
     const [meanData2, setMeanData2] = useState<number[]>([]);
     const [dataPoints, setDataPoints] = useState<number>(
-        dataPointsField ? undefined : 1);
+        dataPointsField ? undefined : defaultPoints);
     const [genre1, setGenre1] = useState<string>();
     const [genre2, setGenre2] = useState<string>();
     const [prng, setPRNG] = useState<seedrandom.PRNG>(
@@ -204,11 +205,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             n={null}/>
                     )}
                     {graphTypes.includes(SAMPLEDATA2) && (
-                        <SampleDataHistogram
+                        <Distribution
+                            data1={data1}
+                            data2={data2}
                             genre1={genre1}
                             genre2={genre2}
                             audioFeature={audioFeature}
-                            dataPoints={dataPoints} />
+                            n={N}/>
                     )}
                     {graphTypes.includes(SAMPLEMEAN) && (
                         <CumulativeSampleMean

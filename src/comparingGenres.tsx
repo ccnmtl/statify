@@ -74,6 +74,7 @@ export const ComparingGenres: React.FC = () => {
                             audioFeatureField={true}
                             dataPointsField={true}
                             seedField={true}
+                            defaultPoints={1}
                             graphTypes={graphTypes}
                             instructions={instructions}
                             activeTab={activeTab} />

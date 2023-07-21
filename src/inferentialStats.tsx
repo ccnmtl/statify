@@ -94,6 +94,7 @@ export const InferentialStats: React.FC = () => {
                             audioFeatureField={false}
                             dataPointsField={true}
                             seedField={true}
+                            defaultPoints={1}
                             graphTypes={graphTypes}
                             instructions={instructions}
                             activeTab={activeTab} />

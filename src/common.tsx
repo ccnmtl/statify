@@ -56,14 +56,14 @@ const loudness: BinData = {
     min: -60,
     max: 6,
     width: 1,
-    ticks: 6
+    ticks: 2
 };
 
 const alternative: BinData = {
     min: 0,
     max: 1,
     width: 0.01,
-    ticks: 0.1
+    ticks: 0.04
 };
 
 export const graphBins = {
@@ -74,4 +74,8 @@ export const graphBins = {
     speechiness: alternative,
     danceability: alternative,
     energy: alternative,
+    popularity: alternative,
 };
+
+export const primary = 'rgba(82, 208, 80, 1.0)';
+export const secondary = 'rgba(255, 100, 100, 0.7)';

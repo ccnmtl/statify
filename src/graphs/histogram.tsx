@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase } from '../common';
+import { BinData, graphBins, toTitleCase, primary, secondary } from '../common';
 import { axisBottom, axisLeft } from 'd3';
 import { bin } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
@@ -63,7 +63,7 @@ export const Histogram: React.FC<histogramProps>  = (
             // Construct graph bars
             selection.append('g')
                 .attr('id', 'genre1')
-                .attr('fill', 'rgba(82, 208, 80, 1.0)')
+                .attr('fill', primary)
                 .selectAll()
                 .data(bins1)
                 .join('rect')
@@ -80,7 +80,7 @@ export const Histogram: React.FC<histogramProps>  = (
                         data2); //Second data set goes here
                 selection.append('g')
                     .attr('id', 'genre2')
-                    .attr('fill', 'rgba(255, 100, 100, 0.7)')
+                    .attr('fill', secondary)
                     .selectAll()
                     .data(bins2)
                     .join('rect')
@@ -100,7 +100,7 @@ export const Histogram: React.FC<histogramProps>  = (
                     .attr('y', -MARGIN-5)
                     .attr('transform', 'rotate(270)')
                     .attr('fill', 'white')
-                    .attr('text-anchor', 'center')
+                    .attr('text-anchor', 'middle')
                     .text('Freq.' + (n ? ` -- Distribution, N = ${n}` : '')))
                 .attr('font-size', FONT_SIZE);
 
