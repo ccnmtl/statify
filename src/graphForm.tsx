@@ -39,7 +39,6 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [data2, setData2] = useState<number[]>([]);
     const [meanData1, setMeanData1] = useState<number[]>([]);
     const [meanData2, setMeanData2] = useState<number[]>([]);
-    const [cumulativeMean, setCumulativeMean] = useState<number[][]>([]);
     const [dataPoints, setDataPoints] = useState<number>(
         dataPointsField ? undefined : defaultPoints);
     const [genre1, setGenre1] = useState<string>();
@@ -70,14 +69,6 @@ export const GraphForm: React.FC<GraphFormProps> = (
             ]);
         }
         return data;
-    };
-
-    const cumulativeMeanFunc = (array: number[]): number[][] => {
-        let sum = 0;
-        return array.map((value, index) => {
-            sum += value;
-            return [sum / (index + 1), index + 1];
-        });
     };
 
     const handleDataUpdate = function(e) {
@@ -139,20 +130,11 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     ]);
                 }
             } else {
-                setCumulativeMean(
-                    cumulativeMeanFunc(data1));
                 setData1([
                     ...data1,
                     ...getDataPoints(genre1, audioFeature, dataPoints)
                 ]);
                 if (genre2) {
-                    setMeanData2([
-                        ...meanData2,
-                        getDataPoints(
-                            genre2,
-                            audioFeature,
-                            N - data1.length
-                        ).reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...data2,
                         ...getDataPoints(
@@ -233,10 +215,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(SAMPLEMEAN) && (
                         <CumulativeSampleMean
-                            color={'rgba(82, 208, 80, 1.0)'}
-                            cumulativeMean={cumulativeMean}
-                            genre1={genre1}
-                            genre2={genre2}
+                            data1={data1}
+                            data2={data2}
                             audioFeature={audioFeature} />
                     )}
                     {graphTypes.includes(DISTRIBUTION) && (
