@@ -76,7 +76,8 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .text('# of data points'))
             .attr('font-size', FONT_SIZE);
 
-        const cm = cumulativeMean.map((c) => [x(c[1]), y(c[0])]);
+        const cm = cumulativeMean.map(
+            (c) => [x(c[1]), y(c[0])] as [number, number]);
         // scatter dots
         svgGraph.append('g').attr('id', 'genre1dots')
             .selectAll('circle')
@@ -100,7 +101,8 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         if(data2) {
             const cumulativeMean2 = cumulativeMeanFunc(data2);
-            const cm2 = cumulativeMean2.map((c) => [x(c[1]), y(c[0])]);
+            const cm2 = cumulativeMean2.map(
+                (c) => [x(c[1]), y(c[0])] as [number, number]);
             // scatter dots
             svgGraph.append('g').attr('id', 'genre2dots')
                 .selectAll('circle')
