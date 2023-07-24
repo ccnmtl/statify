@@ -79,3 +79,5 @@ export const graphBins = {
 
 export const primary = 'rgba(82, 208, 80, 1.0)';
 export const secondary = 'rgba(255, 100, 100, 0.7)';
+export const FONT_SIZE = 14;
+export const MARGIN = 30;

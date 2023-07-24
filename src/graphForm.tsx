@@ -215,10 +215,9 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(SAMPLEMEAN) && (
                         <CumulativeSampleMean
-                            genre1={genre1}
-                            genre2={genre2}
-                            audioFeature={audioFeature}
-                            dataPoints={dataPoints} />
+                            data1={data1}
+                            data2={data2}
+                            audioFeature={audioFeature} />
                     )}
                     {graphTypes.includes(DISTRIBUTION) && (
                         <Histogram
