@@ -13,7 +13,7 @@ const Y_LABEL = 20;
 const Y_CAP = 20;
 
 
-interface histogramProps {
+interface HistogramProps {
     color: string;
     data1: number[];
     data2: number[] | null;
@@ -23,7 +23,7 @@ interface histogramProps {
     n: number | null;
 }
 
-export const Histogram: React.FC<histogramProps>  = (
+export const Histogram: React.FC<HistogramProps>  = (
     {data1, data2, genre1, genre2, audioFeature='tempo', n}
 ) => {
     const svgRef = useRef(null);

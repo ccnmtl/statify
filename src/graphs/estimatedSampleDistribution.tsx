@@ -19,7 +19,7 @@ const T_95 = 1.9720; // https://www.tutorialspoint.com/statistics/t_distribution
 // Degrees of Freedom (df) = n_1 + n_2 - 2 = 2n - 2 = 198
 // Two Tails, 0.05 (95% confidence)
 
-interface distributionProps {
+interface EstimatedDistributionProps {
     data1: number[];
     data2: number[];
     genre1: string;
@@ -28,7 +28,7 @@ interface distributionProps {
     n: number;
 }
 
-export const Distribution: React.FC<distributionProps>  = (
+export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     {data1, data2, genre1, genre2, audioFeature='tempo', n}
 ) => {
     const svgRef = useRef(null);

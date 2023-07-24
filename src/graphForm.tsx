@@ -4,7 +4,7 @@ import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import { Genre, toTitleCase, InstructionData  } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
-import { Distribution } from './graphs/estimatedSampleDistribution';
+import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -53,10 +53,10 @@ export const GraphForm: React.FC<GraphFormProps> = (
         setMeanData2([]);
     };
 
-    const SAMPLEDATA = 1;
-    const SAMPLEMEAN = 2;
-    const DISTRIBUTION = 3;
-    const SAMPLEDATA2 = 4;
+    const SAMPLEDATAHISTORGAM = 1;
+    const SAMPLEMEANLINE = 2;
+    const DISTRIBUTIONHISTOGRAM = 3;
+    const ESTIMATED_DISTRIBUTION = 4;
     const N = 100; // The number of datapoints to compile into the mean
 
     const getDataPoints = function(genre:string, feature:string , n:number) {
@@ -194,7 +194,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                 </div>
                 <div className='row' id='capture'>
-                    {graphTypes.includes(SAMPLEDATA) && (
+                    {graphTypes.includes(SAMPLEDATAHISTORGAM) && (
                         <Histogram
                             color={'rgba(82, 208, 80, 1.0)'}
                             data1={data1}
@@ -204,8 +204,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             audioFeature={audioFeature}
                             n={null}/>
                     )}
-                    {graphTypes.includes(SAMPLEDATA2) && (
-                        <Distribution
+                    {graphTypes.includes(ESTIMATED_DISTRIBUTION) && (
+                        <EstimatedDistribution
                             data1={data1}
                             data2={data2}
                             genre1={genre1}
@@ -213,13 +213,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             audioFeature={audioFeature}
                             n={N}/>
                     )}
-                    {graphTypes.includes(SAMPLEMEAN) && (
+                    {graphTypes.includes(SAMPLEMEANLINE) && (
                         <CumulativeSampleMean
                             data1={data1}
                             data2={data2}
                             audioFeature={audioFeature} />
                     )}
-                    {graphTypes.includes(DISTRIBUTION) && (
+                    {graphTypes.includes(DISTRIBUTIONHISTOGRAM) && (
                         <Histogram
                             data1={meanData1}
                             data2={meanData2}
