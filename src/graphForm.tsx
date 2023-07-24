@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import genres from '../data/trackDataByGenre.json';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
-import { Genre, toTitleCase, InstructionData  } from './common';
+import {
+    Genre, toTitleCase, InstructionData, primary, secondary
+} from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
 
@@ -53,10 +55,12 @@ export const GraphForm: React.FC<GraphFormProps> = (
         setMeanData2([]);
     };
 
-    const SAMPLEDATAHISTOGRAM = 1;
-    const SAMPLEMEANLINE = 2;
-    const DISTRIBUTIONHISTOGRAM = 3;
-    const ESTIMATED_DISTRIBUTION = 4;
+    const SAMPLEDATAHISTOGRAM1 = 1;
+    const SAMPLEDATAHISTOGRAM2 = 2;
+    const SAMPLEDATAHISTOGRAMBOTH = 3;
+    const DISTRIBUTIONHISTOGRAM = 4;
+    const SAMPLEMEANLINE = 5;
+    const ESTIMATED_DISTRIBUTION = 6;
     const N = 100; // The number of datapoints to compile into the mean
 
     const getDataPoints = function(genre:string, feature:string , n:number) {
@@ -194,9 +198,29 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                 </div>
                 <div className='row' id='capture'>
-                    {graphTypes.includes(SAMPLEDATAHISTOGRAM) && (
+                    {graphTypes.includes(SAMPLEDATAHISTOGRAM1) && (
                         <Histogram
-                            color={'rgba(82, 208, 80, 1.0)'}
+                            color={primary}
+                            data1={data1}
+                            data2={null}
+                            genre1={genre1}
+                            genre2={null}
+                            audioFeature={audioFeature}
+                            n={null}/>
+                    )}
+                    {graphTypes.includes(SAMPLEDATAHISTOGRAM2) && (
+                        <Histogram
+                            color={secondary}
+                            data1={data2}
+                            data2={null}
+                            genre1={genre2}
+                            genre2={null}
+                            audioFeature={audioFeature}
+                            n={null}/>
+                    )}
+                    {graphTypes.includes(SAMPLEDATAHISTOGRAMBOTH) && (
+                        <Histogram
+                            color={primary}
                             data1={data1}
                             data2={data2}
                             genre1={genre1}
@@ -221,9 +245,9 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(DISTRIBUTIONHISTOGRAM) && (
                         <Histogram
+                            color={primary}
                             data1={meanData1}
                             data2={meanData2}
-                            color={'rgba(101, 188, 212, 1.0)'}
                             genre1={genre1}
                             genre2={genre2}
                             audioFeature={audioFeature}

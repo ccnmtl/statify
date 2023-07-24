@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase, primary, secondary } from '../common';
+import { BinData, graphBins, toTitleCase, secondary } from '../common';
 import { axisBottom, axisLeft } from 'd3';
 import { bin } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
@@ -24,7 +24,7 @@ interface HistogramProps {
 }
 
 export const Histogram: React.FC<HistogramProps>  = (
-    {data1, data2, genre1, genre2, audioFeature='tempo', n}
+    {color, data1, data2, genre1, genre2, audioFeature='tempo', n}
 ) => {
     const svgRef = useRef(null);
 
@@ -63,7 +63,7 @@ export const Histogram: React.FC<HistogramProps>  = (
             // Construct graph bars
             selection.append('g')
                 .attr('id', 'genre1')
-                .attr('fill', primary)
+                .attr('fill', color)
                 .selectAll()
                 .data(bins1)
                 .join('rect')

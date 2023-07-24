@@ -41,13 +41,13 @@ const instructions: InstructionData[] = [
 
 export const ComparingGenres: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [graphTypes, setGraphTypes] = useState([2]);
+    const [graphTypes, setGraphTypes] = useState([5]);
 
     useEffect(() => {
         if (activeTab === 3) {
-            setGraphTypes([2, 3]);
+            setGraphTypes([5, 4]);
         } else {
-            setGraphTypes([2]);
+            setGraphTypes([5]);
         }
     }, [activeTab]);
     return (
