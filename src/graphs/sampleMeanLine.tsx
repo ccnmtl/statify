@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { BinData, graphBins, toTitleCase, primary, secondary,
+import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY,
     FONT_SIZE, MARGIN } from '../common';
 import { cumulativeMeanFunc } from './utils';
 import { line, axisBottom, axisLeft } from 'd3';
@@ -96,7 +96,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .datum(cm)
             .attr('d', lnMkr(cm))
             .attr('fill', 'none')
-            .attr('stroke', primary)
+            .attr('stroke', PRIMARY)
             .attr('stroke-width', 2);
 
         if(data2) {
@@ -121,7 +121,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .datum(cm2)
                 .attr('d', lnMkr2(cm2))
                 .attr('fill', 'none')
-                .attr('stroke', secondary)
+                .attr('stroke', SECONDARY)
                 .attr('stroke-width', 2);
         }
 
