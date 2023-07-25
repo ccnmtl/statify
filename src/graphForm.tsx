@@ -53,7 +53,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
         setMeanData2([]);
     };
 
-    const SAMPLEDATAHISTORGAM = 1;
+    const SAMPLEDATAHISTOGRAM = 1;
     const SAMPLEMEANLINE = 2;
     const DISTRIBUTIONHISTOGRAM = 3;
     const ESTIMATED_DISTRIBUTION = 4;
@@ -194,7 +194,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                 </div>
                 <div className='row' id='capture'>
-                    {graphTypes.includes(SAMPLEDATAHISTORGAM) && (
+                    {graphTypes.includes(SAMPLEDATAHISTOGRAM) && (
                         <Histogram
                             color={'rgba(82, 208, 80, 1.0)'}
                             data1={data1}
