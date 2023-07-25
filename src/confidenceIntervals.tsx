@@ -62,7 +62,7 @@ export const ConfidenceIntervals: React.FC = () => {
                             dataPointsField={false}
                             seedField={true}
                             defaultPoints={100}
-                            graphTypes={[1, 3, 4]}
+                            graphTypes={[1, 1, 4]}
                             instructions={instructions}
                             activeTab={activeTab} />
                     </div>
