@@ -3,7 +3,7 @@ type InitialData = {
     baseUrl: string;
 }
 
-declare const LogicLearner: InitialData;
+declare const Statify: InitialData;
 
 declare module '*jpg' {
     const content: string;
