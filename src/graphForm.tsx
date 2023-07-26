@@ -325,7 +325,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                         return (
                                             <option key={index}
                                                 value={audioFeature}>
-                                                {audioFeature}
+                                                {toTitleCase(audioFeature)}
                                             </option>
                                         );
                                     })}

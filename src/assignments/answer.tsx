@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { AssignmentData } from '../common';
 
 interface AnswerProps {
     questionId: number;
@@ -11,35 +12,44 @@ export const Answer: React.FC<AnswerProps> = (
 ) => {
 
     const handleAnswers = (
-        evt: React.ChangeEvent<HTMLTextAreaElement>,): void => {
+        evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
+        const target = evt.currentTarget;
         setAnswers(() => {
-            answers[questionId] = evt.currentTarget.value;
+            answers[questionId] = target.value;
             return answers;
         });
+        const data = JSON.parse(
+            window.localStorage.getItem(module)) as AssignmentData[];
+        data[0].answers = answers;
 
         window.localStorage.setItem(
-            module+questionId.toString(), evt.target.value);
+            module, JSON.stringify(data));
 
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const prevAnswer = answers[questionId] ? answers[questionId] : '';
+    const setAnswerStorage = (module: string) => {
+
+        const data = JSON.parse(
+            window.localStorage.getItem(module)) as AssignmentData[];
+
+        if(data) {
+            if (Object.keys(data[0].answers).length > 0) {
+                const localAnswers: object = data[0].answers;
+
+                if(localAnswers[questionId]){
+                    setAnswers(() => {
+                        // eslint-disable-next-line max-len
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        answers[questionId] = localAnswers[questionId];
+                        return answers;
+                    });
+                }
+            }
+        }
+    };
 
     useEffect(() => {
-
-        const answerStorage = window.localStorage.getItem(
-            module+questionId.toString()
-        );
-        console.log('answee storage', answerStorage)
-        if(answerStorage){
-            setAnswers(() => {
-                answers[questionId] = answerStorage;
-                return answers;
-            });
-        }
-
-        console.log('answers', answers);
-        console.log('one answer', answers[questionId])
+        setAnswerStorage(module);
 
     },[]);
 
@@ -56,7 +66,7 @@ export const Answer: React.FC<AnswerProps> = (
                 onChange={handleAnswers}
                 // eslint-disable-next-line max-len
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                defaultValue={prevAnswer}
+                defaultValue={answers[questionId]}
                 rows={3}>
             </textarea>
 
