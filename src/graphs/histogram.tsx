@@ -1,10 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase, secondary } from '../common';
+import {
+    BinData, graphBins, toTitleCase, primary, secondary, HIGHLIGHT_1,
+    HIGHLIGHT_2
+} from '../common';
 import { axisBottom, axisLeft } from 'd3';
-import { bin } from 'd3-array';
-import { scaleLinear } from 'd3-scale';
+import { bin, Bin } from 'd3-array';
+import { scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
-
+/**
+ * import { visibility } from
+ *     'html2canvas/dist/types/css/property-descriptors/visibility';
+*/
 
 const BUCKET_PADDING = 4;
 const FONT_SIZE = 14;
@@ -23,6 +29,29 @@ interface HistogramProps {
     n: number | null;
 }
 
+const overlappingBins = function(
+    bins1:Bin<number, number>[], bins2:Bin<number, number>[]
+) {
+    const overlap:Bin<number, number>[] = [];
+    for (let go = true, one = 0, two = 0; go;) {
+        if (bins1.length === one || bins2.length === two) {
+            go = false;
+        } else if(bins1[one].x0 < bins2[two].x0) {
+            one++;
+        } else if(bins1[one].x0 > bins2[two].x0) {
+            two++;
+        } else {
+            if (bins1[one].length > 0 &&
+                bins1[one].length < bins2[two].length
+            ) {
+                overlap.push(bins1[one]);
+            }
+            one++, two++;
+        }
+    }
+    return overlap;
+};
+
 export const Histogram: React.FC<HistogramProps>  = (
     {color, data1, data2, genre1, genre2, audioFeature='tempo', n}
 ) => {
@@ -34,6 +63,26 @@ export const Histogram: React.FC<HistogramProps>  = (
         null,
         undefined
     >>(null);
+
+    const generateDetails = function(
+        d:Bin<number, number>,
+        id:string,
+        x:ScaleLinear<number, number, never>,
+        y:ScaleLinear<number, number, never>,
+    ) {
+        selection.append('text')
+            .attr('id', id)
+            .attr('fill', 'white')
+            .attr('font-size', FONT_SIZE)
+            .attr('paint-order', 'stroke')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
+            .attr('text-anchor', 'middle')
+            .attr('x', (x(d.x1) - x(d.x0)) / 2 + x(d.x0)
+                + BUCKET_PADDING/2)
+            .attr('y', Math.max(MARGIN, y(d.length)) - 10)
+            .text(`[${d.x0}, ${d.x1}] : ${d.length}`);
+    };
 
     useEffect(() => {
         if (!selection) {
@@ -60,6 +109,8 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .domain([0, Y_CAP])
                 .range([height, MARGIN]);
 
+            const id1 = 'detail-1';
+
             // Construct graph bars
             selection.append('g')
                 .attr('id', 'genre1')
@@ -70,9 +121,20 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
                 .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
                 .attr('y', (d) => y(d.length))
-                .attr('height', (d) => y(0) - y(d.length));
+                .attr('height', (d) => y(0) - y(d.length))
+                .on('mouseenter', function(){
+                    const d = select(this).datum() as Bin<number, number>;
+                    generateDetails(d, id1, x, y);
+                    select(this).attr('fill', HIGHLIGHT_1);
+                })
+                .on('mouseout', function(){
+                    select(this).attr('fill', primary);
+                    document.getElementById(id1).remove();
+                });
 
+            // Construct 2nd set of graph bars
             if (data2) {
+                const id2 = 'detail-2';
                 const bins2 = bin()
                     .domain([binData.min, binData.max])
                     .thresholds(
@@ -87,7 +149,39 @@ export const Histogram: React.FC<HistogramProps>  = (
                     .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
                     .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
                     .attr('y', (d) => y(d.length))
-                    .attr('height', (d) => y(0) - y(d.length));
+                    .attr('height', (d) => y(0) - y(d.length))
+                    .on('mouseenter', function(){
+                        const d = select(this).datum() as Bin<number, number>;
+                        generateDetails(d, id2, x, y);
+                        select(this).attr('fill', HIGHLIGHT_2);
+                    })
+                    .on('mouseout', function(){
+                        select(this).attr('fill', secondary);
+                        document.getElementById(id2).remove();
+                    });
+
+                // Shared data column
+                const binOverlap = overlappingBins(bins1, bins2);
+                const idOverlap = 'detail-1-overlap';
+                selection.append('g')
+                    .attr('id', 'genre2-overlap')
+                    .attr('fill', 'rgba(0, 0, 0, 0)')
+                    .selectAll()
+                    .data(binOverlap)
+                    .join('rect')
+                    .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
+                    .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
+                    .attr('y', (d) => y(d.length))
+                    .attr('height', (d) => y(0) - y(d.length))
+                    .on('mouseenter', function(){
+                        const d = select(this).datum() as Bin<number, number>;
+                        generateDetails(d, idOverlap, x, y);
+                        select(this).attr('fill', HIGHLIGHT_1);
+                    })
+                    .on('mouseout', function(){
+                        select(this).attr('fill', 'rgba(0, 0, 0, 0)');
+                        document.getElementById(idOverlap).remove();
+                    });
             }
 
             // Construct the Y-axis
