@@ -58,13 +58,13 @@ const questions: string[] = [
 
 export const InferentialStats: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [graphTypes, setGraphTypes] = useState([1, 2]);
+    const [graphTypes, setGraphTypes] = useState([1, 5]);
 
     useEffect(() => {
         if (activeTab === 2) {
-            setGraphTypes([1, 2, 3]);
+            setGraphTypes([1, 5, 4]);
         } else {
-            setGraphTypes([1, 2]);
+            setGraphTypes([1, 5]);
         }
     }, [activeTab]);
 
