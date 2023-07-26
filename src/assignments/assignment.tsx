@@ -75,7 +75,8 @@ export const Assignment: React.FC<AssignmentProps>  = (
                             <Answer
                                 questionId={index}
                                 answers={answers}
-                                setAnswers={setAnswers} />
+                                setAnswers={setAnswers}
+                                module={module} />
                         </div>
                     );
                 })}
@@ -90,10 +91,10 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                 className={'form-label'}>
                             Name:
                             </label>
-                            <input type="text"
-                                className="form-control w-100 mb-4"
-                                id="name-input"
-                                placeholder="Name"
+                            <input type='text'
+                                className='form-control w-100 mb-4'
+                                id='name-input'
+                                placeholder='Name'
                                 onChange={handleName}
                                 name="name" />
                         </div>
@@ -102,12 +103,12 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                 className={'form-label'}>
                             Uni:
                             </label>
-                            <input type="text"
-                                className="form-control w-100 mb-4"
-                                id="uni-input"
-                                placeholder="Uni"
+                            <input type='text'
+                                className='form-control w-100 mb-4'
+                                id='uni-input'
+                                placeholder='Uni'
                                 onChange={handleUni}
-                                name="uni" />
+                                name='uni' />
                         </div>
                     </div>
                     <button
