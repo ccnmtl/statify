@@ -14,10 +14,6 @@ const GAUSSIAN = 1 / Math.sqrt(2 * Math.PI);
 const Z_97_5 = 1.96; // 97.5th percentile, use negative for 2.5th percentile
 // The Z-table is a list of known constants and can be found at:
 // https://www.statology.org/z-table/
-const T_95 = 1.9720; // https://www.tutorialspoint.com/statistics/t_distribution_table.htm
-// n_1 and n_2 are assumed to be 100
-// Degrees of Freedom (df) = n_1 + n_2 - 2 = 2n - 2 = 198
-// Two Tails, 0.05 (95% confidence)
 
 interface EstimatedDistributionProps {
     data1: number[];
@@ -81,8 +77,10 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     const significance = function(
         mu1:number, mu2:number, sd1:number, sd2:number
     ) {
-        const pooledDeviation = Math.sqrt((sd1^2 + sd2^2)/2);
-        return pValue((mu1 - mu2) / (pooledDeviation * Math.sqrt(2/n)), n);
+        const pooledDeviation = Math.sqrt(
+            (Math.pow(sd1, 2) + Math.pow(sd2, 2))/2);
+        return 1 - Math.abs(100 - Math.abs(
+            pValue((mu1 - mu2) / (pooledDeviation * 2 / n), n))) / 100;
     };
 
     const stdError = function(data:number[]) {
@@ -227,22 +225,27 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                 .attr('font-size', FONT_SIZE);
 
             // TODO -- FIX p-value -- use Cumulative Distribution Function
-            // if (data1.length > 0) {
-            //     // Display the P-value
-            //     const sig = significance(
-            //         mean1, mean2, deviation(data1), deviation(data2));
-            //     selection.append('g')
-            //         .attr('id', 'significance')
-            //         .call((g) => g.append('text')
-            //             .attr('x', gWidth)
-            //             .attr('y', MARGIN)
-            //             .attr('fill', 'white')
-            //             .attr('text-anchor', 'end')
-            //             .text(sig < 0.001 ?
-            //                 'p-value < 0.001' :
-            //                 `p-value = ${sig.toFixed(3)}`))
-            //         .attr('font-size', FONT_SIZE);
-            // }
+            if (data1.length > 0) {
+                // Display the P-value
+                console.log(
+                    'mu_1:', mean1,
+                    '; mu_2:', mean2,
+                    '; sd_1:', deviation(data1),
+                    '; sd_2:', deviation(data2));
+                const sig = significance(
+                    mean1, mean2, deviation(data1), deviation(data2));
+                selection.append('g')
+                    .attr('id', 'significance')
+                    .call((g) => g.append('text')
+                        .attr('x', gWidth)
+                        .attr('y', MARGIN)
+                        .attr('fill', 'white')
+                        .attr('text-anchor', 'end')
+                        .text(sig < 0.001 ?
+                            'p-value < 0.001' :
+                            `p-value = ${sig.toFixed(3)}`))
+                    .attr('font-size', FONT_SIZE);
+            }
         }
     }, [selection, data1, genre1, genre2, audioFeature]);
 
