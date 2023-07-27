@@ -66,6 +66,13 @@ const alternative: BinData = {
     ticks: 0.04
 };
 
+const popularity: BinData = {
+    min: 0,
+    max: 100,
+    width: 5,
+    ticks: 5
+};
+
 export const graphBins = {
     tempo,
     key,
@@ -74,7 +81,7 @@ export const graphBins = {
     speechiness: alternative,
     danceability: alternative,
     energy: alternative,
-    popularity: alternative,
+    popularity: popularity
 };
 
 export const primary = 'rgba(82, 208, 80, 1.0)';
