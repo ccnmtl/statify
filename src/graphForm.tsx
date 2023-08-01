@@ -3,7 +3,7 @@ import genres from '../data/trackDataByGenre.json';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import {
-    Genre, toTitleCase, InstructionData, primary, secondary
+    Genre, toTitleCase, InstructionData, PRIMARY, SECONDARY
 } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
@@ -200,7 +200,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 <div className='row' id='capture'>
                     {graphTypes.includes(SAMPLEDATAHISTOGRAM1) && (
                         <Histogram
-                            color={primary}
+                            color={PRIMARY}
                             data1={data1}
                             data2={null}
                             genre1={genre1}
@@ -210,7 +210,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(SAMPLEDATAHISTOGRAM2) && (
                         <Histogram
-                            color={secondary}
+                            color={SECONDARY}
                             data1={data2}
                             data2={null}
                             genre1={genre2}
@@ -220,7 +220,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(SAMPLEDATAHISTOGRAMBOTH) && (
                         <Histogram
-                            color={primary}
+                            color={PRIMARY}
                             data1={data1}
                             data2={data2}
                             genre1={genre1}
@@ -245,7 +245,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     )}
                     {graphTypes.includes(DISTRIBUTIONHISTOGRAM) && (
                         <Histogram
-                            color={primary}
+                            color={PRIMARY}
                             data1={meanData1}
                             data2={meanData2}
                             genre1={genre1}
@@ -372,7 +372,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         <input
                             type='submit'
                             id='submit-btn'
-                            className='btn btn-primary'
+                            className='btn btn-PRIMARY'
                             value='Submit'
                         />
                     </form>

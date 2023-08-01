@@ -1,22 +1,23 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
-    BinData, graphBins, toTitleCase, primary, secondary, HIGHLIGHT_1,
+    BinData, graphBins, toTitleCase, SECONDARY, GRAPH_BG, HIGHLIGHT_1,
     HIGHLIGHT_2
 } from '../common';
 import { axisBottom, axisLeft } from 'd3';
 import { bin, Bin } from 'd3-array';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
-/**
- * import { visibility } from
- *     'html2canvas/dist/types/css/property-descriptors/visibility';
-*/
+
 
 const BUCKET_PADDING = 4;
 const FONT_SIZE = 14;
 const MARGIN = 30;
 const Y_LABEL = 20;
-const Y_CAP = 20;
+const Y_SCALE = 20;
+const LEGEND_R = 10;
+const LEGEND_GAP = 20;
+const LEGEND_TEXT_DROP = 5;
+const LEGEND_CIRCLE_STROKE = 1.5;
 
 
 interface HistogramProps {
@@ -97,6 +98,15 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .thresholds(
                     (binData.max - binData.min) / binData.ticks)(
                     data1); // First data goes here
+            const bins2 = data2 ?
+                bin()
+                    .domain([binData.min, binData.max])
+                    .thresholds((binData.max - binData.min) / binData.ticks)(
+                        data2) :
+                null;
+            const over20 = [...bins1.map(d => d.length),
+                ...bins1.map(d => d.length)].find(x => x > Y_SCALE);
+            const yCap = over20 ? 20 * Math.ceil(over20 / Y_SCALE) : Y_SCALE;
 
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
             const height =
@@ -106,10 +116,19 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .domain([binData.min, binData.max]).nice()
                 .range([MARGIN + Y_LABEL, gWidth]);
             const y = scaleLinear()
-                .domain([0, Y_CAP])
+                .domain([0, yCap])
                 .range([height, MARGIN]);
 
             const id1 = 'detail-1';
+
+            // Generate graph body
+            selection.append('rect')
+                .attr('fill', GRAPH_BG)
+                .attr('height', height-MARGIN)
+                .attr('id', 'graph-background')
+                .attr('width', gWidth-MARGIN-Y_LABEL)
+                .attr('x', MARGIN + Y_LABEL)
+                .attr('y', MARGIN);
 
             // Construct graph bars
             selection.append('g')
@@ -128,21 +147,16 @@ export const Histogram: React.FC<HistogramProps>  = (
                     select(this).attr('fill', HIGHLIGHT_1);
                 })
                 .on('mouseout', function(){
-                    select(this).attr('fill', primary);
+                    select(this).attr('fill', color);
                     document.getElementById(id1).remove();
                 });
 
             // Construct 2nd set of graph bars
             if (data2) {
                 const id2 = 'detail-2';
-                const bins2 = bin()
-                    .domain([binData.min, binData.max])
-                    .thresholds(
-                        (binData.max - binData.min) / binData.ticks)(
-                        data2); //Second data set goes here
                 selection.append('g')
                     .attr('id', 'genre2')
-                    .attr('fill', secondary)
+                    .attr('fill', SECONDARY)
                     .selectAll()
                     .data(bins2)
                     .join('rect')
@@ -156,7 +170,7 @@ export const Histogram: React.FC<HistogramProps>  = (
                         select(this).attr('fill', HIGHLIGHT_2);
                     })
                     .on('mouseout', function(){
-                        select(this).attr('fill', secondary);
+                        select(this).attr('fill', SECONDARY);
                         document.getElementById(id2).remove();
                     });
 
@@ -223,6 +237,43 @@ export const Histogram: React.FC<HistogramProps>  = (
                     .attr('y', 12)
                     .text(`Count: ${data1.length}`))
                 .attr('font-size', FONT_SIZE);
+
+            // Generate Legend
+            if (genre1 && genre2) {
+                selection.append('g')
+                    .attr('id', 'legend')
+                    .attr('transform',
+                        `translate(${gWidth}, ${3 * MARGIN / 2})`)
+                    .call((g) => g.append('g')
+                        .attr('transform',
+                            `translate(${-LEGEND_GAP}, 0)`)
+                        .call((g) => g.append('circle')
+                            .attr('stroke', 'black')
+                            .attr('stroke-width', LEGEND_CIRCLE_STROKE)
+                            .attr('fill', color)
+                            .attr('r', LEGEND_R))
+                        .call((g) => g.append('text')
+                            .attr('fill', 'white')
+                            .attr('text-anchor', 'end')
+                            .attr('x', -LEGEND_GAP)
+                            .attr('y', LEGEND_TEXT_DROP)
+                            .text(`${toTitleCase(genre1)}`)))
+                    .call((g) => g.append('g')
+                        .attr('transform',
+                            `translate(${-LEGEND_GAP}, ${30})`)
+                        .call((g) => g.append('circle')
+                            .attr('stroke', 'black')
+                            .attr('stroke-width', LEGEND_CIRCLE_STROKE)
+                            .attr('fill', SECONDARY)
+                            .attr('r', LEGEND_R))
+                        .call((g) => g.append('text')
+                            .attr('fill', 'white')
+                            .attr('text-anchor', 'end')
+                            .attr('x', -LEGEND_GAP)
+                            .attr('y', LEGEND_TEXT_DROP)
+                            .text(`${toTitleCase(genre2)}`)))
+                    .attr('font-size', FONT_SIZE);
+            }
         }
     }, [selection, data1, genre1, genre2, audioFeature]);
 

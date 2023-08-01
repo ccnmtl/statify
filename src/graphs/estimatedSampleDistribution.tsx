@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase, primary, secondary } from '../common';
+import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY } from '../common';
 import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import {
@@ -187,9 +187,9 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
             selection.selectAll('g').remove();
 
             generateCurve(selection, 'curve1', projection, data1, curve, fill,
-                primary, se1, mean1, x, y);
+                PRIMARY, se1, mean1, x, y);
             generateCurve(selection, 'curve2', projection, data2, curve, fill,
-                secondary, se2, mean2, x, y);
+                SECONDARY, se2, mean2, x, y);
 
             // Construct the Y-axis
             selection.append('g')
