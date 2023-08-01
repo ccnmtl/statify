@@ -3,6 +3,13 @@ export type TabData = {
     info: string;
 }
 
+export type AssignmentData = {
+    answers: object;
+    module: string;
+    uni: string;
+    name: string;
+}
+
 export type InstructionData = {
     instruction: string;
 }

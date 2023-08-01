@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import { Answer } from './answer';
 import { AssignmentDocument } from './assignmentDocument';
 import html2canvas from 'html2canvas';
+import { AssignmentData } from '../common';
 
 
 interface AssignmentProps {
@@ -17,15 +18,25 @@ export const Assignment: React.FC<AssignmentProps>  = (
 ) => {
     const [answers, setAnswers] = useState({});
     const [screenshot, setScreenshot] = useState<string>();
-    const [name, setName] = useState<string>();
-    const [uni, setUni] = useState<string>();
+    const [name, setName] = useState<string>('');
+    const [uni, setUni] = useState<string>('');
 
     const handleName = (evt: React.ChangeEvent<HTMLInputElement>): void => {
         setName(evt.target.value);
+        const data = JSON.parse(
+            window.localStorage.getItem(module)) as AssignmentData[];
+        data[0].name = evt.target.value;
+        window.localStorage.setItem(
+            module, JSON.stringify(data));
     };
 
     const handleUni = (evt: React.ChangeEvent<HTMLInputElement>): void => {
         setUni(evt.target.value);
+        const data = JSON.parse(
+            window.localStorage.getItem(module)) as AssignmentData[];
+        data[0].uni = evt.target.value;
+        window.localStorage.setItem(
+            module, JSON.stringify(data));
     };
 
     const generatePdfDocument = async() => {
@@ -51,12 +62,33 @@ export const Assignment: React.FC<AssignmentProps>  = (
         });
     };
 
-    const handleLocalStorage = () => {
-        // Placeholder. I am thinking here is where we will save the data to
-        // local storage. Only when that data is saved, we will be able to
-        // download the pdf.
+    const setLocalStorage = (module: string) => {
 
+        const initData: AssignmentData = {
+            answers: {},
+            module: module,
+            uni: uni,
+            name: name,
+        };
+        const data = JSON.parse(
+            window.localStorage.getItem(module)) as AssignmentData[];
+
+        if (data){
+            setUni(data[0].uni);
+            setName(data[0].name);
+
+            return data;
+        } else {
+            const assignmentState = [...new Array<AssignmentData>(initData)];
+            return window.localStorage.setItem(module,
+                JSON.stringify(assignmentState));
+        }
     };
+
+    useEffect(() => {
+        setLocalStorage(module);
+
+    },[]);
 
     return (
 
@@ -75,26 +107,25 @@ export const Assignment: React.FC<AssignmentProps>  = (
                             <Answer
                                 questionId={index}
                                 answers={answers}
-                                setAnswers={setAnswers} />
+                                setAnswers={setAnswers}
+                                module={module} />
                         </div>
                     );
                 })}
 
                 <div className={'mb-3'}>
-                    <label htmlFor={'exampleFormControlTextarea1'}
-                        className={'form-label'}>3. Build a report
-                    </label> <br />
                     <div className='row'>
                         <div className='col-4'>
                             <label htmlFor={'name-input'}
                                 className={'form-label'}>
                             Name:
                             </label>
-                            <input type="text"
-                                className="form-control w-100 mb-4"
-                                id="name-input"
-                                placeholder="Name"
+                            <input type='text'
+                                className='form-control w-100 mb-4'
+                                id='name-input'
+                                placeholder='Name'
                                 onChange={handleName}
+                                defaultValue={name}
                                 name="name" />
                         </div>
                         <div className='col-4'>
@@ -102,12 +133,13 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                 className={'form-label'}>
                             Uni:
                             </label>
-                            <input type="text"
-                                className="form-control w-100 mb-4"
-                                id="uni-input"
-                                placeholder="Uni"
+                            <input type='text'
+                                className='form-control w-100 mb-4'
+                                id='uni-input'
+                                placeholder='Uni'
                                 onChange={handleUni}
-                                name="uni" />
+                                defaultValue={uni}
+                                name='uni' />
                         </div>
                     </div>
                     <button
