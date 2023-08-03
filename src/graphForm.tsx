@@ -372,7 +372,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         <input
                             type='submit'
                             id='submit-btn'
-                            className='btn btn-PRIMARY'
+                            className='btn btn-primary'
                             value='Submit'
                         />
                     </form>
