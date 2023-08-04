@@ -227,11 +227,6 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
             // TODO -- FIX p-value -- use Cumulative Distribution Function
             if (data1.length > 0) {
                 // Display the P-value
-                console.log(
-                    'mu_1:', mean1,
-                    '; mu_2:', mean2,
-                    '; sd_1:', deviation(data1),
-                    '; sd_2:', deviation(data2));
                 const sig = significance(
                     mean1, mean2, deviation(data1), deviation(data2));
                 selection.append('g')
