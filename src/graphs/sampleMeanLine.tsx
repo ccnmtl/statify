@@ -1,20 +1,19 @@
 import React, { useRef, useEffect } from 'react';
 import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY,
-    FONT_SIZE, MARGIN } from '../common';
+    FONT_SIZE } from '../common';
 import { cumulativeMeanFunc } from './utils';
-import { line, axisBottom, axisLeft } from 'd3';
+import { extent, line, axisBottom, axisLeft } from 'd3';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 
-const Y_LABEL = 30;
-const HEIGHT = 350;
+
+const MARGIN = 50;
 
 interface CumulativeSampleMeanProps {
     audioFeature: string | null
     data1: number[];
     data2: number[] | null;
 }
-
 
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
     { data1, data2, audioFeature='tempo'}
@@ -29,22 +28,17 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         svgGraph.selectAll('g').remove();
         const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
+        const HEIGHT = Number.parseInt(svgGraph.style('height')) - (MARGIN - 7);
 
-        let xScale;
-        if(data1.length > 25 && data1.length < 50)
-        {
-            xScale = 50;
-        } else if(data1.length > 50 && data1.length < 75) {
-            xScale = 75;
-        } else if(data1.length > 75) {
-            xScale = 100;
-        } else {
-            xScale = 25;
-        }
+        const datapoints = [];
+        cumulativeMean.map((x) => {
+            datapoints.push(x[1]);
+        });
+
         // Create scales for x and y axes
         const x = scaleLinear()
-            .domain([0, xScale])
-            .range([MARGIN, gWidth]);
+            .domain(extent(datapoints))
+            .range([MARGIN, gWidth + 20]);
 
         const y = scaleLinear()
             .domain([binData.min, binData.max]).nice()
@@ -52,12 +46,12 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         // Construct the Y-axis
         svgGraph.append('g')
-            .attr('transform', `translate(${MARGIN + Y_LABEL -10}, -20)`)
-            .call(axisLeft(y).ticks(10).tickSizeOuter(2))
+            .attr('transform', `translate(${MARGIN},0)`)
+            .call(axisLeft(y))
             .call((g) => g.select('.domain').remove())
             .call((g) => g.append('text')
                 .attr('x', -HEIGHT/2)
-                .attr('y', -MARGIN-7)
+                .attr('y', -MARGIN + 10)
                 .attr('transform', 'rotate(270)')
                 .attr('fill', 'white')
                 .attr('text-anchor', 'center')
@@ -66,11 +60,11 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         // Create X axis
         svgGraph.append('g')
-            .attr('transform', `translate(20,${HEIGHT})`)
-            .call(axisBottom(x).ticks(10))
+            .attr('transform', `translate(0,${HEIGHT})`)
+            .call(axisBottom(x))
             .call((g) => g.append('text')
                 .attr('x', gWidth/2 + MARGIN)
-                .attr('y', MARGIN + 10)
+                .attr('y', MARGIN - 10)
                 .attr('fill', 'white')
                 .attr('text-anchor', 'right')
                 .text('# of data points'))
@@ -140,9 +134,9 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
         <div className='col-sm-12'>
             <svg
                 id='lines'
+                width={'100%'}
+                height={'22rem'}
                 ref={svgRef}
-                width='100%'
-                height='30rem'
             />
         </div>
     );

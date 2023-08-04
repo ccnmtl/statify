@@ -280,11 +280,10 @@ export const Histogram: React.FC<HistogramProps>  = (
     return (
         <div className='col-sm-12'>
             <svg
-                id="bins"
-                className="col"
+                id='bins'
                 ref={svgRef}
-                width="100%"
-                height="20rem"
+                width='100%'
+                height='20rem'
             />
         </div>
     );

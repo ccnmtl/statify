@@ -247,11 +247,10 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     return (
         <div className='col-sm-12'>
             <svg
-                id="distribution"
-                className="col"
+                id='distribution'
                 ref={svgRef}
-                width="100%"
-                height="20rem"
+                width='100%'
+                height='20rem'
             />
         </div>
     );
