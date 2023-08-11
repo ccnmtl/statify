@@ -90,6 +90,12 @@ export const Assignment: React.FC<AssignmentProps>  = (
 
     },[]);
 
+    useEffect(() => {
+        if(screenshot) {
+            void generatePdfDocument();
+        }
+    },[screenshot]);
+
     return (
 
         <>
@@ -145,13 +151,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
                     <button
                         onClick={() => void generateScreenshot()}
                         className={'btn btn-primary btn-statify me-2'}>
-                                Screenshot Graph
-                    </button>
-                    <button
-                        disabled={!screenshot}
-                        onClick={() => void generatePdfDocument()}
-                        className={'btn btn-primary btn-statify'}>
-                                Create PDF
+                                Create Assignment
                     </button>
                 </div>
             </div>
