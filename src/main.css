@@ -17,6 +17,12 @@ body
     background-color: #000;
 }
 
+#intro
+{
+    background-color: #0f0f0f;
+    border: 1px solid #1e1e1e;
+}
+
 #nav-global
 {
     background-color: #0f0f0f!important;
