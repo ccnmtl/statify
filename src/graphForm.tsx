@@ -272,12 +272,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     >
                         {genre1Field && (
                             <div className='mb-3'>
-                                <label htmlFor='genre1'
+                                <label htmlFor='firstGenre'
                                     className='form-label'>Genre 1</label>
-                                <select name='genre1' id='genre1'
+                                <select name='firstGenre' id='firstGenre'
                                     className='form-select'
-                                    defaultValue={'Select one'}
+                                    defaultValue={'Select One'}
                                     onChange={handleGenre1Select}
+                                    aria-required={'true'}
                                     required>
                                     <option value={''}>Select one</option>
                                     {genresText.map((genre, index) => {
@@ -292,12 +293,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         )}
                         {genre2Field && (
                             <div className='mb-3'>
-                                <label htmlFor='genre2'
+                                <label htmlFor='secondGenre'
                                     className='form-label'>Genre 2</label>
-                                <select name='genre2' id='genre2'
+                                <select name='secondGenre' id='secondGenre'
                                     className='form-select'
-                                    defaultValue={'Select one'}
+                                    defaultValue={'Select One'}
                                     onChange={handleGenre2Select}
+                                    aria-required={'true'}
                                     required>
                                     <option value={''}>Select one</option>
                                     {genresText.map((genre, index) => {
@@ -318,6 +320,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     className='form-select'
                                     defaultValue={'Select one'}
                                     onChange={handleAudioFeatureSelect}
+                                    aria-required={'true'}
                                     required>
                                     <option value={''}>Select one</option>
                                     {audioFeatures.map((
@@ -342,6 +345,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     className='form-select'
                                     defaultValue={'Select one'}
                                     onChange={handleDataPointsSelect}
+                                    aria-required={'true'}
                                     required>
                                     <option value={''}>Select one</option>
                                     {dataPointOptions.map((points, index) => {
@@ -365,6 +369,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     className='form-input'
                                     defaultValue={initialSeed}
                                     onChange={handleSeed}
+                                    aria-required={'true'}
                                     required>
                                 </input>
                             </div>
