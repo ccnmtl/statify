@@ -94,16 +94,16 @@ export const Assignment: React.FC<AssignmentProps>  = (
 
         <>
             <div className='col-md-9'>
-                <h2>Questions</h2>
+                <h3>Questions</h3>
                 {questions.map((question, index) => {
                     return (
                         <div key={index}>
                             <p>
                                 {index + 1}. {question}
                             </p>
-                            <h2>
+                            <h3>
                                 Answer
-                            </h2>
+                            </h3>
                             <Answer
                                 questionId={index}
                                 answers={answers}

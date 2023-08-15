@@ -57,6 +57,7 @@ export const Histogram: React.FC<HistogramProps>  = (
     {color, data1, data2, genre1, genre2, audioFeature='tempo', n}
 ) => {
     const svgRef = useRef(null);
+    const whichHisto = n ? 'DistributionHistogram' : 'SampleDataHistogram';
 
     const [selection, setSelection] = useState<null | Selection<
         null,
@@ -125,14 +126,13 @@ export const Histogram: React.FC<HistogramProps>  = (
             selection.append('rect')
                 .attr('fill', GRAPH_BG)
                 .attr('height', height-MARGIN)
-                .attr('id', 'graph-background')
                 .attr('width', gWidth-MARGIN-Y_LABEL)
                 .attr('x', MARGIN + Y_LABEL)
                 .attr('y', MARGIN);
 
             // Construct graph bars
             selection.append('g')
-                .attr('id', 'genre1')
+                .attr('id', `genre1-${whichHisto}-${color}`)
                 .attr('fill', color)
                 .selectAll()
                 .data(bins1)
@@ -155,7 +155,7 @@ export const Histogram: React.FC<HistogramProps>  = (
             if (data2) {
                 const id2 = 'detail-2';
                 selection.append('g')
-                    .attr('id', 'genre2')
+                    .attr('id', `genre2-${whichHisto}`)
                     .attr('fill', SECONDARY)
                     .selectAll()
                     .data(bins2)
@@ -280,7 +280,7 @@ export const Histogram: React.FC<HistogramProps>  = (
     return (
         <div className='col-sm-12'>
             <svg
-                id='bins'
+                id={`${whichHisto}-${color}`}
                 ref={svgRef}
                 width='100%'
                 height='20rem'
