@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY,
-    FONT_SIZE } from '../common';
+    FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2 } from '../common';
 import { cumulativeMeanFunc } from './utils';
 import { extent, line, axisBottom, axisLeft } from 'd3';
 import { scaleLinear } from 'd3-scale';
@@ -72,8 +72,9 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         const cm = cumulativeMean.map(
             (c) => [x(c[1]), y(c[0])] as [number, number]);
+
         // scatter dots
-        svgGraph.append('g').attr('id', 'genre1dots')
+        const circles = svgGraph.append('g').attr('id', 'genre1dots')
             .selectAll('circle')
             .data(cm)
             .enter()
@@ -82,6 +83,43 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .attr('cx', d=>d[0])
             .attr('cy', d=>d[1])
             .style('fill', 'white');
+
+        // hover details
+        svgGraph.append('g').attr('id', 'genre1text')
+            .selectAll('text')
+            .data(cm)
+            .enter()
+            .append('text')
+            .attr('fill', 'white')
+            .attr('font-size', FONT_SIZE)
+            .attr('x', d => d[0])
+            .attr('y', d => d[1])
+            .attr('dy', -20)
+            .attr('text-anchor', 'middle')
+            .attr('class', 'circle-label')
+            .style('opacity', 0)
+            .text((d, i) => `[${i+1}, ${cumulativeMean[i][0].toFixed(2)}]`);
+
+        circles
+            .on('mouseenter', function(event, d) {
+                select(this)
+                    .attr('r', 5)
+                    .style('fill', HIGHLIGHT_1);
+
+                svgGraph.selectAll('.circle-label')
+                    .filter(data => data === d)
+                    .style('opacity', 1);
+            })
+            .on('mouseout', function(event, d) {
+                select(this)
+                    .attr('r', 2)
+                    .style('fill', 'white');
+
+                svgGraph.selectAll('.circle-label')
+                    .filter(data => data === d)
+                    .style('opacity', 0);
+            });
+
 
         const lnMkr = line();
         //lines
@@ -98,7 +136,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             const cm2 = cumulativeMean2.map(
                 (c) => [x(c[1]), y(c[0])] as [number, number]);
             // scatter dots
-            svgGraph.append('g').attr('id', 'genre2dots')
+            const circles2 = svgGraph.append('g').attr('id', 'genre2dots')
                 .selectAll('circle')
                 .data(cm2)
                 .enter()
@@ -107,6 +145,43 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .attr('cx', d=>d[0])
                 .attr('cy', d=>d[1])
                 .style('fill', 'white');
+
+            // hover details
+            svgGraph.append('g').attr('id', 'genre2text')
+                .selectAll('text')
+                .data(cm2)
+                .enter()
+                .append('text')
+                .attr('fill', 'white')
+                .attr('font-size', FONT_SIZE)
+                .attr('x', d => d[0])
+                .attr('y', d => d[1])
+                .attr('dy', -20)
+                .attr('text-anchor', 'middle')
+                .attr('class', 'circle-label2')
+                .style('opacity', 0)
+                .text((d, i) => `[${i+1},
+                    ${cumulativeMean2[i][0].toFixed(2)}]`);
+
+            circles2
+                .on('mouseenter', function(event, d) {
+                    select(this)
+                        .attr('r', 5)
+                        .style('fill', HIGHLIGHT_2);
+
+                    svgGraph.selectAll('#genre2text .circle-label2')
+                        .filter(data => data === d)
+                        .style('opacity', 1);
+                })
+                .on('mouseout', function(event, d) {
+                    select(this)
+                        .attr('r', 2)
+                        .style('fill', 'white');
+
+                    svgGraph.selectAll('#genre2text .circle-label2')
+                        .filter(data => data === d)
+                        .style('opacity', 0);
+                });
 
             const lnMkr2 = line();
             //lines
