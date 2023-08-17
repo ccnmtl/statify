@@ -75,8 +75,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
         return data;
     };
 
-    const handleDataUpdate = function(e) {
-        (e as Event).preventDefault();
+    const handleDataUpdate = (evt: React.FormEvent<HTMLFormElement>): void => {
+        evt.preventDefault();
         if (genre1) {
             if (data1.length === N) {
                 if (dataPoints === N) {
@@ -268,7 +268,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
 
                     <form
                         className='p-2 graph-inputs'
-                        onSubmit={(e) => handleDataUpdate(e)}
+                        onSubmit={handleDataUpdate}
                     >
                         {genre1Field && (
                             <div className='mb-3'>
