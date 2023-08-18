@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY,
     FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2 } from '../common';
 import { cumulativeMeanFunc } from './utils';
@@ -18,6 +18,8 @@ interface CumulativeSampleMeanProps {
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
     { data1, data2, audioFeature='tempo'}
 ) => {
+    const [prevData, setPrevData] = useState<[number, number][][]>([]);
+    const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
     const svgRef = useRef(null);
 
     useEffect(() => {
@@ -131,6 +133,24 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .attr('stroke', PRIMARY)
             .attr('stroke-width', 2);
 
+        if(cm.length === 100) {
+            setPrevData([
+                ...prevData, cm
+            ]);
+        }
+
+        prevData.forEach((oldData) => {
+            //lines
+            svgGraph.append('g').attr('id', 'genre1line')
+                .append('path')
+                .datum(oldData)
+                .attr('d', lnMkr(oldData))
+                .attr('fill', 'none')
+                .attr('stroke', PRIMARY)
+                .attr('opacity', 0.35)
+                .attr('stroke-width', 2);
+        });
+
         if(data2) {
             const cumulativeMean2 = cumulativeMeanFunc(data2);
             const cm2 = cumulativeMean2.map(
@@ -192,6 +212,24 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .attr('fill', 'none')
                 .attr('stroke', SECONDARY)
                 .attr('stroke-width', 2);
+
+            if(cm2.length === 100) {
+                setPrevData2([
+                    ...prevData2, cm2
+                ]);
+            }
+
+            prevData2.forEach((oldData) => {
+                //lines
+                svgGraph.append('g').attr('id', 'genre1line')
+                    .append('path')
+                    .datum(oldData)
+                    .attr('d', lnMkr(oldData))
+                    .attr('fill', 'none')
+                    .attr('stroke', SECONDARY)
+                    .attr('opacity', 0.35)
+                    .attr('stroke-width', 2);
+            });
         }
 
         // Construct Ticker Label
