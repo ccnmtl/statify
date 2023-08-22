@@ -24,6 +24,7 @@ js-typecheck: $(JS_SENTINAL)
 .PHONY: js-typecheck
 
 test: $(JS_SENTINAL) eslint
+	npm test
 	npm run cypress:test
 
 cypress:

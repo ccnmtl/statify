@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
+import { tTestTwoSample } from 'simple-statistics';
 import {
     area, axisBottom, axisLeft, deviation, mean, line, curveNatural, ScaleLinear
 } from 'd3';
@@ -12,7 +13,7 @@ import {
 const FONT_SIZE = 14;
 const MARGIN = 30;
 const Y_LABEL = 12;
-const GAUSSIAN = 1 / Math.sqrt(2 * Math.PI);
+export const GAUSSIAN = 1 / Math.sqrt(2 * Math.PI);
 const Z_97_5 = 1.96; // 97.5th percentile, use negative for 2.5th percentile
 // The Z-table is a list of known constants and can be found at:
 // https://www.statology.org/z-table/
@@ -25,6 +26,22 @@ interface EstimatedDistributionProps {
     audioFeature: string;
     n: number;
 }
+
+// Does not follow the typical standard distribution, uses standard error.
+export const gaussian = function(x:number, se:number, mean:number, n:number) {
+    if (se === 0 || n === 0) {
+        throw new Error('Divide by zero');
+    }
+    const z = (x - mean) / se;
+    return GAUSSIAN * Math.exp(-0.5 * z * z) / se * n;
+};
+
+export const stdError = function(data:number[], n:number) {
+    if (data.length === 0) {
+        return 0;
+    }
+    return (deviation(data) ?? 0) / Math.sqrt(n === 0 ? 1 : n);
+};
 
 export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     {data1, data2, genre1, genre2, audioFeature='tempo', n}
@@ -45,57 +62,6 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     };
 
     window.addEventListener('resize', handleResize);
-
-    // Does not follow the typical standard distribution, uses standard error.
-    const gaussian = function(x:number, se:number, mean:number) {
-        const z = (x - mean) / se;
-        return GAUSSIAN * Math.exp(-0.5 * z * z) / se * n;
-    };
-
-    const gamma = function(x:number) {
-        let val = 1;
-        for (let i = 2; i < x; i++) {
-            val *= i;
-        }
-        return val;
-    };
-
-    /**
-     * Student's t-distribution p_v(t), Where _v is the degree of freedom.
-     * https://bpb-us-w2.wpmucdn.com/voices.uchicago.edu/dist/9/1193/files/2016/01/05b-TandP.pdf
-     * @param t T-value of the two datasets
-     * @param n Size of the two datasets, assumed equal lengths
-     * @returns P-value, the probability that two datasets are the same
-     */
-    const pValue = function(t:number, n:number) {
-        const v = 2 * n - 2;
-        return gamma((v + 1) / 2) / (Math.sqrt(v * Math.PI) * gamma(v / 2))
-                * (1 + t^2 / v)^(-(v+1)/2);
-    };
-
-    /**
-     * Calculate the probability of obtaining the observed difference between
-     * datasets if the null hypothesis were true -- Meaning, if the datasets
-     * were from the same source. The equations assume that both datasets are
-     * the same size.
-     * @param mu1 First Mean
-     * @param mu2 Second Mean
-     * @param sd1 First Standard Deviation
-     * @param sd2 Second Standard Deviation
-     * @returns Significance (P-value)
-     */
-    const significance = function(
-        mu1:number, mu2:number, sd1:number, sd2:number
-    ) {
-        const pooledDeviation = Math.sqrt(
-            (Math.pow(sd1, 2) + Math.pow(sd2, 2))/2);
-        return 1 - Math.abs(100 - Math.abs(
-            pValue((mu1 - mu2) / (pooledDeviation * 2 / n), n))) / 100;
-    };
-
-    const stdError = function(data:number[]) {
-        return deviation(data) / Math.sqrt(n);
-    };
 
     /**
      * Generates a normal distribution curve with an area underneath from the
@@ -133,12 +99,12 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
             .call((g) => g.append('path')
                 .datum(projection
                     .filter(f => f > lowerBound && f < upperBound)
-                    .map(d => [d, gaussian(d, se, mu)]))
+                    .map(d => [d, gaussian(d, se, mu, n)]))
                 .attr('fill', color)
                 .attr('d', fill as number[]))
             .call((g) => g.append('path')
                 .datum(projection
-                    .map(d => [d, gaussian(d, se, mu)]))
+                    .map(d => [d, gaussian(d, se, mu, n)]))
                 .attr('fill', 'none')
                 .attr('stroke', 'white')
                 .attr('stroke-dasharray', '5 3')
@@ -154,7 +120,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                 .attr('stroke-width', 1.5)
                 .attr('x1', x(mu))
                 .attr('x2', x(mu))
-                .attr('y1', y(data.length > 0 ? gaussian(mu, se, mu) : 0))
+                .attr('y1', y(data.length > 0 ? gaussian(mu, se, mu, n) : 0))
                 .attr('y2', y(0)));
         return [se, mu];
     };
@@ -164,14 +130,14 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
             setSelection(select(svgRef.current));
         } else {
             const binData = graphBins[audioFeature] as BinData;
-            const se1 = stdError(data1), mean1 = mean(data1);
-            const se2 = stdError(data2), mean2 = mean(data2);
+            const se1 = stdError(data1, n), mean1 = mean(data1) ?? 0;
+            const se2 = stdError(data2, n), mean2 = mean(data2) ?? 0;
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
             const height =
                 Number.parseInt(selection.style('height')) - MARGIN * 2;
             const yScale = data1.length > 0 ? Math.max(
-                gaussian(mean1, se1, mean1),
-                gaussian(mean2, se2, mean2)):
+                gaussian(mean1, se1, mean1, n),
+                gaussian(mean2, se2, mean2, n)):
                 20;
             const yMagnitude = 8 * Math.floor(Math.log10(yScale));
             const x = scaleLinear()
@@ -245,8 +211,8 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                 .attr('font-size', FONT_SIZE);
 
             // Display the P-value
-            const sig = significance(
-                mean1, mean2, deviation(data1), deviation(data2));
+            const t = Math.abs(tTestTwoSample(data1, data2) ?? 0);
+            const sig = 1/(Math.pow(t, Math.PI)+1);
             selection.append('g')
                 .attr('id', 'significance')
                 .call((g) => g.append('text')
