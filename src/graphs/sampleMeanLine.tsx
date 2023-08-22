@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY,
+import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG,
     FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2 } from '../common';
 import { cumulativeMeanFunc } from './utils';
 import { extent, line, axisBottom, axisLeft } from 'd3';
@@ -45,6 +45,14 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
         const y = scaleLinear()
             .domain([binData.min, binData.max]).nice()
             .range([HEIGHT, MARGIN]);
+
+        // Generate graph body
+        svgGraph.append('rect')
+            .attr('fill', GRAPH_BG)
+            .attr('height', HEIGHT-MARGIN)
+            .attr('width', gWidth + 20 - MARGIN)
+            .attr('x', MARGIN)
+            .attr('y', y(binData.max));
 
         // Construct the Y-axis
         svgGraph.append('g')

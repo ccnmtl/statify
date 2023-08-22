@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY } from '../common';
 import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import {
     area, axisBottom, axisLeft, deviation, mean, line, curveNatural, ScaleLinear
 } from 'd3';
+import {
+    BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG
+} from '../common';
 
 
 const FONT_SIZE = 14;
@@ -166,11 +168,12 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                 20;
             const yMagnitude = 8 * Math.floor(Math.log10(yScale));
             const x = scaleLinear()
-                .domain([binData.min, binData.max]).nice()
+                .domain([binData.min, binData.max])
                 .range([MARGIN + Y_LABEL + yMagnitude, gWidth]);
             const y = scaleLinear()
                 .domain([0, yScale])
                 .range([height, MARGIN]);
+
             const curve = line()
                 .curve(curveNatural)
                 .x(d => x(d[0]))
@@ -185,6 +188,15 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                         + binData.min);
 
             selection.selectAll('g').remove();
+
+            // Generate graph body
+            selection.append('g')
+                .call((g) => g.append('rect')
+                    .attr('fill', GRAPH_BG)
+                    .attr('height', height - MARGIN)
+                    .attr('width', gWidth - x(binData.min))
+                    .attr('x', x(binData.min))
+                    .attr('y', MARGIN));
 
             generateCurve(selection, 'curve1', projection, data1, curve, fill,
                 PRIMARY, se1, mean1, x, y);
@@ -201,7 +213,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                 .call((g) => g.select('.domain').remove())
                 .call((g) => g.append('text')
                     .attr('x', -height/2)
-                    .attr('y', -Y_LABEL-yMagnitude-15)
+                    .attr('y', -x(binData.min) + Y_LABEL)
                     .attr('transform', 'rotate(270)')
                     .attr('fill', 'white')
                     .attr('text-anchor', 'middle')
@@ -233,7 +245,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     .attr('id', 'significance')
                     .call((g) => g.append('text')
                         .attr('x', gWidth)
-                        .attr('y', MARGIN)
+                        .attr('y', 12)
                         .attr('fill', 'white')
                         .attr('text-anchor', 'end')
                         .text(sig < 0.001 ?
