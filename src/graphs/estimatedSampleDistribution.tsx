@@ -154,18 +154,16 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     useEffect(() => {
         if (!selection) {
             setSelection(select(svgRef.current));
-        } else {
+        } else if (data1.length > 0){
             const binData = graphBins[audioFeature] as BinData;
             const se1 = stdError(data1), mean1 = mean(data1);
             const se2 = stdError(data2), mean2 = mean(data2);
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
             const height =
                 Number.parseInt(selection.style('height')) - MARGIN * 2;
-            const yScale = data1.length > 0 ?
-                Math.max(
-                    gaussian(mean1, se1, mean1),
-                    gaussian(mean2, se2, mean2)):
-                20;
+            const yScale = Math.max(
+                gaussian(mean1, se1, mean1),
+                gaussian(mean2, se2, mean2));
             const yMagnitude = 8 * Math.floor(Math.log10(yScale));
             const x = scaleLinear()
                 .domain([binData.min, binData.max])
@@ -236,23 +234,20 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     ))
                 .attr('font-size', FONT_SIZE);
 
-            // TODO -- FIX p-value -- use Cumulative Distribution Function
-            if (data1.length > 0) {
-                // Display the P-value
-                const sig = significance(
-                    mean1, mean2, deviation(data1), deviation(data2));
-                selection.append('g')
-                    .attr('id', 'significance')
-                    .call((g) => g.append('text')
-                        .attr('x', gWidth)
-                        .attr('y', 12)
-                        .attr('fill', 'white')
-                        .attr('text-anchor', 'end')
-                        .text(sig < 0.001 ?
-                            'p-value < 0.001' :
-                            `p-value = ${sig.toFixed(3)}`))
-                    .attr('font-size', FONT_SIZE);
-            }
+            // Display the P-value
+            const sig = significance(
+                mean1, mean2, deviation(data1), deviation(data2));
+            selection.append('g')
+                .attr('id', 'significance')
+                .call((g) => g.append('text')
+                    .attr('x', gWidth)
+                    .attr('y', 12)
+                    .attr('fill', 'white')
+                    .attr('text-anchor', 'end')
+                    .text(sig < 0.001 ?
+                        'p-value < 0.001' :
+                        `p-value = ${sig.toFixed(3)}`))
+                .attr('font-size', FONT_SIZE);
         }
     }, [selection, data1, genre1, genre2, audioFeature]);
 
