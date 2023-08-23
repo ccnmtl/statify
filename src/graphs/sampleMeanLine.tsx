@@ -22,6 +22,12 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
     const svgRef = useRef(null);
 
+    const [width, setWidth]  = useState<number>();
+    const handleResize = function() {
+        setWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+
     useEffect(() => {
 
         const cumulativeMean = cumulativeMeanFunc(data1);
@@ -47,12 +53,13 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .range([HEIGHT, MARGIN]);
 
         // Generate graph body
-        svgGraph.append('rect')
-            .attr('fill', GRAPH_BG)
-            .attr('height', HEIGHT-MARGIN)
-            .attr('width', gWidth + 20 - MARGIN)
-            .attr('x', MARGIN)
-            .attr('y', y(binData.max));
+        svgGraph.append('g')
+            .call((g) => g.append('rect')
+                .attr('fill', GRAPH_BG)
+                .attr('height', HEIGHT-MARGIN)
+                .attr('width', gWidth + 20 - MARGIN)
+                .attr('x', MARGIN)
+                .attr('y', y(binData.max)));
 
         // Construct the Y-axis
         svgGraph.append('g')
@@ -250,7 +257,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .text(`Count: ${data1.length}`))
             .attr('font-size', FONT_SIZE);
 
-    }, [data1, data2, audioFeature]);
+    }, [data1, data2, audioFeature, width]);
     return (
         <div className='col-sm-12'>
             <svg

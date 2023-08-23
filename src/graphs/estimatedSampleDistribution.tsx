@@ -38,6 +38,14 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
         undefined
     >>(null);
 
+    const [width, setWidth]  = useState<number>();
+
+    const handleResize = function() {
+        setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Does not follow the typical standard distribution, uses standard error.
     const gaussian = function(x:number, se:number, mean:number) {
         const z = (x - mean) / se;
@@ -249,7 +257,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                         `p-value = ${sig.toFixed(3)}`))
                 .attr('font-size', FONT_SIZE);
         }
-    }, [selection, data1, genre1, genre2, audioFeature]);
+    }, [selection, data1, genre1, genre2, audioFeature, width]);
 
     return (
         <div className='col-sm-12'>
