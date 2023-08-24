@@ -139,3 +139,10 @@ form select
     background-color: #37D247;
     border: 0;
 }
+
+.footer
+{
+    display: flex!important;
+    justify-content: center!important;
+    flex-direction: row;
+}
