@@ -162,16 +162,17 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     useEffect(() => {
         if (!selection) {
             setSelection(select(svgRef.current));
-        } else if (data1.length > 0){
+        } else {
             const binData = graphBins[audioFeature] as BinData;
             const se1 = stdError(data1), mean1 = mean(data1);
             const se2 = stdError(data2), mean2 = mean(data2);
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
             const height =
                 Number.parseInt(selection.style('height')) - MARGIN * 2;
-            const yScale = Math.max(
+            const yScale = data1.length > 0 ? Math.max(
                 gaussian(mean1, se1, mean1),
-                gaussian(mean2, se2, mean2));
+                gaussian(mean2, se2, mean2)):
+                20;
             const yMagnitude = 8 * Math.floor(Math.log10(yScale));
             const x = scaleLinear()
                 .domain([binData.min, binData.max])
@@ -204,11 +205,12 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     .attr('x', x(binData.min))
                     .attr('y', MARGIN));
 
-            generateCurve(selection, 'curve1', projection, data1, curve, fill,
-                PRIMARY, se1, mean1, x, y);
-            generateCurve(selection, 'curve2', projection, data2, curve, fill,
-                SECONDARY, se2, mean2, x, y);
-
+            if (data1.length > 0){
+                generateCurve(selection, 'curve1', projection, data1, curve,
+                    fill, PRIMARY, se1, mean1, x, y);
+                generateCurve(selection, 'curve2', projection, data2, curve,
+                    fill, SECONDARY, se2, mean2, x, y);
+            }
             // Construct the Y-axis
             selection.append('g')
                 .attr(
