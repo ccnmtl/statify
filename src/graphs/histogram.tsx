@@ -66,6 +66,14 @@ export const Histogram: React.FC<HistogramProps>  = (
         undefined
     >>(null);
 
+    const [width, setWidth]  = useState<number>();
+
+    const handleResize = function() {
+        setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     const generateDetails = function(
         d:Bin<number, number>,
         id:string,
@@ -123,12 +131,13 @@ export const Histogram: React.FC<HistogramProps>  = (
             const id1 = 'detail-1';
 
             // Generate graph body
-            selection.append('rect')
-                .attr('fill', GRAPH_BG)
-                .attr('height', height-MARGIN)
-                .attr('width', gWidth-MARGIN-Y_LABEL)
-                .attr('x', MARGIN + Y_LABEL)
-                .attr('y', MARGIN);
+            selection.append('g')
+                .call((g) => g.append('rect')
+                    .attr('fill', GRAPH_BG)
+                    .attr('height', height-MARGIN)
+                    .attr('width', gWidth-MARGIN-Y_LABEL)
+                    .attr('x', MARGIN + Y_LABEL)
+                    .attr('y', MARGIN));
 
             // Construct graph bars
             selection.append('g')
@@ -275,7 +284,7 @@ export const Histogram: React.FC<HistogramProps>  = (
                     .attr('font-size', FONT_SIZE);
             }
         }
-    }, [selection, data1, genre1, genre2, audioFeature]);
+    }, [selection, data1, genre1, genre2, audioFeature, width]);
 
     return (
         <div className='col-sm-12'>
