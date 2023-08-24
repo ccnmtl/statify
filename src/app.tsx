@@ -6,6 +6,7 @@ import { Home} from './home';
 import { InferentialStats} from './inferentialStats';
 import { ComparingGenres} from './comparingGenres';
 import { ConfidenceIntervals } from './confidenceIntervals';
+import { Footer } from './footer';
 
 
 export const App: React.FC = () => {
@@ -26,6 +27,8 @@ export const App: React.FC = () => {
                 <Route path='/confidence'
                     element={<ConfidenceIntervals />} />
             </Routes>
+
+            <Footer />
         </>
     );
 };
