@@ -9,21 +9,14 @@ export const Footer: React.FC = () => {
         <footer className='bg-dark pt-2 pb-5 navbar-dark' id='nav-global'>
             <ul className='navbar-nav footer'>
                 <li className='nav-item me-5'>
-                    <Link to='/'
+                    <Link to='/about/'
                         className='nav-link'
                         title='About'>
                         About
                     </Link>
                 </li>
-                <li className='nav-item me-5'>
-                    <Link to='/'
-                        className='nav-link'
-                        title='Help'>
-                        Help
-                    </Link>
-                </li>
                 <li className='nav-item'>
-                    <Link to='/'
+                    <Link to='/contact/'
                         className='nav-link'
                         title='Contact'>
                             Contact

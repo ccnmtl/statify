@@ -8,6 +8,8 @@ import { ComparingGenres} from './comparingGenres';
 import { ConfidenceIntervals } from './confidenceIntervals';
 import { Footer } from './footer';
 import ReactGA from 'react-ga4';
+import { Contact } from './contact';
+import { About } from './about';
 
 
 export const App: React.FC = () => {
@@ -34,6 +36,8 @@ export const App: React.FC = () => {
             <Routes>
                 <Route path='*' element={<h1>404</h1>} />
                 <Route path='/' element={<Home />} />
+                <Route path='/about/' element={<About />} />
+                <Route path='/contact/' element={<Contact />} />
                 <Route path='/descriptive/'
                     element={<DescriptiveStats />} />
                 <Route path='/inferential/'
