@@ -31,7 +31,7 @@ export const Home: React.FC = () => {
                             genre?
                         </p>
                         <Link
-                            to={'/descriptive'}
+                            to={'/descriptive/'}
                             className={'btn btn-primary btn-statify'}
                             type={'submit'}
                         >
