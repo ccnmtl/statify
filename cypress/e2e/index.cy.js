@@ -12,8 +12,6 @@ describe('Home Page', () => {
         cy.checkPageA11y();
     });
     it('Has link that takes you to first module', () => {
-        // cy.get('[data-cy="statify-start"]').should('contain',
-        //     'Good question.');
         cy.get('[data-cy="statify-start"]').click();
         cy.url().should('eq', 'http://localhost:8000/descriptive/');
     });

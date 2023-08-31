@@ -268,6 +268,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     <form
                         className='p-2 graph-inputs'
                         onSubmit={handleDataUpdate}
+                        data-cy={'graphForm'}
                     >
                         {genre1Field && (
                             <div className='mb-3'>

@@ -25,6 +25,7 @@ export const TabNav: React.FC<TabNavProps> = (
                             <a className={activeTab == idx ?
                                 'nav-link active' : 'nav-link'} href='#'
                             data-active-tab={idx}
+                            data-cy={idx}
                             onClick={handleSetActiveTab}>
                                 {tab.title}
                             </a>

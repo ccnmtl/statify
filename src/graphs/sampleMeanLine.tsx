@@ -270,6 +270,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
         <div className='col-sm-12 mb-4'>
             <svg
                 id='lines'
+                data-cy={'sampleMean'}
                 width={'100%'}
                 height={'22rem'}
                 ref={svgRef}
