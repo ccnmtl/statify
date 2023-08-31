@@ -30,7 +30,7 @@ interface HistogramProps {
     n: number | null;
 }
 
-const overlappingBins = function(
+export function overlappingBins(
     bins1:Bin<number, number>[], bins2:Bin<number, number>[]
 ) {
     const overlap:Bin<number, number>[] = [];
@@ -51,7 +51,7 @@ const overlappingBins = function(
         }
     }
     return overlap;
-};
+}
 
 export const Histogram: React.FC<HistogramProps>  = (
     {color, data1, data2, genre1, genre2, audioFeature='tempo', n}

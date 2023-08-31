@@ -38,9 +38,6 @@ module.exports = {
     ].concat(devMode ? [] : [new MiniCssExtractPlugin()]),
     devServer: {
         port: 8000,
-        allowedHosts: [
-            'comic.ctl.columbia.edu'
-        ],
         historyApiFallback: true,
         devMiddleware: {
             writeToDisk: true,
