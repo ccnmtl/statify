@@ -214,16 +214,24 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
             const t = Math.abs(tTestTwoSample(data1, data2) ?? 0);
             const sig = 1/(Math.pow(t, Math.PI)+1);
             selection.append('g')
-                .attr('id', 'significance')
-                .call((g) => g.append('text')
-                    .attr('x', gWidth)
-                    .attr('y', 12)
-                    .attr('fill', 'white')
-                    .attr('text-anchor', 'end')
-                    .text(sig < 0.001 ?
-                        'p-value < 0.001' :
-                        `p-value = ${sig.toFixed(3)}`))
-                .attr('font-size', FONT_SIZE);
+                .attr('id', 'title-header')
+                .call((g) => {
+                    g.append('text')
+                        .attr('x', gWidth)
+                        .attr('y', 12)
+                        .attr('fill', 'white')
+                        .attr('font-size', FONT_SIZE)
+                        .attr('text-anchor', 'end')
+                        .text(sig < 0.001 ?
+                            'p-value < 0.001' :
+                            `p-value = ${sig.toFixed(3)}`);
+                    g.append('text')
+                        .attr('fill', 'white')
+                        .attr('font-size', FONT_SIZE * 1.5)
+                        .attr('text-anchor', 'middle')
+                        .attr('x', gWidth/2 + MARGIN)
+                        .attr('y', 18)
+                        .text(`Sampling Distribution when N = ${n}`);});
         }
     }, [selection, data1, genre1, genre2, audioFeature, width]);
 

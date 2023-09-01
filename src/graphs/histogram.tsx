@@ -237,15 +237,25 @@ export const Histogram: React.FC<HistogramProps>  = (
                     ))
                 .attr('font-size', FONT_SIZE);
 
-            // Construct Ticker Label
+            // Construct Title and Ticker Label
             selection.append('g')
-                .call((g) => g.append('text')
-                    .attr('fill', 'white')
-                    .attr('text-anchor', 'end')
-                    .attr('x', gWidth)
-                    .attr('y', 12)
-                    .text(`Count: ${data1.length}`))
-                .attr('font-size', FONT_SIZE);
+                .attr('id', 'graph-header')
+                .call((g) => {
+                    g.append('text')
+                        .attr('fill', 'white')
+                        .attr('font-size', FONT_SIZE)
+                        .attr('text-anchor', 'end')
+                        .attr('x', gWidth)
+                        .attr('y', 12)
+                        .text(`Count: ${data1.length}`);
+                    g.append('text')
+                        .attr('fill', 'white')
+                        .attr('font-size', FONT_SIZE * 1.5)
+                        .attr('text-anchor', 'middle')
+                        .attr('x', gWidth/2 + MARGIN)
+                        .attr('y', 18)
+                        .text('Sample Data'.concat(
+                            genre1 ? ` for ${toTitleCase(genre1)}`: ''));});
 
             // Generate Legend
             if (genre1 && genre2) {

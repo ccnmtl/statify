@@ -249,17 +249,25 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         // Construct Ticker Label
         svgGraph.append('g')
-            .call((g) => g.append('text')
-                .attr('fill', 'white')
-                .attr('text-anchor', 'end')
-                .attr('x', gWidth)
-                .attr('y', 12)
-                .text(`Count: ${data1.length}`))
-            .attr('font-size', FONT_SIZE);
+            .call((g) => {
+                g.append('text')
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE)
+                    .attr('text-anchor', 'end')
+                    .attr('x', gWidth)
+                    .attr('y', 24)
+                    .text(`Count: ${data1.length}`);
+                g.append('text')
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE * 1.5)
+                    .attr('text-anchor', 'middle')
+                    .attr('x', gWidth/2 + MARGIN)
+                    .attr('y', 36)
+                    .text('Cumulative Sample Mean');});
 
     }, [data1, data2, audioFeature, width]);
     return (
-        <div className='col-sm-12'>
+        <div className='col-sm-12 mb-4'>
             <svg
                 id='lines'
                 width={'100%'}
