@@ -33,7 +33,6 @@ export interface Genre {
     energy: number[],
     key: number[],
     loudness: number[],
-    popularity: number[],
     speechiness: number[],
     tempo: number[]
 }

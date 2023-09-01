@@ -6,7 +6,7 @@ import sys
 
 FEATURES = [
     'key', 'tempo', 'acousticness', 'speechiness', 'danceability',
-    'energy', 'loudness', 'popularity'
+    'energy', 'loudness'
 ]
 
 

@@ -21,7 +21,7 @@ interface GraphFormProps {
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
-    'speechiness', 'acousticness', 'tempo', 'popularity'];
+    'speechiness', 'acousticness', 'tempo'];
 
 const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 
