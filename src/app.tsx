@@ -6,6 +6,7 @@ import { Home} from './home';
 import { InferentialStats} from './inferentialStats';
 import { ComparingGenres} from './comparingGenres';
 import { ConfidenceIntervals } from './confidenceIntervals';
+import { Glossary } from './glossary';
 import { Footer } from './footer';
 import ReactGA from 'react-ga4';
 import { Contact } from './contact';
@@ -46,6 +47,8 @@ export const App: React.FC = () => {
                     element={<ComparingGenres />} />
                 <Route path='/confidence/'
                     element={<ConfidenceIntervals />} />
+                <Route path='/glossary/'
+                    element={<Glossary />} />
             </Routes>
 
             <Footer />

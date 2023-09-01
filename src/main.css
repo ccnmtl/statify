@@ -23,6 +23,22 @@ body
     border: 1px solid #1e1e1e;
 }
 
+.glossary
+{
+    background-color: #0f0f0f;
+    border: 1px solid #1e1e1e;
+}
+
+.glossary strong
+{
+    font-size: 1.2em;
+}
+
+li.no-bullet
+{
+    list-style-type: none;
+}
+
 #nav-global
 {
     background-color: #0f0f0f!important;

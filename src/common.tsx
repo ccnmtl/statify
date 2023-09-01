@@ -16,9 +16,9 @@ export type InstructionData = {
 
 /**
  * Given a string, the first character of each subset separated by a space is
- * capitalized.
- * @param text string
- * @returns string
+ * capitalized. E.g. a tale of two cities => A Tale Of Two Cities
+ * @param text Any string input
+ * @returns Title Case equivalent of the input
  */
 export function toTitleCase(text: string) {
     // Regex searches for all instances of space and underscore
