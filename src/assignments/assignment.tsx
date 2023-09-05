@@ -107,9 +107,6 @@ export const Assignment: React.FC<AssignmentProps>  = (
                             <p>
                                 {index + 1}. {question}
                             </p>
-                            <h3>
-                                Answer
-                            </h3>
                             <Answer
                                 questionId={index}
                                 answers={answers}

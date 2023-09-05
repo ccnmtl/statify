@@ -54,22 +54,16 @@ export const Answer: React.FC<AnswerProps> = (
     },[]);
 
     return (
-        <div className={'mb-3'}>
-            <label htmlFor={`answer-${module + questionId.toString()}`}
-                className={'form-label'}>
-                Why? Explain.
-            </label>
-            <textarea
-                className={'form-control'}
-                id={`answer-${module + questionId.toString()}`}
-                name={'answer'}
-                onChange={handleAnswers}
-                // eslint-disable-next-line max-len
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                defaultValue={answers[questionId]}
-                rows={3}>
-            </textarea>
-
-        </div>
+        <textarea
+            className={'form-control mb-3 mx-3'}
+            id={`answer-${module + questionId.toString()}`}
+            name={'answer'}
+            onChange={handleAnswers}
+            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            defaultValue={answers[questionId]}
+            placeholder='Enter your answer here'
+            rows={3}>
+        </textarea>
     );
 };
