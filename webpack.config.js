@@ -44,6 +44,9 @@ module.exports = {
         },
         static: {
             directory: './'
+        },
+        client: {
+            overlay: false,
         }
     }
 };

@@ -300,6 +300,7 @@ export const Histogram: React.FC<HistogramProps>  = (
         <div className='col-sm-12'>
             <svg
                 id={`${whichHisto}-${color}`}
+                data-cy={whichHisto}
                 ref={svgRef}
                 width='100%'
                 height='20rem'

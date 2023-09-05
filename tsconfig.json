@@ -11,7 +11,7 @@
         "skipLibCheck": true,
         "allowJs": true
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "cypress.config.ts"],
     "exclude": [
         "node_modules",
         "dist"

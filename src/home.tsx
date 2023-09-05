@@ -33,6 +33,7 @@ export const Home: React.FC = () => {
                         <Link
                             to={'/descriptive/'}
                             className={'btn btn-primary btn-statify'}
+                            data-cy={'statify-start'}
                             type={'submit'}
                         >
                             Good question. Let&apos;s Statify!
