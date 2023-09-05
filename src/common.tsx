@@ -49,28 +49,28 @@ const tempo: BinData = {
     min: 50,
     max: 200,
     width: 5,
-    ticks: 5
+    ticks: 3
 };
 
 const key: BinData = {
     min: 0,
     max: 12,
     width: 0.5,
-    ticks: 1
+    ticks: 0.2
 };
 
 const loudness: BinData = {
     min: -60,
     max: 6,
     width: 1,
-    ticks: 2
+    ticks: 1
 };
 
 const alternative: BinData = {
     min: 0,
     max: 1,
     width: 0.01,
-    ticks: 0.04
+    ticks: 0.02
 };
 
 const popularity: BinData = {
