@@ -34,6 +34,17 @@ body
     font-weight: 600;
 }
 
+#footer-global
+{
+    background-color: #0f0f0f!important;
+    border-bottom: 1px solid #1e1e1e;
+}
+
+#footer-global a
+{
+    font-weight: 600;
+}
+
 form select
 {
     background-color: #0f0f0f!important;
