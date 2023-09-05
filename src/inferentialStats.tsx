@@ -29,31 +29,31 @@ const inferentialTabs: TabData[] = [
 ];
 
 const instructions: InstructionData[] = [
-    {instruction:
-    'Click the “Draw data point” button to generate a sample that is added to '
-    + 'the graph. The “Sample Data” histogram shows the distribution of data ' +
-    'points within the sample, while the “Cumulative Sample Mean” line plot ' +
-    'shows the average value in the sample as more samples are added. For this'
-    + ' part start with adding and drawing just 1 sample point at a time.'},
-    {instruction:
-    'Click the “Draw data point” to draw 100 data points at a time. The ' +
-    'cumulative sample mean plot shows how the mean changes within each sample'
-    + ' as more data points are added. By comparing results for separate ' +
-    'samples students can see how the dispersion of sample means decreases as '
-    + 'the number of data points in a sample increases. '},
-    {instruction:
-    'Increase the number of data points drawn to 25 and click the “draw data ' +
-    'point” button a repetitively many times to see the distribution forming. '}
+    {instruction: 'Start working on these questions after interacting with\
+        the Part 2.3 of the simulation.'},
+    {instruction: 'Start working on these questions after interacting with\
+        the Part 2.3 of the simulation.'},
+    {instruction: 'Click the Draw data points button until you have collected\
+        at least 5 samples (100 data points each). Remember that you can change\
+        the number of data points to draw each time using the dropdown box on\
+        the left! Use the data you collected to answer the following\
+        questions.'},
 ];
 
 const questions: string[] = [
-    'Etiam sagittis ornare libero, vitae blandit orci sodales nec. Quisque tem'
-    + 'pus sem at ligula luctus lacinia. Aenean nec elementum nisl, sit amet v'
-    + 'olutpat mi. Sed quis purus nec sapien aliquam tristique. Sed',
-    'vitae lorem quis elit scelerisque sodales. Nulla ante libero, t'
-    + 'empus sit amet eros nec, convallis suscipit augue. Nam tempus'
-    + 'rutrum cursus. Ut lacinia blandit orci, eu viverra nulla. Sed '
-    + 'pulvinar urna orci, id dictum elit hendrerit a.'
+    'What do the x and y axes of the Cumulative Sample Mean plot represent?',
+    'What information does the Cumulative Sample Mean plot provide that the\
+        Sample Data histogram does not?',
+    'What happens to the distribution of the sample means as more data\
+        points are added to each sample? Why does this happen?',
+    'Continue drawing data points until you have collected 12 samples (100 data\
+        points each). What statistical parameters could you use to describe the\
+        shape of the sampling distribution shown in the bottom plot?',
+    'Compare and contrast the distribution of data points (top histogram) to\
+        the distribution of sample means (bottom histogram).',
+    'How would the bottom histogram look different if it showed the sample\
+        means for samples with 20 data points instead of 100? What if it showed\
+        the sample means for samples with 3 data points?'
 ];
 
 export const InferentialStats: React.FC = () => {
