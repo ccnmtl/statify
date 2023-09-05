@@ -33,7 +33,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
     GraphFormProps) => {
     const genresText: string[] = Object.keys(genres);
     const initialSeed = [...Array(8) as null[]].map(
-        () => Math.floor(Math.random() * 16).toString(16)).join(''); // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+        // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+        () => Math.floor(Math.random() * 16).toString(16)).join('');
 
     const [audioFeature, setAudioFeature] = useState<string>(
         audioFeatureField ? undefined : 'tempo');
@@ -181,22 +182,20 @@ export const GraphForm: React.FC<GraphFormProps> = (
     return (
         <>
             <div className={'col-md-9'}>
-                <div className={'alert statify-alert'}role={'alert'}>
-                    {(genre1 && !genre2) && (
-                        `You are sampling from ${toTitleCase(genre1)}`
-                    )}
-                    {(!genre1 && genre2) && (
-                        `You are sampling from ${toTitleCase(genre2)}`
-                    )}
-                    {(genre1 && genre2) && (
-                        `You are sampling from ${toTitleCase(genre1)}
-                        and ${toTitleCase(genre2)}`
-                    )}
-                    {!(genre1 || genre2) && (
-                        'The copy in this alert depends on the form '
-                        + 'input on the right—check it out!'
-                    )}
-                </div>
+                {(genre1 || genre2) && (
+                    <div className={'alert statify-alert'}role={'alert'}>
+                        {(genre1 && !genre2) && (
+                            `You are sampling from ${toTitleCase(genre1)}`
+                        )}
+                        {(!genre1 && genre2) && (
+                            `You are sampling from ${toTitleCase(genre2)}`
+                        )}
+                        {(genre1 && genre2) && (
+                            `You are sampling from ${toTitleCase(genre1)}
+                            and ${toTitleCase(genre2)}`
+                        )}
+                    </div>
+                )}
                 <div className='row' id='capture'>
                     {graphTypes.includes(SAMPLEDATAHISTOGRAM1) && (
                         <Histogram
