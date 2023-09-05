@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG,
-    FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2 } from '../common';
+    FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2, AUDIO_DEFAULT } from '../common';
 import { cumulativeMeanFunc } from './utils';
 import { extent, line, axisBottom, axisLeft } from 'd3';
 import { scaleLinear } from 'd3-scale';
@@ -10,13 +10,13 @@ import { select } from 'd3-selection';
 const MARGIN = 50;
 
 interface CumulativeSampleMeanProps {
-    audioFeature: string | null
+    audioFeature: string | null;
     data1: number[];
     data2: number[] | null;
 }
 
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
-    { data1, data2, audioFeature='tempo'}
+    { data1, data2, audioFeature=AUDIO_DEFAULT}
 ) => {
     const [prevData, setPrevData] = useState<[number, number][][]>([]);
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
@@ -29,7 +29,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
     window.addEventListener('resize', handleResize);
 
     useEffect(() => {
-
+        audioFeature ??= AUDIO_DEFAULT;
         const cumulativeMean = cumulativeMeanFunc(data1);
         const svgGraph = select(svgRef.current);
         const binData = graphBins[audioFeature] as BinData;

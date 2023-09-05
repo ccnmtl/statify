@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TabNav } from './tabNavigation';
-import { InstructionData, TabData } from './common';
+import { GraphProps, InstructionData, TabData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 
@@ -58,7 +58,8 @@ const instructions: InstructionData[] = [
     }
 ];
 
-export const ConfidenceIntervals: React.FC = () => {
+export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
+{
     const [activeTab, setActiveTab] = useState<number>(0);
 
     return (
@@ -93,7 +94,9 @@ export const ConfidenceIntervals: React.FC = () => {
                             defaultPoints={100}
                             graphTypes={[1, 2, 6]}
                             instructions={instructions}
-                            activeTab={activeTab} />
+                            activeTab={activeTab}
+                            store={store}
+                            setStore={setStore} />
                     </div>
                     <div className='row'>
                         <Assignment

@@ -1,3 +1,6 @@
+import React from 'react';
+import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
+
 export type TabData = {
     title: string;
     info: string;
@@ -35,6 +38,23 @@ export interface Genre {
     loudness: number[],
     speechiness: number[],
     tempo: number[]
+}
+
+export interface Store {
+    audioFeature: string,
+    data1: number[],
+    data2: number[],
+    dataPoints: number | null,
+    genre1: string,
+    genre2: string,
+    meanData1: number[],
+    meanData2: number[],
+    prng: seedrandom.PRNG
+}
+
+export interface GraphProps {
+    store: Store,
+    setStore: React.Dispatch<React.SetStateAction<Store>>
 }
 
 export interface BinData {
@@ -97,3 +117,4 @@ export const HIGHLIGHT_2 = 'rgba(255, 100, 255, 0.7)';
 export const GRAPH_BG = 'rgba(64, 64, 64, 1.0)';
 export const FONT_SIZE = 14;
 export const MARGIN = 30;
+export const AUDIO_DEFAULT = 'tempo';

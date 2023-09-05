@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import { Route, Routes  } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { Nav } from './nav';
 import { DescriptiveStats} from './descriptiveStats';
 import { Home} from './home';
@@ -10,6 +10,7 @@ import { Glossary } from './glossary';
 import { Footer } from './footer';
 import ReactGA from 'react-ga4';
 import { About } from './about';
+import { Store } from './common';
 
 
 export const App: React.FC = () => {
@@ -20,6 +21,8 @@ export const App: React.FC = () => {
     };
 
     ReactGA.initialize('G-TKVQP6RR12', options);
+
+    const [store, setStore] = useState<Store>({} as Store);
 
     useEffect(() => {
         ReactGA.send({
@@ -38,13 +41,13 @@ export const App: React.FC = () => {
                 <Route path='/' element={<Home />} />
                 <Route path='/about/' element={<About />} />
                 <Route path='/descriptive/'
-                    element={<DescriptiveStats />} />
+                    element={<DescriptiveStats {...{store, setStore}} />} />
                 <Route path='/inferential/'
-                    element={<InferentialStats />} />
+                    element={<InferentialStats {...{store, setStore}} />} />
                 <Route path='/comparative/'
-                    element={<ComparingGenres />} />
+                    element={<ComparingGenres {...{store, setStore}} />} />
                 <Route path='/confidence/'
-                    element={<ConfidenceIntervals />} />
+                    element={<ConfidenceIntervals {...{store, setStore}} />} />
                 <Route path='/glossary/'
                     element={<Glossary />} />
             </Routes>

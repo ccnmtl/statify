@@ -6,9 +6,8 @@ import {
     area, axisBottom, axisLeft, deviation, mean, line, curveNatural, ScaleLinear
 } from 'd3';
 import {
-    BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG
+    BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG, AUDIO_DEFAULT
 } from '../common';
-
 
 const FONT_SIZE = 14;
 const MARGIN = 30;
@@ -23,7 +22,7 @@ interface EstimatedDistributionProps {
     data2: number[];
     genre1: string;
     genre2: string;
-    audioFeature: string;
+    audioFeature: string | null;
     n: number;
 }
 
@@ -44,7 +43,7 @@ export const stdError = function(data:number[], n:number) {
 };
 
 export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
-    {data1, data2, genre1, genre2, audioFeature='tempo', n}
+    {data1, data2, genre1, genre2, audioFeature=AUDIO_DEFAULT, n}
 ) => {
     const svgRef = useRef(null);
 
@@ -129,13 +128,15 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
         if (!selection) {
             setSelection(select(svgRef.current));
         } else {
+            audioFeature ??= AUDIO_DEFAULT;
             const binData = graphBins[audioFeature] as BinData;
             const se1 = stdError(data1, n), mean1 = mean(data1) ?? 0;
             const se2 = stdError(data2, n), mean2 = mean(data2) ?? 0;
             const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
             const height =
                 Number.parseInt(selection.style('height')) - MARGIN * 2;
-            const yScale = data1.length > 0 ? Math.max(
+
+            const yScale = data1.length > 0  && data2.length > 0 ? Math.max(
                 gaussian(mean1, se1, mean1, n),
                 gaussian(mean2, se2, mean2, n)):
                 20;
@@ -171,7 +172,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     .attr('x', x(binData.min))
                     .attr('y', MARGIN));
 
-            if (data1.length > 0){
+            if (data1.length > 0 && data2.length > 0){
                 generateCurve(selection, 'curve1', projection, data1, curve,
                     fill, PRIMARY, se1, mean1, x, y);
                 generateCurve(selection, 'curve2', projection, data2, curve,
@@ -206,7 +207,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     .text(
                         audioFeature === 'tempo' ?
                             'Tempo, Beats Per Minute (BPM)' :
-                            toTitleCase(audioFeature)
+                            toTitleCase(audioFeature  ?? AUDIO_DEFAULT)
                     ))
                 .attr('font-size', FONT_SIZE);
 

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import genres from '../data/trackDataByGenre.json';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import {
-    Genre, toTitleCase, InstructionData, PRIMARY, SECONDARY
+    Genre, toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
+    AUDIO_DEFAULT
 } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
@@ -14,10 +15,12 @@ interface GraphFormProps {
     audioFeatureField: boolean;
     dataPointsField: boolean;
     seedField: boolean;
-    defaultPoints: number | null;
+    defaultPoints: number;
     graphTypes: number[];
     activeTab: number;
     instructions: InstructionData[];
+    store: Store;
+    setStore: React.Dispatch<React.SetStateAction<Store>> | null;
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
@@ -28,7 +31,8 @@ const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
-        graphTypes, instructions, activeTab, seedField, defaultPoints
+        graphTypes, instructions, activeTab, seedField, defaultPoints,
+        store, setStore
     }:
     GraphFormProps) => {
     const genresText: string[] = Object.keys(genres);
@@ -36,24 +40,44 @@ export const GraphForm: React.FC<GraphFormProps> = (
         // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
         () => Math.floor(Math.random() * 16).toString(16)).join('');
 
-    const [audioFeature, setAudioFeature] = useState<string>(
-        audioFeatureField ? undefined : 'tempo');
-    const [data1, setData1] = useState<number[]>([]);
-    const [data2, setData2] = useState<number[]>([]);
-    const [meanData1, setMeanData1] = useState<number[]>([]);
-    const [meanData2, setMeanData2] = useState<number[]>([]);
+    const [audioFeature, setAudioFeature] = useState<string|null>(
+        audioFeatureField ? store.audioFeature : null);
+    const [data1, setData1] = useState<number[]>(store.data1 || []);
+    const [data2, setData2] = useState<number[]>(store.data2 || []);
+    const [meanData1, setMeanData1] = useState<number[]>(
+        store.meanData1 || []);
+    const [meanData2, setMeanData2] = useState<number[]>(
+        store.meanData2 || []);
     const [dataPoints, setDataPoints] = useState<number>(
-        dataPointsField ? undefined : defaultPoints);
-    const [genre1, setGenre1] = useState<string>();
-    const [genre2, setGenre2] = useState<string>();
+        dataPointsField ? store.dataPoints || defaultPoints : defaultPoints);
+    const [genre1, setGenre1] = useState<string>(store.genre1 || '');
+    const [genre2, setGenre2] = useState<string>(store.genre2 || '');
     const [prng, setPRNG] = useState<seedrandom.PRNG>(
-        () => seedrandom(initialSeed));
+        () => store.prng || seedrandom(initialSeed));
+
+    useEffect(() => {
+        if (setStore) {
+            const checkAudio = audioFeature ?? AUDIO_DEFAULT;
+            setStore({audioFeature: checkAudio, data1, data2, meanData1,
+                meanData2, genre1, genre2, dataPoints, prng});
+        }
+    }, [audioFeature, data1, data2, meanData1, meanData2, genre1, genre2,
+        dataPoints, prng]);
 
     const clearData = function() {
         setData1([]);
         setData2([]);
         setMeanData1([]);
         setMeanData2([]);
+    };
+
+    const reset = function() {
+        clearData();
+        setDataPoints(dataPointsField ? 0 : defaultPoints);
+        setGenre1('');
+        setGenre2('');
+        setAudioFeature(null);
+        setPRNG(() => seedrandom(initialSeed));
     };
 
     const SAMPLEDATAHISTOGRAM1 = 1;
@@ -64,10 +88,12 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const ESTIMATED_DISTRIBUTION = 6;
     const N = 100; // The number of datapoints to compile into the mean
 
-    const getDataPoints = function(genre:string, feature:string , n:number) {
+    const getDataPoints = function(
+        genre:string, feature:string|null , n:number)
+    {
         const data:number[] = [];
         const chosenGenre = genres[genre] as Genre;
-        const chosenFeature = chosenGenre[feature] as number[];
+        const chosenFeature = chosenGenre[feature ?? AUDIO_DEFAULT] as number[];
         for (let i = 0; i < n; i++) {
             data.push(chosenFeature[
                 Math.floor(prng() * (chosenGenre.count-1))
@@ -78,7 +104,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
 
     const handleDataUpdate = (evt: React.FormEvent<HTMLFormElement>): void => {
         evt.preventDefault();
-        if (genre1) {
+        if (genre1 !== '') {
             if (data1.length === N) {
                 if (dataPoints === N) {
                     setMeanData1([
@@ -92,7 +118,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 setData1([
                     ...getDataPoints(genre1, audioFeature, dataPoints)
                 ]);
-                if (genre2) {
+                if (genre2 !== '') {
                     setMeanData2([
                         ...meanData2,
                         getDataPoints(
@@ -182,15 +208,15 @@ export const GraphForm: React.FC<GraphFormProps> = (
     return (
         <>
             <div className={'col-md-9'}>
-                {(genre1 || genre2) && (
+                {(genre1 !== '' || genre2 !== '') && (
                     <div className={'alert statify-alert'}role={'alert'}>
-                        {(genre1 && !genre2) && (
+                        {(genre1 !== '' && genre2 === '') && (
                             `You are sampling from ${toTitleCase(genre1)}`
                         )}
-                        {(!genre1 && genre2) && (
+                        {(genre1 === '' && genre2 !== '') && (
                             `You are sampling from ${toTitleCase(genre2)}`
                         )}
-                        {(genre1 && genre2) && (
+                        {(genre1 !== '' && genre2 !== '') && (
                             `You are sampling from ${toTitleCase(genre1)}
                             and ${toTitleCase(genre2)}`
                         )}
@@ -267,8 +293,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
 
                     <form
                         className='p-2 graph-inputs'
-                        onSubmit={handleDataUpdate}
                         data-cy={'graphForm'}
+                        onSubmit={handleDataUpdate}
                     >
                         {genre1Field && (
                             <div className='mb-3'>
@@ -276,7 +302,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     className='form-label'>Genre 1</label>
                                 <select name='firstGenre' id='firstGenre'
                                     className='form-select'
-                                    defaultValue={'Select One'}
+                                    value={genre1 ? genre1 : 'Select One'}
                                     onChange={handleGenre1Select}
                                     aria-required={'true'}
                                     required>
@@ -297,7 +323,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     className='form-label'>Genre 2</label>
                                 <select name='secondGenre' id='secondGenre'
                                     className='form-select'
-                                    defaultValue={'Select One'}
+                                    value={genre2 ? genre2 : 'Select One'}
                                     onChange={handleGenre2Select}
                                     aria-required={'true'}
                                     required>
@@ -318,7 +344,10 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                     className='form-label'>Audio Feature</label>
                                 <select name='audioFeature' id='audioFeature'
                                     className='form-select'
-                                    defaultValue={'Select one'}
+                                    value={
+                                        audioFeature ?
+                                            audioFeature :
+                                            'Select One'}
                                     onChange={handleAudioFeatureSelect}
                                     aria-required={'true'}
                                     required>
@@ -343,7 +372,8 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 </label>
                                 <select name='dataPoints' id='dataPoints'
                                     className='form-select'
-                                    defaultValue={'Select one'}
+                                    value={
+                                        dataPoints ? dataPoints : 'Select One'}
                                     onChange={handleDataPointsSelect}
                                     aria-required={'true'}
                                     required>
@@ -374,12 +404,20 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 </input>
                             </div>
                         )}
-                        <input
-                            type='submit'
-                            id='submit-btn'
-                            className='btn btn-primary'
-                            value='Submit'
-                        />
+                        <div className="row px-4">
+                            <input
+                                type='submit'
+                                id='submit-btn'
+                                className='col mx-1 mb-2 btn btn-primary'
+                                value='Submit'
+                            />
+                            <input
+                                type='button'
+                                id='reset-btn'
+                                className='col mx-1 mb-2 btn btn-danger'
+                                onClick={reset}
+                                value="Reset"/>
+                        </div>
                     </form>
                 </div>
             </div>
