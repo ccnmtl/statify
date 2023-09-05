@@ -29,31 +29,32 @@ const inferentialTabs: TabData[] = [
 ];
 
 const instructions: InstructionData[] = [
-    {instruction: 'Start working on these questions after interacting with\
-        the Part 2.3 of the simulation.'},
-    {instruction: 'Start working on these questions after interacting with\
-        the Part 2.3 of the simulation.'},
-    {instruction: 'Click the Draw data points button until you have collected\
-        at least 5 samples (100 data points each). Remember that you can change\
-        the number of data points to draw each time using the dropdown box on\
-        the left! Use the data you collected to answer the following\
-        questions.'},
+    {instruction: 'Start working on these questions after interacting with '+
+        'the Part 2.3 of the simulation.'},
+    {instruction: 'Start working on these questions after interacting with '+
+        'the Part 2.3 of the simulation.'},
+    {instruction: 'Click the Draw data points button until you have collected '+
+        'at least 5 samples (100 data points each). Remember that you can '+
+        'change the number of data points to draw each time using the '+
+        'dropdown box on the left! Use the data you collected to answer the '+
+        'following questions.'},
 ];
 
 const questions: string[] = [
     'What do the x and y axes of the Cumulative Sample Mean plot represent?',
-    'What information does the Cumulative Sample Mean plot provide that the\
-        Sample Data histogram does not?',
-    'What happens to the distribution of the sample means as more data\
-        points are added to each sample? Why does this happen?',
-    'Continue drawing data points until you have collected 12 samples (100 data\
-        points each). What statistical parameters could you use to describe the\
-        shape of the sampling distribution shown in the bottom plot?',
-    'Compare and contrast the distribution of data points (top histogram) to\
-        the distribution of sample means (bottom histogram).',
-    'How would the bottom histogram look different if it showed the sample\
-        means for samples with 20 data points instead of 100? What if it showed\
-        the sample means for samples with 3 data points?'
+    'What information does the Cumulative Sample Mean plot provide that the '+
+        'Sample Data histogram does not?',
+    'What happens to the distribution of the sample means as more data'+
+        'points are added to each sample? Why does this happen?',
+    'Continue drawing data points until you have collected 12 samples (100 '+
+        'data points each). What statistical parameters could you use to '+
+        'describe the shape of the sampling distribution shown in the bottom '+
+        'plot?',
+    'Compare and contrast the distribution of data points (top histogram) to'+
+        'the distribution of sample means (bottom histogram).',
+    'How would the bottom histogram look different if it showed the sample'+
+        'means for samples with 20 data points instead of 100? What if it '+
+        'showed the sample means for samples with 3 data points?'
 ];
 
 export const InferentialStats: React.FC = () => {
