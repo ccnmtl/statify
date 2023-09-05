@@ -16,11 +16,10 @@ export const Footer: React.FC = () => {
                     </Link>
                 </li>
                 <li className='nav-item'>
-                    <Link to='/contact/'
-                        className='nav-link'
-                        title='Contact'>
-                            Contact
-                    </Link>
+                    <a href={'mailto:ctl-statify@columbia.edu'}
+                        className={'nav-link'}>
+                            Contact Us
+                    </a>
                 </li>
             </ul>
 
