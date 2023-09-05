@@ -85,16 +85,13 @@ export const Assignment: React.FC<AssignmentProps>  = (
         }
     };
 
+    const pdfButton =
+    (module === 'DescriptiveStatistics' && !screenshot) ? true : false;
+
     useEffect(() => {
         setLocalStorage(module);
 
     },[]);
-
-    useEffect(() => {
-        if(screenshot) {
-            void generatePdfDocument();
-        }
-    },[screenshot]);
 
     return (
 
@@ -145,9 +142,17 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                 name='uni' />
                         </div>
                     </div>
+                    {(module === 'DescriptiveStatistics') && (
+                        <button
+                            onClick={() => void generateScreenshot()}
+                            className={'btn btn-primary btn-statify me-2'}>
+                                                    Screenshot Graph
+                        </button>
+                    )}
                     <button
-                        onClick={() => void generateScreenshot()}
-                        className={'btn btn-primary btn-statify me-2'}>
+                        disabled={pdfButton}
+                        onClick={() => void generatePdfDocument()}
+                        className={'btn btn-primary btn-statify'}>
                                 Create Assignment
                     </button>
                 </div>
