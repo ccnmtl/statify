@@ -239,7 +239,7 @@ export const Histogram: React.FC<HistogramProps>  = (
 
             // Construct Title and Ticker Label
             selection.append('g')
-                .attr('id', 'graph-header')
+                .attr('id', `graph-header-${whichHisto}-${color}`)
                 .call((g) => {
                     g.append('text')
                         .attr('fill', 'white')

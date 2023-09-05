@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
 
     return (
 
-        <footer className='bg-dark pt-2 pb-5 navbar-dark' id='nav-global'>
+        <footer className='bg-dark pt-2 pb-5 navbar-dark' id='footer-global'>
             <ul className='navbar-nav footer'>
                 <li className='nav-item me-5'>
                     <Link to='/about/'
@@ -34,9 +34,6 @@ export const Footer: React.FC = () => {
                         alt='Center for Teaching and Learning
                         at Columbia University'
                         itemProp='logo' width='290' />
-                    <span className='sr-only' itemProp='name'>
-            Center for Teaching and Learning at Columbia University
-                    </span>
                 </a>
             </span>
 
