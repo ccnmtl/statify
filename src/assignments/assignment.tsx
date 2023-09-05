@@ -104,8 +104,10 @@ export const Assignment: React.FC<AssignmentProps>  = (
                 {questions.map((question, index) => {
                     return (
                         <div key={index}>
-                            <p>
-                                {index + 1}. {question}
+                            <p dangerouslySetInnerHTML={
+                                {
+                                    __html: (index + 1) + '. ' + question
+                                }}>
                             </p>
                             <Answer
                                 questionId={index}
