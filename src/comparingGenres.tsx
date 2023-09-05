@@ -12,31 +12,39 @@ const comparingTabs: TabData[] = [
 ];
 
 const questions: string[] = [
-    'Etiam sagittis ornare libero, vitae blandit orci sodales nec. Quisque tem'
-    + 'pus sem at ligula luctus lacinia. Aenean nec elementum nisl, sit amet v'
-    + 'olutpat mi. Sed quis purus nec sapien aliquam tristique. Sed',
-    'vitae lorem quis elit scelerisque sodales. Nulla ante libero, t'
-    + 'empus sit amet eros nec, convallis suscipit augue. Nam tempus'
-    + 'rutrum cursus. Ut lacinia blandit orci, eu viverra nulla. Sed '
-    + 'pulvinar urna orci, id dictum elit hendrerit a.'
+    'Draw 100 data points. What is the mean tempo for each genre when N = 100?'+
+        '(make sure that you are comparing them by Audio Feature = tempo)'+
+        'Which genre has a higher tempo? Note: If you mouse over a point on'+
+        'the Cumulative Sample Mean graph you will be provided the sample mean'+
+        'for a given number of data points.',
+    'Based on this data, can you say definitively whether the genres have'+
+        'different tempos? Why or why not?',
+    'Continue drawing data points. Looking at the Cumulative Sample Mean plot,'+
+        'how does the overlap between the sampling distributions change as the'+
+        'number of data points in each sample increases? Why?',
+    'Select any two genres from the dropdown menus on the left. Draw 1200 data'+
+        'points for any two of the nine available audio parameters.'+
+        'Intuitively, you can say that two populations can be said to be'+
+        'different if their sampling distributions have minimal overlap. Based'+
+        'on the distribution of sample means for the two audio features that'+
+        'you are analyzing, do you think the two genres that you selected are'+
+        'different? Why or why not? Do you think the genres could be'+
+        'differentiated based on other features?'
 ];
 
 const instructions: InstructionData[] = [
-    {instruction:
-    'Etiam sagittis ornare libero, vitae blandit orci sodales nec. Quisque tem'
-    + 'pus sem at ligula luctus lacinia. Aenean nec elementum nisl, sit amet v'
+    {instruction: 'Answer these questions after completing Part 3.4 of the'+
+        'simulations.'
     },
-    {instruction:
-    'olutpat mi. Sed quis purus nec sapien aliquam tristique. Sed' +
-    'vitae lorem quis elit scelerisque sodales. Nulla ante libero, t'
+    {instruction: 'Answer these questions after completing Part 3.4 of the'+
+        'simulations.'
     },
-    {instruction:
-    'empus sit amet eros nec, convallis suscipit augue. Nam tempus'
-    + 'rutrum cursus. Ut lacinia blandit orci, eu viverra nulla. Sed '
+    {instruction: 'Answer these questions after completing Part 3.4 of the'+
+        'simulations.'
     },
-    {instruction:
-    'pulvinar urna orci, id dictum elit hendrerit a.'
-    }
+    {instruction: 'Answer these questions after completing Part 3.4 of the'+
+        'simulations.'
+    },
 ];
 
 export const ComparingGenres: React.FC = () => {
