@@ -32,6 +32,12 @@ export const Nav: React.FC = () => {
                                 </Link>
                             </li>
                             <li className='nav-item'>
+                                <Link to='/glossary/'
+                                    className='nav-link'>
+                                    Glossary
+                                </Link>
+                            </li>
+                            <li className='nav-item'>
                                 <Link to='/descriptive/'
                                     className='nav-link'>
                                     1.Descriptive Statistics
