@@ -29,15 +29,21 @@ const inferentialTabs: TabData[] = [
 ];
 
 const instructions: InstructionData[] = [
-    {instruction: 'Start working on these questions after interacting with '+
-        'the Part 2.3 of the simulation.'},
-    {instruction: 'Start working on these questions after interacting with '+
-        'the Part 2.3 of the simulation.'},
-    {instruction: 'Click the Draw data points button until you have collected '+
-        'at least 5 samples (100 data points each). Remember that you can '+
-        'change the number of data points to draw each time using the '+
-        'dropdown box on the left! Use the data you collected to answer the '+
-        'following questions.'},
+    {instruction:
+    'Click the “Draw data point” button to generate a sample that is added to '
+    + 'the graph. The “Sample Data” histogram shows the distribution of data ' +
+    'points within the sample, while the “Cumulative Sample Mean” line plot ' +
+    'shows the average value in the sample as more samples are added. For this'
+    + ' part start with adding and drawing just 1 sample point at a time.'},
+    {instruction:
+    'Click the “Draw data point” to draw 100 data points at a time. The ' +
+    'cumulative sample mean plot shows how the mean changes within each sample'
+    + ' as more data points are added. By comparing results for separate ' +
+    'samples students can see how the dispersion of sample means decreases as '
+    + 'the number of data points in a sample increases. '},
+    {instruction:
+    'Increase the number of data points drawn to 25 and click the “draw data ' +
+    'point” button a repetitively many times to see the distribution forming. '}
 ];
 
 const questions: string[] = [
