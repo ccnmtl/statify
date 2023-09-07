@@ -1,7 +1,19 @@
 import React from 'react';
+import Logo from '../images/logo-bw.png';
 import {
-    Document, Page, Text, StyleSheet, Image
+    Document, Page, Text, StyleSheet, Image, Font, View
 } from '@react-pdf/renderer';
+
+Font.register({
+    family: 'Poppins',
+    src: 'https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrFJA.ttf'
+});
+
+Font.register({
+    family: 'PoppinsBold',
+    src: 'https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7V1s.ttf'
+});
+
 
 // Create styles
 const styles = StyleSheet.create({
@@ -10,17 +22,30 @@ const styles = StyleSheet.create({
         paddingBottom: 65,
         paddingHorizontal: 35,
     },
+    moduleTitle: {
+        fontSize: 20,
+        marginBottom: 8,
+        fontFamily: 'PoppinsBold'
+    },
     questionTitle: {
         fontSize: 15,
-        marginBottom: 10
+        marginBottom: 8,
+        fontFamily: 'PoppinsBold'
+    },
+    answerTitle: {
+        fontSize: 12,
+        marginBottom: 5,
+        fontFamily: 'PoppinsBold'
     },
     answer: {
         fontSize: 12,
-        marginBottom: 10
+        marginBottom: 10,
+        fontFamily: 'Poppins'
     },
     question: {
-        fontSize: 13,
-        marginBottom: 5
+        fontSize: 12,
+        marginBottom: 5,
+        fontFamily: 'Poppins'
     },
     image: {
         width: '100%',
@@ -29,14 +54,23 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         marginBottom: 10
     },
-    name: {
-        fontSize: 12,
-        textAlign: 'right'
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
     },
-    uni: {
+    headerLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    logo: {
+        width: 150,
+        height: 60,
+        marginRight: 10,
+    },
+    student: {
+        fontFamily: 'Poppins',
         fontSize: 12,
-        textAlign: 'right',
-        marginBottom: 40,
     }
 });
 
@@ -46,11 +80,14 @@ interface AssignmentDocumentProps {
     screenshot: string | null;
     uni: string;
     name: string;
+    module: string;
 }
+const d = new Date();
+const date = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
 
 
 export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
-    {questions, answers, screenshot, name, uni}
+    {questions, answers, screenshot, name, uni, module}
 ) =>
 {
     const createQA = questions.map((question, index) => {
@@ -61,6 +98,9 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
                 </Text>
                 <Text style={styles.question}>
                     {question}
+                </Text>
+                <Text style={styles.answerTitle}>
+                    Answer
                 </Text>
                 <Text style={styles.answer}>
                     {answers[index]}
@@ -73,18 +113,38 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
     return (
         <Document>
             <Page size='A4' style={styles.page}>
-                <Text style={styles.name}>
-                    {name}
+                <View style={styles.header} fixed>
+                    <View style={styles.headerLeft}>
+                        <Image
+                            source={Logo} style={styles.logo} />
+                    </View>
+                    <View style={styles.student}>
+                        <Text>
+                            {name}
+                        </Text>
+                        <Text>
+                            {uni}
+                        </Text>
+                        <Text>
+                            {date}
+                        </Text>
+                    </View>
+
+                </View>
+                <Text style={styles.moduleTitle}>
+                    {module.replace(/([A-Z])/g, ' $1').trim()}
                 </Text>
-                <Text style={styles.uni}>
-                    {uni}
-                </Text>
-                {(screenshot) && (
-                    <Image
-                        style={styles.image}
-                        source={screenshot} />
-                )}
                 {createQA}
+                {(screenshot) && (
+                    <>
+                        <Text style={styles.answerTitle} break>
+                        Evidence (Screenshot)
+                        </Text>
+                        <Image
+                            style={styles.image}
+                            source={screenshot} />
+                    </>
+                )}
             </Page>
         </Document>
     );

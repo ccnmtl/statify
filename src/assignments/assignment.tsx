@@ -46,10 +46,11 @@ export const Assignment: React.FC<AssignmentProps>  = (
                 answers={answers}
                 screenshot={screenshot}
                 name={name}
+                module={module}
                 uni={uni}
             />
         )).toBlob();
-        saveAs(blob, `${name}_${module}`);
+        saveAs(blob, `${name.replace(/ /g,'_')}_${module}`);
     };
 
     const generateScreenshot = async() => {
