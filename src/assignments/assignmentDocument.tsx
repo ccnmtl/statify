@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 interface AssignmentDocumentProps {
     questions: string[];
     answers: object;
-    screenshot: string;
+    screenshot: string | null;
     uni: string;
     name: string;
 }
@@ -79,9 +79,11 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
                 <Text style={styles.uni}>
                     {uni}
                 </Text>
-                <Image
-                    style={styles.image}
-                    source={screenshot} />
+                {(screenshot) && (
+                    <Image
+                        style={styles.image}
+                        source={screenshot} />
+                )}
                 {createQA}
             </Page>
         </Document>
