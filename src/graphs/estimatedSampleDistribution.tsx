@@ -231,7 +231,8 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                         .attr('text-anchor', 'middle')
                         .attr('x', gWidth/2 + MARGIN)
                         .attr('y', 18)
-                        .text(`Sampling Distribution when N = ${n}`);});
+                        .text(
+                            `Estimated Sampling Distribution when N = ${n}`);});
         }
     }, [selection, data1, genre1, genre2, audioFeature, width]);
 
