@@ -91,6 +91,25 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             (c) => [x(c[1]), y(c[0])] as [number, number]);
 
         const lnMkr = line();
+
+        //Old lines of 100 pts
+        if(cm.length === 100) {
+            setPrevData([
+                ...prevData, cm
+            ]);
+        }
+        prevData.forEach((oldData) => {
+            //lines
+            svgGraph.append('g').attr('id', 'genre1line')
+                .append('path')
+                .datum(oldData)
+                .attr('d', lnMkr(oldData))
+                .attr('fill', 'none')
+                .attr('stroke', PRIMARY)
+                .attr('opacity', 0.35)
+                .attr('stroke-width', 2);
+        });
+
         //lines
         svgGraph.append('g').attr('id', 'genre1line')
             .append('path')
@@ -146,23 +165,6 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                     .filter(data => data === d)
                     .style('opacity', 0);
             });
-        if(cm.length === 100) {
-            setPrevData([
-                ...prevData, cm
-            ]);
-        }
-
-        prevData.forEach((oldData) => {
-            //lines
-            svgGraph.append('g').attr('id', 'genre1line')
-                .append('path')
-                .datum(oldData)
-                .attr('d', lnMkr(oldData))
-                .attr('fill', 'none')
-                .attr('stroke', PRIMARY)
-                .attr('opacity', 0.35)
-                .attr('stroke-width', 2);
-        });
 
         if(data2) {
             const cumulativeMean2 = cumulativeMeanFunc(data2);
@@ -170,6 +172,25 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 (c) => [x(c[1]), y(c[0])] as [number, number]);
 
             const lnMkr2 = line();
+
+            //Old lines of 100 pts
+            if(cm2.length === 100) {
+                setPrevData2([
+                    ...prevData2, cm2
+                ]);
+            }
+            prevData2.forEach((oldData) => {
+                //lines
+                svgGraph.append('g').attr('id', 'genre1line')
+                    .append('path')
+                    .datum(oldData)
+                    .attr('d', lnMkr2(oldData))
+                    .attr('fill', 'none')
+                    .attr('stroke', SECONDARY)
+                    .attr('opacity', 0.35)
+                    .attr('stroke-width', 2);
+            });
+
             //lines
             svgGraph.append('g').attr('id', 'genre2line')
                 .append('path')
@@ -226,24 +247,6 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                         .filter(data => data === d)
                         .style('opacity', 0);
                 });
-
-            if(cm2.length === 100) {
-                setPrevData2([
-                    ...prevData2, cm2
-                ]);
-            }
-
-            prevData2.forEach((oldData) => {
-                //lines
-                svgGraph.append('g').attr('id', 'genre1line')
-                    .append('path')
-                    .datum(oldData)
-                    .attr('d', lnMkr(oldData))
-                    .attr('fill', 'none')
-                    .attr('stroke', SECONDARY)
-                    .attr('opacity', 0.35)
-                    .attr('stroke-width', 2);
-            });
         }
 
         // Construct Ticker Label
