@@ -31,13 +31,17 @@ describe('Inferential Statistics', () => {
     });
 
     it('Checks form', () => {
-        cy.get('#firstGenre').select('Latin', {force: true});
+        cy.get('[data-cy="firstGenre"]').click();
+        cy.get('[data-cy="Option1-0"]').click();
+        cy.get('[data-cy="firstGenre"]').should('contain', '5th Wave Emo');
         cy.get('#submit-btn').click();
         cy.get('#dataPoints')
             .invoke('prop', 'validationMessage')
             .should((text) => {
                 expect(text).to.contain('Please select an item in the list.');
             });
+        cy.get('[data-cy="reset"]').click();
+        cy.get('[data-cy="firstGenre"]').should('contain', 'Select One');
     });
 
     it('Tests a11y', () => {

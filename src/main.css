@@ -34,6 +34,20 @@ body
     font-size: 1.2em;
 }
 
+li button {
+    color: white!important;
+}
+
+.hover-green:hover, .hover-green:focus {
+    background-color: #37D247!important;
+}
+
+li.active
+{
+    background-color: white;
+    color: black;
+}
+
 li.no-bullet
 {
     list-style-type: none;
