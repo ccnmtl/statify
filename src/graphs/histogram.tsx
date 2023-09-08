@@ -254,8 +254,10 @@ export const Histogram: React.FC<HistogramProps>  = (
                         .attr('text-anchor', 'middle')
                         .attr('x', gWidth/2 + MARGIN)
                         .attr('y', 18)
-                        .text('Sample Data'.concat(
-                            genre1 ? ` for ${toTitleCase(genre1)}`: ''));});
+                        .text(
+                            whichHisto === 'SampleDataHistogram'
+                                ? 'Sample Data'
+                                : 'Sampling Distribution When N = 100');});
 
             // Generate Legend
             if (genre1 && genre2) {
