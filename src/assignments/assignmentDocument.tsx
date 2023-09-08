@@ -83,7 +83,7 @@ interface AssignmentDocumentProps {
     module: string;
 }
 const d = new Date();
-const date = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
+const date = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
 
 
 export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
