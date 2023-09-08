@@ -6,7 +6,10 @@ import { Assignment } from './assignments/assignment';
 
 const confidenceTabs: TabData[] = [
     {title: 'Part 4.1',
-        info: 'Nunc eget laoreet orci, convallis maximus purus.'}
+        info: 'You will draw a sample and use the plots in this tab to '+
+            'learn about estimating sampling distributions from smaller '+
+            'samples and using 95% confidence intervals to determine '+
+            'statistically significant differences (or lack thereof).'}
 ];
 
 const questions: string[] = [
@@ -50,17 +53,8 @@ const questions: string[] = [
 ];
 
 const instructions: InstructionData[] = [
-    {instruction: 'Previously, you learned that the standard deviation of a '+
-        'sampling distribution is called the standard error. However, for '+
-        'each of the two histograms shown on this page, you are not looking '+
-        'at a sampling distribution, but at the distribution of the 100 data '+
-        'points in a single sample. Therefore, the standard error is not '+
-        'equal to the standard deviation (unless your population size is '+
-        'equal to 100!). When we only have access to a small portion of the '+
-        'population (as is the case here!), the standard error, and therefore '+
-        'the sampling distribution, can be estimated by dividing the standard '+
-        'deviation of the sample by the square root of the sample size, i.e., '+
-        'SE = SD/√N.'
+    {instruction: 'Select two genres and a feature you wish to compare the '+
+        'genres by, and then press the “Submit” button a few times.'
     }
 ];
 
@@ -73,8 +67,13 @@ export const ConfidenceIntervals: React.FC = () => {
                 <div className={'container-fluid'}>
                     <h1 className={'py-4 px-3'}>4.Confidence Intervals</h1>
                     <p className='lead py-4 px-3'>
-                        This copy describes what this Confidence Intervals
-                        unit is all about.
+                        The Confidence Interval is a range of values that is
+                        likely to contain the true population parameter,
+                        calculated from sample statistics and a desired
+                        confidence level. This simulation will help you
+                        understand that confidence intervals represent the
+                        variability inherent in estimates from sample data
+                        rather than the exact population parameter value.
                     </p>
                     <TabNav
                         tabsInfo={confidenceTabs}

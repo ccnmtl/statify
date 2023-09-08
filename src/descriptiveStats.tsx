@@ -7,7 +7,11 @@ import { Assignment } from './assignments/assignment';
 const descriptiveTabs: TabData[] = [
     {
         title: 'Part 1.1',
-        info: 'Etiam sagittis ornare libero, vitae blandit.'
+        info: 'The purpose of Part 1.1 is to introduce students to the '+
+            'following fundamental concepts: data point, sample, population, '+
+            'histogram. Students click the “Draw data point” button to '+
+            'generate a sample. The “Sample Data” histogram shows the '+
+            'distribution of data points within the sample.'
     }
 ];
 
@@ -47,8 +51,13 @@ export const DescriptiveStats: React.FC = () => {
                 <div className={'container-fluid'}>
                     <h1 className={'py-4 px-3'}>1.Descriptive Statistics</h1>
                     <p className='lead py-4 px-3'>
-                        This copy describes what this Descriptive Statistics
-                        unit is all about.
+                        Descriptive statistics involves describing datasets
+                        using standard terminology and identifying the
+                        limitations of what can be inferred from a single
+                        sample. The simulations in this unit will introduce you
+                        to the cumulative sample mean and the sampling
+                        distribution to make such descriptions and
+                        identifications.
                     </p>
                     <TabNav
                         tabsInfo={descriptiveTabs}
