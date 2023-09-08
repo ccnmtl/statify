@@ -5,10 +5,32 @@ import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 
 const comparingTabs: TabData[] = [
-    {title: 'Part 3.1', info: 'Fusce nec mi ac odio finibus tristique.'},
-    {title: 'Part 3.2', info: 'Quisque tempus sem at ligula luctus lacinia.'},
-    {title: 'Part 3.3', info: 'Ut lacinia blandit orci, eu viverra nulla.'},
-    {title: 'Part 3.4', info: 'Sed pulvinar urna orci, id dictum elit hendrer'}
+    {   title: 'Part 3.1',
+        info: 'The purpose of 3.1 is to start introducing you to the idea of '+
+            'comparing two different samples in a statistically rigorous way. '+
+            'By observing how the cumulative sample means for the two genres '+
+            'change as more data points are drawn, you will be able to '+
+            'observe that it isn’t definitive that two genres are different '+
+            'for a given audio feature based on a single data point, as the '+
+            'sample means can vary drastically with the number of data points '+
+            'added. Additionally, you will see that the cumulative sample '+
+            'means converge to a certain value as more data points are added, '+
+            'and the difference between the genres becomes more robust (each '+
+            'sample becomes more representative of the population).'},
+    {   title: 'Part 3.2',
+        info: 'In Part 3.2 you will play with different genres and audio '+
+            'features, checking how their previous expectations compare to '+
+            'the data sampled.'},
+    {   title: 'Part 3.3',
+        info: 'In Part 3.3 you will continue to play with different genres '+
+            'and audio features, checking how their previous expectations '+
+            'compare to the data sampled.'},
+    {   title: 'Part 3.4',
+        info: 'In Part 3.4 you will compare sampling distributions for two '+
+            'genres and think about how to use the comparison to tell whether '+
+            'those genres are indeed different. How much overlap is '+
+            'acceptable for two sampling distributions to still be considered '+
+            'different will be defined in the last module.'}
 ];
 
 const questions: string[] = [
@@ -33,17 +55,19 @@ const questions: string[] = [
 ];
 
 const instructions: InstructionData[] = [
-    {instruction: 'Answer these questions after completing Part 3.4 of the'+
-        'simulations.'
+    {instruction: 'Select two genres and a feature you wish to compare the '+
+        'genres by, and then press the “Submit” button a few times.'
     },
-    {instruction: 'Answer these questions after completing Part 3.4 of the'+
-        'simulations.'
+    {instruction: 'Select two genres and a feature you wish to compare the '+
+        'genres by, and then press the “Submit” button a few times.'
     },
-    {instruction: 'Answer these questions after completing Part 3.4 of the'+
-        'simulations.'
+    {instruction: 'Select two genres and a feature you wish to compare the '+
+        'genres by, and then press the “Submit” button a few times.'
     },
-    {instruction: 'Answer these questions after completing Part 3.4 of the'+
-        'simulations.'
+    {instruction: 'Draw several samples, building a histogram of samples of '+
+        'means (sampling distribution – bottom plot). Check whether the '+
+        'sampling distributions for the two genres overlap (suggesting there '+
+        'may not be a difference between them) or not.'
     },
 ];
 
@@ -64,8 +88,10 @@ export const ComparingGenres: React.FC = () => {
                 <div className={'container-fluid'}>
                     <h1 className={'py-4 px-3'}>3.Comparing Genres</h1>
                     <p className={'lead py-4 px-3'}>
-                        This copy describes what this Comparing Genres
-                        unit is all about.
+                        This Comparing Genres simulation will help you explore
+                        the fundamental logic of hypothesis tests. The
+                        simulation will have you compare data from audio
+                        features between two chosen genres.
                     </p>
                     <TabNav
                         tabsInfo={comparingTabs}

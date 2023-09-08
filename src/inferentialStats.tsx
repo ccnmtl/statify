@@ -83,10 +83,10 @@ export const InferentialStats: React.FC = () => {
                         2.Inferential Statistics
                     </h1>
                     <p className='lead py-4 px-3'>
-                    Inferential statistics involves making population
-                     inferences based on sample data. The simulations in this
-                     unit will help you to better understand sampling
-                     distribution, standard deviation, and standard error.
+                        Inferential statistics involves making population
+                        inferences based on sample data. The simulations in
+                        this unit will help you to better understand sampling
+                        distribution, standard deviation, and standard error.
                     </p>
                     <TabNav
                         tabsInfo={inferentialTabs}
