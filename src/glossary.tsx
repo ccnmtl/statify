@@ -33,7 +33,7 @@ export const Glossary: React.FC = () => {
                 to have for one particular sample.'
         ],
         [
-            'Sample Distribution (of the mean)',
+            'Sampling Distribution (of the mean)',
             'probability distribution of the mean derived from all (or at least\
                 a large number of) possible samples having the same size from\
                 the population.'
