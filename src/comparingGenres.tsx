@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TabNav } from './tabNavigation';
-import { TabData, InstructionData } from './common';
+import { TabData, InstructionData, GraphProps } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 
@@ -71,7 +71,7 @@ const instructions: InstructionData[] = [
     },
 ];
 
-export const ComparingGenres: React.FC = () => {
+export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
 
@@ -108,10 +108,12 @@ export const ComparingGenres: React.FC = () => {
                             audioFeatureField={true}
                             dataPointsField={true}
                             seedField={true}
-                            defaultPoints={1}
+                            defaultPoints={0}
                             graphTypes={graphTypes}
                             instructions={instructions}
-                            activeTab={activeTab} />
+                            activeTab={activeTab}
+                            store={store}
+                            setStore={setStore} />
                     </div>
                     <div className='row'>
                         <Assignment

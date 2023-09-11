@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabNav } from './tabNavigation';
-import { InstructionData, TabData } from './common';
+import { GraphProps, InstructionData, Store, TabData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 
@@ -42,14 +42,18 @@ const instructions: InstructionData[] = [
     },
 ];
 
-export const DescriptiveStats: React.FC = () => {
+export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
+
+    useEffect(() => setStore({} as Store), []);
 
     return (
         <>
             <section className={'statify-section'}>
                 <div className={'container-fluid'}>
-                    <h1 className={'py-4 px-3'}>1.Descriptive Statistics</h1>
+                    <h1 className={'py-4 px-3'}>
+                        1.Descriptive Statistics
+                    </h1>
                     <p className='lead py-4 px-3'>
                         Descriptive statistics involves describing datasets
                         using standard terminology and identifying the
@@ -77,7 +81,9 @@ export const DescriptiveStats: React.FC = () => {
                             defaultPoints={1}
                             graphTypes={[1]}
                             instructions={instructions}
-                            activeTab={activeTab} />
+                            activeTab={activeTab}
+                            store={{} as Store}
+                            setStore={null}/>
                     </div>
                     <div className='row'>
                         <Assignment

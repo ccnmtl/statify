@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
     BinData, graphBins, toTitleCase, SECONDARY, GRAPH_BG, HIGHLIGHT_1,
-    HIGHLIGHT_2
+    HIGHLIGHT_2, AUDIO_DEFAULT
 } from '../common';
 import { axisBottom, axisLeft } from 'd3';
 import { bin, Bin } from 'd3-array';
@@ -54,7 +54,7 @@ export function overlappingBins(
 }
 
 export const Histogram: React.FC<HistogramProps>  = (
-    {color, data1, data2, genre1, genre2, audioFeature='tempo', n}
+    {color, data1, data2, genre1, genre2, audioFeature=AUDIO_DEFAULT, n}
 ) => {
     const svgRef = useRef(null);
     const whichHisto = n ? 'DistributionHistogram' : 'SampleDataHistogram';
@@ -98,6 +98,7 @@ export const Histogram: React.FC<HistogramProps>  = (
         if (!selection) {
             setSelection(select(svgRef.current));
         } else {
+            audioFeature ??= AUDIO_DEFAULT;
             const binData = graphBins[audioFeature] as BinData;
 
             selection.selectAll('g').remove();
@@ -161,7 +162,7 @@ export const Histogram: React.FC<HistogramProps>  = (
                 });
 
             // Construct 2nd set of graph bars
-            if (data2) {
+            if (bins2) {
                 const id2 = 'detail-2';
                 selection.append('g')
                     .attr('id', `genre2-${whichHisto}`)
@@ -231,7 +232,7 @@ export const Histogram: React.FC<HistogramProps>  = (
                     .attr('fill', 'white')
                     .attr('text-anchor', 'center')
                     .text(
-                        audioFeature === 'tempo' ?
+                        audioFeature === AUDIO_DEFAULT ?
                             'Tempo, Beats Per Minute (BPM)' :
                             toTitleCase(audioFeature)
                     ))

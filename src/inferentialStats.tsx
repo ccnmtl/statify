@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TabNav } from './tabNavigation';
-import { TabData, InstructionData } from './common';
+import { TabData, InstructionData, Store, GraphProps } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 
@@ -63,7 +63,7 @@ const questions: string[] = [
         'showed the sample means for samples with 3 data points?'
 ];
 
-export const InferentialStats: React.FC = () => {
+export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([1, 5]);
 
@@ -74,6 +74,8 @@ export const InferentialStats: React.FC = () => {
             setGraphTypes([1, 5]);
         }
     }, [activeTab]);
+
+    useEffect(() => setStore({} as Store), []);
 
     return (
         <>
@@ -103,10 +105,12 @@ export const InferentialStats: React.FC = () => {
                             audioFeatureField={false}
                             dataPointsField={true}
                             seedField={true}
-                            defaultPoints={1}
+                            defaultPoints={0}
                             graphTypes={graphTypes}
                             instructions={instructions}
-                            activeTab={activeTab} />
+                            activeTab={activeTab}
+                            store={{} as Store}
+                            setStore={null} />
                     </div>
                     <div className='row'>
                         <Assignment
