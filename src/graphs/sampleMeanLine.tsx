@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG,
+import { BinData, graphBins, PRIMARY, SECONDARY, GRAPH_BG,
     FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2, AUDIO_DEFAULT } from '../common';
 import { cumulativeMeanFunc } from './utils';
 import { extent, line, axisBottom, axisLeft } from 'd3';
@@ -67,12 +67,12 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .call(axisLeft(y))
             .call((g) => g.select('.domain').remove())
             .call((g) => g.append('text')
-                .attr('x', -HEIGHT/2)
+                .attr('x', -HEIGHT/2.5)
                 .attr('y', -MARGIN + 10)
                 .attr('transform', 'rotate(270)')
                 .attr('fill', 'white')
                 .attr('text-anchor', 'center')
-                .text(`Sample Mean for ${toTitleCase(audioFeature)}`))
+                .text('Sample Mean'))
             .attr('font-size', FONT_SIZE);
 
         // Create X axis
