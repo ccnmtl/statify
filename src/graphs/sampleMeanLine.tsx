@@ -120,7 +120,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .attr('stroke-width', 2);
 
         // scatter dots
-        const circles = svgGraph.append('g').attr('id', 'genre1dots')
+        svgGraph.append('g').attr('id', 'genre1dots')
             .selectAll('circle')
             .data(cm)
             .enter()
@@ -129,6 +129,17 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .attr('cx', d=>d[0])
             .attr('cy', d=>d[1])
             .style('fill', 'white');
+
+        // hover overlay dots
+        const hover = svgGraph.append('g').attr('id', 'genre1hover')
+            .selectAll('circle')
+            .data(cm)
+            .enter()
+            .append('circle')
+            .attr('r', 6)
+            .attr('cx', d=>d[0])
+            .attr('cy', d=>d[1])
+            .style('fill', 'rgba(255,255,255,0)');
 
         // hover details
         svgGraph.append('g').attr('id', 'genre1text')
@@ -146,10 +157,9 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             .style('opacity', 0)
             .text((d, i) => `[${i+1}, ${cumulativeMean[i][0].toFixed(2)}]`);
 
-        circles
+        hover
             .on('mouseenter', function(event, d) {
                 select(this)
-                    .attr('r', 5)
                     .style('fill', HIGHLIGHT_1);
 
                 svgGraph.selectAll('.circle-label')
@@ -158,8 +168,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             })
             .on('mouseout', function(event, d) {
                 select(this)
-                    .attr('r', 2)
-                    .style('fill', 'white');
+                    .style('fill', 'rgba(255,255,255,0)');
 
                 svgGraph.selectAll('.circle-label')
                     .filter(data => data === d)
@@ -201,7 +210,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .attr('stroke-width', 2);
 
             // scatter dots
-            const circles2 = svgGraph.append('g').attr('id', 'genre2dots')
+            svgGraph.append('g').attr('id', 'genre2dots')
                 .selectAll('circle')
                 .data(cm2)
                 .enter()
@@ -210,6 +219,17 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .attr('cx', d=>d[0])
                 .attr('cy', d=>d[1])
                 .style('fill', 'white');
+
+            // hover overlay dots
+            const hover2 = svgGraph.append('g').attr('id', 'genre2hover')
+                .selectAll('circle')
+                .data(cm2)
+                .enter()
+                .append('circle')
+                .attr('r', 6)
+                .attr('cx', d=>d[0])
+                .attr('cy', d=>d[1])
+                .style('fill', 'rgba(255,255,255,0)');
 
             // hover details
             svgGraph.append('g').attr('id', 'genre2text')
@@ -228,10 +248,9 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .text((d, i) => `[${i+1},
                     ${cumulativeMean2[i][0].toFixed(2)}]`);
 
-            circles2
+            hover2
                 .on('mouseenter', function(event, d) {
                     select(this)
-                        .attr('r', 5)
                         .style('fill', HIGHLIGHT_2);
 
                     svgGraph.selectAll('#genre2text .circle-label2')
