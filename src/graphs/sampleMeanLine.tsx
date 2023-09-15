@@ -18,14 +18,23 @@ interface CumulativeSampleMeanProps {
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
     { data1, data2, audioFeature=AUDIO_DEFAULT}
 ) => {
+    const [oldData, setOldData] = useState(data1);
+    const [oldData2, setOldData2] = useState(data1);
     const [prevData, setPrevData] = useState<[number, number][][]>([]);
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
     const svgRef = useRef(null);
 
     const [width, setWidth]  = useState<number>();
-    const handleResize = function() {
-        setWidth(window.innerWidth);
+    let resizeTimeout;
+
+    const handleResize = () => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            setWidth(window.innerWidth);
+        }, 10); // Adjust the timeout duration as needed
     };
+
     window.addEventListener('resize', handleResize);
 
     useEffect(() => {
@@ -93,22 +102,24 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
         const lnMkr = line();
 
         //Old lines of 100 pts
-        if(cm.length === 100) {
+        if(cm.length === 100 && data1 !== oldData) {
             setPrevData([
                 ...prevData, cm
             ]);
+            setOldData(data1);
         }
-        prevData.forEach((oldData) => {
-            //lines
-            svgGraph.append('g').attr('id', 'genre1line')
-                .append('path')
-                .datum(oldData)
-                .attr('d', lnMkr(oldData))
-                .attr('fill', 'none')
-                .attr('stroke', PRIMARY)
-                .attr('opacity', 0.35)
-                .attr('stroke-width', 2);
-        });
+
+        //Old lines
+        svgGraph.append('g').attr('id', 'genre1old')
+            .call((g) =>  prevData.forEach((oldData) =>
+                g.append('path')
+                    .datum(oldData)
+                    .attr('d', lnMkr(oldData))
+                    .attr('fill', 'none')
+                    .attr('stroke', PRIMARY)
+                    .attr('opacity', 0.35)
+                    .attr('stroke-width', 2)
+            ));
 
         //lines
         svgGraph.append('g').attr('id', 'genre1line')
@@ -183,14 +194,15 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             const lnMkr2 = line();
 
             //Old lines of 100 pts
-            if(cm2.length === 100) {
+            if(cm2.length === 100 && data2 !== oldData2) {
                 setPrevData2([
                     ...prevData2, cm2
                 ]);
+                setOldData2(data2);
             }
             prevData2.forEach((oldData) => {
                 //lines
-                svgGraph.append('g').attr('id', 'genre1line')
+                svgGraph.append('g').attr('id', 'genre2old')
                     .append('path')
                     .datum(oldData)
                     .attr('d', lnMkr2(oldData))
