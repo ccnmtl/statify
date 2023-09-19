@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { BinData, graphBins, PRIMARY, SECONDARY, GRAPH_BG,
     FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2, AUDIO_DEFAULT } from '../common';
 import { cumulativeMeanFunc } from './utils';
-import { extent, line, axisBottom, axisLeft } from 'd3';
+import { extent, line, axisBottom, axisLeft, min, max, range } from 'd3';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 
@@ -14,6 +14,8 @@ interface CumulativeSampleMeanProps {
     data1: number[];
     data2: number[] | null;
 }
+
+const numTicks = 5;
 
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
     { data1, data2, audioFeature=AUDIO_DEFAULT}
@@ -52,13 +54,36 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
             datapoints.push(x[1]);
         });
 
+        const minYValue1 = cumulativeMean.length > 0
+            ? min(cumulativeMean, (d) => d[0])
+            : binData.min;
+        const maxYValue1 = cumulativeMean.length > 0
+            ? max(cumulativeMean, (d) => d[0])
+            : binData.max;
+
+        let minYValue = minYValue1;
+        let maxYValue = maxYValue1;
+
+        if (data2.length > 0) {
+            const cumulativeMean2 = cumulativeMeanFunc(data2);
+            const minYValue2 = min(cumulativeMean2, (d) => d[0]);
+            const maxYValue2 = max(cumulativeMean2, (d) => d[0]);
+
+            minYValue = Math.min(minYValue1, minYValue2);
+            maxYValue = Math.max(maxYValue1, maxYValue2);
+
+        }
+
+        const tickValues = range(
+            minYValue, maxYValue, (maxYValue - minYValue) / (numTicks - 1));
+
+
         // Create scales for x and y axes
         const x = scaleLinear()
             .domain(extent(datapoints))
             .range([MARGIN, gWidth + 20]);
-
         const y = scaleLinear()
-            .domain([binData.min, binData.max]).nice()
+            .domain([minYValue, maxYValue])
             .range([HEIGHT, MARGIN]);
 
         // Generate graph body
@@ -68,12 +93,12 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .attr('height', HEIGHT-MARGIN)
                 .attr('width', gWidth + 20 - MARGIN)
                 .attr('x', MARGIN)
-                .attr('y', y(binData.max)));
+                .attr('y', y(maxYValue)));
 
         // Construct the Y-axis
         svgGraph.append('g')
             .attr('transform', `translate(${MARGIN},0)`)
-            .call(axisLeft(y))
+            .call(axisLeft(y).tickValues(tickValues))
             .call((g) => g.select('.domain').remove())
             .call((g) => g.append('text')
                 .attr('x', -HEIGHT/2.5)
@@ -186,7 +211,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                     .style('opacity', 0);
             });
 
-        if(data2) {
+        if(data2.length > 0) {
             const cumulativeMean2 = cumulativeMeanFunc(data2);
             const cm2 = cumulativeMean2.map(
                 (c) => [x(c[1]), y(c[0])] as [number, number]);
