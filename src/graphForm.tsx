@@ -396,7 +396,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 </label>
                                 <input name='seed' id='seed'
                                     type='text'
-                                    className='form-input'
+                                    className='form-control'
                                     defaultValue={initialSeed}
                                     onChange={handleSeed}
                                     aria-required={'true'}
