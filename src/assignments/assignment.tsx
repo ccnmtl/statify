@@ -20,9 +20,12 @@ export const Assignment: React.FC<AssignmentProps>  = (
     const [screenshot, setScreenshot] = useState<string>();
     const [name, setName] = useState<string>('');
     const [uni, setUni] = useState<string>('');
+    const [uniError, setUniError] = useState<boolean>(false);
+    const [nameError, setNameError] = useState<boolean>(false);
 
     const handleName = (evt: React.ChangeEvent<HTMLInputElement>): void => {
         setName(evt.target.value);
+        setNameError(false);
         const data = JSON.parse(
             window.localStorage.getItem(module)) as AssignmentData[];
         data[0].name = evt.target.value;
@@ -32,6 +35,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
 
     const handleUni = (evt: React.ChangeEvent<HTMLInputElement>): void => {
         setUni(evt.target.value);
+        setUniError(false);
         const data = JSON.parse(
             window.localStorage.getItem(module)) as AssignmentData[];
         data[0].uni = evt.target.value;
@@ -40,17 +44,23 @@ export const Assignment: React.FC<AssignmentProps>  = (
     };
 
     const generatePdfDocument = async() => {
-        const blob = await pdf((
-            <AssignmentDocument
-                questions={questions}
-                answers={answers}
-                screenshot={screenshot}
-                name={name}
-                module={module}
-                uni={uni}
-            />
-        )).toBlob();
-        saveAs(blob, `${name.replace(/ /g,'_')}_${module}`);
+        if(name === '') {
+            setNameError(true);
+        } else if(uni === '') {
+            setUniError(true);
+        } else {
+            const blob = await pdf((
+                <AssignmentDocument
+                    questions={questions}
+                    answers={answers}
+                    screenshot={screenshot}
+                    name={name}
+                    module={module}
+                    uni={uni}
+                />
+            )).toBlob();
+            saveAs(blob, `${name.replace(/ /g,'_')}_${module}`);
+        }
     };
 
     const generateScreenshot = async() => {
@@ -117,10 +127,17 @@ export const Assignment: React.FC<AssignmentProps>  = (
                 <div className={'mb-3'}>
                     <div className='row'>
                         <div className='col-4'>
-                            <label htmlFor={'name-input'}
-                                className={'form-label'}>
-                            Name:
-                            </label>
+                            <div>
+                                <label htmlFor={'name-input'}
+                                    className={'form-label'}>
+                                        Name:
+                                </label>
+                                {nameError && (
+                                    <span className={'text-danger fs-6 ms-5'}>
+                                        * Required
+                                    </span>
+                                )}
+                            </div>
                             <input type='text'
                                 className='form-control w-100 mb-4'
                                 id='name-input'
@@ -130,12 +147,20 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                 name="name" />
                         </div>
                         <div className='col-4'>
-                            <label htmlFor={'uni-input'}
-                                className={'form-label'}>
-                            Uni:
-                            </label>
+                            <div>
+                                <label htmlFor={'uni-input'}
+                                    className={'form-label'}>
+                                        Uni:
+                                </label>
+                                {uniError && (
+                                    <span className={'text-danger fs-6 ms-5'}>
+                                        * Required
+                                    </span>
+
+                                )}
+                            </div>
                             <input type='text'
-                                className='form-control w-100 mb-4'
+                                className='form-control w-50 mb-4'
                                 id='uni-input'
                                 placeholder='Uni'
                                 onChange={handleUni}
