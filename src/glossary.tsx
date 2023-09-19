@@ -47,7 +47,7 @@ export const Glossary: React.FC = () => {
                 <div className="mx-auto">
                     <ul className='row align-items-stretch'>
                         {definitions.map((term, key) =>
-                            <li key={key} className="col-6 no-bullet">
+                            <li key={key} className="col-lg-6 no-bullet">
                                 <p className={'glossary p-4 rounded my-2'}>
                                     <strong>{term[0]}</strong>: {term[1]}
                                 </p>
