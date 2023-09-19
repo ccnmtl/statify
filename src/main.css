@@ -50,6 +50,12 @@ li.no-bullet
     font-weight: 600;
 }
 
+#nav-global strong
+{
+    font-weight: 800;
+    color: white;
+}
+
 #footer-global
 {
     background-color: #0f0f0f!important;
