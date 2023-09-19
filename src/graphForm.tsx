@@ -55,6 +55,11 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [prng, setPRNG] = useState<seedrandom.PRNG>(
         () => store.prng || seedrandom(initialSeed));
 
+    const [oldData, setOldData] = useState(data1);
+    const [oldData2, setOldData2] = useState(data1);
+    const [prevData, setPrevData] = useState<[number, number][][]>([]);
+    const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
+
     useEffect(() => {
         if (setStore) {
             const checkAudio = audioFeature ?? AUDIO_DEFAULT;
@@ -69,6 +74,10 @@ export const GraphForm: React.FC<GraphFormProps> = (
         setData2([]);
         setMeanData1([]);
         setMeanData2([]);
+        setOldData([]);
+        setOldData2([]);
+        setPrevData([]);
+        setPrevData2([]);
     };
 
     const reset = function() {
@@ -266,7 +275,15 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         <CumulativeSampleMean
                             data1={data1}
                             data2={data2}
-                            audioFeature={audioFeature} />
+                            audioFeature={audioFeature}
+                            oldData={oldData}
+                            oldData2={oldData2}
+                            prevData={prevData}
+                            prevData2={prevData2}
+                            setOldData={setOldData}
+                            setOldData2={setOldData2}
+                            setPrevData={setPrevData}
+                            setPrevData2={setPrevData2}/>
                     )}
                     {graphTypes.includes(DISTRIBUTIONHISTOGRAM) && (
                         <Histogram
