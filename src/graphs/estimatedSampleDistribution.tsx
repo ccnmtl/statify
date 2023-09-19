@@ -218,8 +218,11 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                 .attr('id', 'title-header')
                 .call((g) => {
                     g.append('text')
-                        .attr('x', gWidth)
-                        .attr('y', 12)
+                        .attr('x', gWidth - 4)
+                        .attr('y', MARGIN + FONT_SIZE)
+                        .attr('paint-order', 'stroke')
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', 4)
                         .attr('fill', 'white')
                         .attr('font-size', FONT_SIZE)
                         .attr('text-anchor', 'end')
