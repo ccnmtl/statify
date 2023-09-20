@@ -312,14 +312,18 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                     .attr('fill', 'white')
                     .attr('font-size', FONT_SIZE)
                     .attr('text-anchor', 'end')
-                    .attr('x', gWidth)
+                    .attr('x', gWidth + 20)
                     .attr('y', 24)
                     .text(`Count: ${data1.length}`);
                 g.append('text')
                     .attr('fill', 'white')
                     .attr('font-size', FONT_SIZE * 1.5)
-                    .attr('text-anchor', 'middle')
-                    .attr('x', gWidth/2 + MARGIN)
+                    .attr('text-anchor', gWidth + 20 - MARGIN < 480 ?
+                        'start' :
+                        'middle')
+                    .attr('x', gWidth + 20 - MARGIN < 480 ?
+                        MARGIN :
+                        gWidth/2 + MARGIN)
                     .attr('y', 36)
                     .text('Cumulative Sample Mean');});
 
