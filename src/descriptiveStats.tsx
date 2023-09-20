@@ -3,6 +3,7 @@ import { TabNav } from './tabNavigation';
 import { GraphProps, InstructionData, Store, TabData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
+import { KeyTermModal } from './keyTermModal';
 
 const descriptiveTabs: TabData[] = [
     {
@@ -40,6 +41,16 @@ const instructions: InstructionData[] = [
         instruction: 'Start by drawing 80 data points on the graph to start '+
             'answering the following questions.'
     },
+];
+
+const keyTerms = [
+    ['Data point', 'A discrete unit of information derived from a ' +
+        'measurement. It could be a number or a word for example, but it has ' +
+        'to be distinguishable from other data points.'],
+    ['Sample', 'A collection of measurements or observations. A sample can ' +
+        'have one or more data points and is a subset of the population.'],
+    ['Population', 'The full set of data points that is of interest for some ' +
+        'question or experiment.']
 ];
 
 export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
@@ -92,8 +103,8 @@ export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
                         />
                     </div>
                 </div>
-
             </section>
+            <KeyTermModal definitions={keyTerms} />
         </>
     );
 };

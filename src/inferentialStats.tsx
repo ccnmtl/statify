@@ -3,6 +3,7 @@ import { TabNav } from './tabNavigation';
 import { TabData, InstructionData, Store, GraphProps } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
+import { KeyTermModal } from './keyTermModal';
 
 const inferentialTabs: TabData[] = [
     {title: 'Part 2.1', info:
@@ -63,6 +64,14 @@ const questions: string[] = [
         'showed the sample means for samples with 3 data points?'
 ];
 
+const keyTerms = [
+    ['Sampling Distribution', 'Observed distribution of the values that a ' +
+        'variable is observed to have for one particular sample.'],
+    ['Sampling distribution (of the mean)', 'Probability distribution of the ' +
+        'mean derived from all (or at least a large number of) possible ' +
+        'samples having the same size from the population.']
+];
+
 export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([1, 5]);
@@ -120,6 +129,7 @@ export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
                     </div>
                 </div>
             </section>
+            <KeyTermModal definitions={keyTerms} />
         </>
     );
 };
