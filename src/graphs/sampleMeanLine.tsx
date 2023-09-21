@@ -13,15 +13,20 @@ interface CumulativeSampleMeanProps {
     audioFeature: string | null;
     data1: number[];
     data2: number[] | null;
+    oldData: number[];
+    setOldData: React.Dispatch<React.SetStateAction<number[]>>;
+    oldData2: number[] | null;
+    setOldData2: React.Dispatch<React.SetStateAction<number[]>>;
+    prevData: [number, number][][];
+    setPrevData: React.Dispatch<React.SetStateAction<[number, number][][]>>
+    prevData2: [number, number][][];
+    setPrevData2: React.Dispatch<React.SetStateAction<[number, number][][]>>
 }
 
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
-    { data1, data2, audioFeature=AUDIO_DEFAULT}
+    { data1, data2, audioFeature=AUDIO_DEFAULT, oldData, oldData2, setOldData,
+        setOldData2, prevData, prevData2, setPrevData, setPrevData2}
 ) => {
-    const [oldData, setOldData] = useState(data1);
-    const [oldData2, setOldData2] = useState(data1);
-    const [prevData, setPrevData] = useState<[number, number][][]>([]);
-    const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
     const svgRef = useRef(null);
 
     const [width, setWidth]  = useState<number>();
