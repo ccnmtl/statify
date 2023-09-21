@@ -232,10 +232,15 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     g.append('text')
                         .attr('fill', 'white')
                         .attr('font-size', FONT_SIZE * 1.5)
-                        .attr('text-anchor', 'middle')
-                        .attr('x', gWidth/2 + MARGIN)
+                        .attr('text-anchor', gWidth - x(binData.min) < 480 ?
+                            'start':
+                            'middle')
+                        .attr('x', gWidth - x(binData.min) < 480 ?
+                            x(binData.min) :
+                            gWidth/2 + MARGIN)
                         .attr('y', 18)
-                        .text(
+                        .text(gWidth - x(binData.min) < 650 ?
+                            `Est. Sampling Dist.: N = ${n}` :
                             `Estimated Sampling Distribution when N = ${n}`);});
         }
     }, [selection, data1, genre1, genre2, audioFeature, width]);

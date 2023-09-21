@@ -252,8 +252,12 @@ export const Histogram: React.FC<HistogramProps>  = (
                     g.append('text')
                         .attr('fill', 'white')
                         .attr('font-size', FONT_SIZE * 1.5)
-                        .attr('text-anchor', 'middle')
-                        .attr('x', gWidth/2 + MARGIN)
+                        .attr('text-anchor', gWidth - MARGIN - Y_LABEL < 480 ?
+                            'start' :
+                            'middle')
+                        .attr('x', gWidth - MARGIN - Y_LABEL < 480 ?
+                            MARGIN + Y_LABEL :
+                            gWidth/2 + MARGIN)
                         .attr('y', 18)
                         .text(
                             whichHisto === 'SampleDataHistogram'
