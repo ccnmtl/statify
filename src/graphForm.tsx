@@ -128,13 +128,15 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     ...getDataPoints(genre1, audioFeature, dataPoints)
                 ]);
                 if (genre2 !== '') {
-                    setMeanData2([
-                        ...meanData2,
-                        getDataPoints(
-                            genre2,
-                            audioFeature,
-                            N
-                        ).reduce((i, sum) => i + sum) / N]);
+                    if (dataPoints === N) {
+                        setMeanData2([
+                            ...meanData2,
+                            getDataPoints(
+                                genre2,
+                                audioFeature,
+                                N
+                            ).reduce((i, sum) => i + sum) / N]);
+                    }
                     setData2([
                         ...getDataPoints(
                             genre2, audioFeature, dataPoints)
