@@ -75,6 +75,7 @@ const keyTerms = [
 export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([1, 5]);
+    const [initialSeed, setInitialSeed] = useState('');
 
     useEffect(() => {
         if (activeTab === 2) {
@@ -85,6 +86,12 @@ export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
     }, [activeTab]);
 
     useEffect(() => setStore({} as Store), []);
+
+    useEffect(() => {
+        setInitialSeed([...Array(8) as null[]].map(
+            // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+            () => Math.floor(Math.random() * 16).toString(16)).join(''));
+    }, []);
 
     return (
         <>
@@ -119,12 +126,14 @@ export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
                             instructions={instructions}
                             activeTab={activeTab}
                             store={{} as Store}
+                            initialSeed={initialSeed}
                             setStore={null} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'InferentialStatistics'}
+                            initialSeed={initialSeed}
                         />
                     </div>
                 </div>

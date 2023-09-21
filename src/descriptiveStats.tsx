@@ -55,8 +55,15 @@ const keyTerms = [
 
 export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
+    const [initialSeed, setInitialSeed] = useState('');
 
     useEffect(() => setStore({} as Store), []);
+
+    useEffect(() => {
+        setInitialSeed([...Array(8) as null[]].map(
+            // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+            () => Math.floor(Math.random() * 16).toString(16)).join(''));
+    }, []);
 
     return (
         <>
@@ -94,12 +101,14 @@ export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
                             instructions={instructions}
                             activeTab={activeTab}
                             store={{} as Store}
-                            setStore={null}/>
+                            setStore={null}
+                            initialSeed={initialSeed}/>
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'DescriptiveStatistics'}
+                            initialSeed={initialSeed}
                         />
                     </div>
                 </div>
