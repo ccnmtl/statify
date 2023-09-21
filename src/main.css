@@ -58,6 +58,11 @@ li.no-bullet
     list-style-type: none;
 }
 
+.modal
+{
+    color: #000;
+}
+
 #nav-global
 {
     background-color: #0f0f0f!important;

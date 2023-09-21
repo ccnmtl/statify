@@ -4,6 +4,7 @@ import { TabData, InstructionData, GraphProps } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 import { KeyTermModal } from './keyTermModal';
+import { ObjectiveModal } from './objectiveModal';
 
 const comparingTabs: TabData[] = [
     {   title: 'Part 3.1',
@@ -76,6 +77,11 @@ const keyTerms = [
     ['', 'There are no key terms for the Comparing Genres exercises.']
 ];
 
+const objectives = [
+    'Students will be able to describe the fundamental logic of hypothesis '+
+        'tests.'
+];
+
 export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
@@ -130,6 +136,7 @@ export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
 
             </section>
             <KeyTermModal definitions={keyTerms} />
+            <ObjectiveModal objectives={objectives} />
         </>
     );
 };

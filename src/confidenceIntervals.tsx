@@ -4,6 +4,7 @@ import { GraphProps, InstructionData, TabData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 import { KeyTermModal } from './keyTermModal';
+import { ObjectiveModal } from './objectiveModal';
 
 const confidenceTabs: TabData[] = [
     {title: 'Part 4.1',
@@ -67,6 +68,14 @@ const keyTerm = [
         'approximate the standard error of the sampling distribution.']
 ];
 
+const objectives = [
+    'Students will understand the distinction between a true sampling '+
+        'distribution and the estimated sampling distribution.',
+    'Students will be able to describe the 95% confidence interval '+
+        'rule-of-thumb as an extension of the underlying logic of hypothesis '+
+        'tests.'
+];
+
 export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
 {
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -116,6 +125,7 @@ export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
                 </div>
             </section>
             <KeyTermModal definitions={keyTerm} />
+            <ObjectiveModal objectives={objectives} />
         </>
     );
 };

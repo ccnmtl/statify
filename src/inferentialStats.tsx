@@ -4,6 +4,7 @@ import { TabData, InstructionData, Store, GraphProps } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 import { KeyTermModal } from './keyTermModal';
+import { ObjectiveModal } from './objectiveModal';
 
 const inferentialTabs: TabData[] = [
     {title: 'Part 2.1', info:
@@ -72,6 +73,18 @@ const keyTerms = [
         'samples having the same size from the population.']
 ];
 
+const objectives = [
+    'Students will be able to describe what a sampling distribution ' +
+        'represents and why it is useful in making statistical ' +
+        'inferences.',
+    'Students will be able to differentiate between the standard deviation ' +
+        'and the standard error, as well as draw a relationship between them ' +
+        '(i.e., the standard error is the standard deviation of a sampling ' +
+        'distribution.',
+    'Students will be able to describe the effect of changing the sample ' +
+        'size on the standard error.'
+];
+
 export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([1, 5]);
@@ -130,6 +143,7 @@ export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
                 </div>
             </section>
             <KeyTermModal definitions={keyTerms} />
+            <ObjectiveModal objectives={objectives} />
         </>
     );
 };
