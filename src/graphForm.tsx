@@ -8,6 +8,7 @@ import {
 } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
+import { GenrePicker } from './genrePicker';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -28,6 +29,20 @@ const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
 
 const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 
+export const getDataPoints = function(
+    genre:string, feature:string|null , n:number, prng:seedrandom.PRNG)
+{
+    const data:number[] = [];
+    const chosenGenre = genres[genre] as Genre;
+    const chosenFeature = chosenGenre[feature ?? AUDIO_DEFAULT] as number[];
+    for (let i = 0; i < n; i++) {
+        data.push(chosenFeature[
+            Math.floor(prng() * (chosenGenre.count-1))
+        ]);
+    }
+    return data;
+};
+
 export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
@@ -35,7 +50,6 @@ export const GraphForm: React.FC<GraphFormProps> = (
         store, setStore
     }:
     GraphFormProps) => {
-    const genresText: string[] = Object.keys(genres);
     const initialSeed = [...Array(8) as null[]].map(
         // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
         () => Math.floor(Math.random() * 16).toString(16)).join('');
@@ -97,20 +111,6 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const ESTIMATED_DISTRIBUTION = 6;
     const N = 100; // The number of datapoints to compile into the mean
 
-    const getDataPoints = function(
-        genre:string, feature:string|null , n:number)
-    {
-        const data:number[] = [];
-        const chosenGenre = genres[genre] as Genre;
-        const chosenFeature = chosenGenre[feature ?? AUDIO_DEFAULT] as number[];
-        for (let i = 0; i < n; i++) {
-            data.push(chosenFeature[
-                Math.floor(prng() * (chosenGenre.count-1))
-            ]);
-        }
-        return data;
-    };
-
     const handleDataUpdate = (evt: React.FormEvent<HTMLFormElement>): void => {
         evt.preventDefault();
         if (genre1 !== '') {
@@ -121,11 +121,12 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         getDataPoints(
                             genre1,
                             audioFeature,
-                            N
+                            N,
+                            prng
                         ).reduce((i, sum) => i + sum) / N]);
                 }
                 setData1([
-                    ...getDataPoints(genre1, audioFeature, dataPoints)
+                    ...getDataPoints(genre1, audioFeature, dataPoints, prng)
                 ]);
                 if (genre2 !== '') {
                     if (dataPoints === N) {
@@ -134,12 +135,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             getDataPoints(
                                 genre2,
                                 audioFeature,
-                                N
+                                N,
+                                prng
                             ).reduce((i, sum) => i + sum) / N]);
                     }
                     setData2([
                         ...getDataPoints(
-                            genre2, audioFeature, dataPoints)
+                            genre2, audioFeature, dataPoints, prng)
                     ]);
                 }
             } else if (data1.length + dataPoints >= N) {
@@ -150,12 +152,14 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         ...getDataPoints(
                             genre1,
                             audioFeature,
-                            N - data1.length
+                            N - data1.length,
+                            prng
                         )
                     ].reduce((i, sum) => i + sum) / N]);
                 setData1([
                     ...data1,
-                    ...getDataPoints(genre1, audioFeature, N - data1.length)
+                    ...getDataPoints(
+                        genre1, audioFeature, N - data1.length, prng)
                 ]);
                 if (genre2) {
                     setMeanData2([
@@ -163,24 +167,25 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         getDataPoints(
                             genre2,
                             audioFeature,
-                            N - data1.length
+                            N - data1.length,
+                            prng
                         ).reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...data2,
                         ...getDataPoints(
-                            genre2, audioFeature, N - data1.length)
+                            genre2, audioFeature, N - data1.length, prng)
                     ]);
                 }
             } else {
                 setData1([
                     ...data1,
-                    ...getDataPoints(genre1, audioFeature, dataPoints)
+                    ...getDataPoints(genre1, audioFeature, dataPoints, prng)
                 ]);
                 if (genre2) {
                     setData2([
                         ...data2,
                         ...getDataPoints(
-                            genre2, audioFeature, dataPoints)
+                            genre2, audioFeature, dataPoints, prng)
                     ]);
                 }
             }
@@ -188,30 +193,41 @@ export const GraphForm: React.FC<GraphFormProps> = (
     };
 
     const handleGenre1Select = (
-        evt: React.ChangeEvent<HTMLSelectElement>): void => {
-        setGenre1(evt.target.value);
+        evt: React.MouseEvent<HTMLElement>): void =>
+    {
+        evt.preventDefault();
+        setGenre1((evt.target as HTMLInputElement).value);
         clearData();
+        document.getElementById('genreList1')
+            .classList.remove('show');
     };
 
     const handleGenre2Select = (
-        evt: React.ChangeEvent<HTMLSelectElement>): void => {
-        setGenre2(evt.target.value);
+        evt: React.MouseEvent<HTMLElement>): void =>
+    {
+        evt.preventDefault();
+        setGenre2((evt.target as HTMLInputElement).value);
         clearData();
+        document.getElementById('genreList2')
+            .classList.remove('show');
     };
 
     const handleAudioFeatureSelect = (
-        evt: React.ChangeEvent<HTMLSelectElement>): void => {
+        evt: React.ChangeEvent<HTMLSelectElement>): void =>
+    {
         setAudioFeature(evt.target.value);
         clearData();
     };
 
     const handleDataPointsSelect = (
-        evt: React.ChangeEvent<HTMLSelectElement>): void => {
+        evt: React.ChangeEvent<HTMLSelectElement>): void =>
+    {
         setDataPoints(Number(evt.target.value));
     };
 
     const handleSeed = (
-        evt: React.ChangeEvent<HTMLInputElement>): void => {
+        evt: React.ChangeEvent<HTMLInputElement>): void =>
+    {
         setPRNG(() => seedrandom(evt.target.value));
         clearData();
     };
@@ -316,53 +332,25 @@ export const GraphForm: React.FC<GraphFormProps> = (
                         onSubmit={handleDataUpdate}
                     >
                         {genre1Field && (
-                            <div className='mb-3'>
-                                <label htmlFor='firstGenre'
-                                    className='form-label'>Genre 1</label>
-                                <select name='firstGenre' id='firstGenre'
-                                    className='form-select'
-                                    value={genre1 ? genre1 : 'Select One'}
-                                    onChange={handleGenre1Select}
-                                    aria-required={'true'}
-                                    required>
-                                    <option value={''}>Select one</option>
-                                    {genresText.map((genre, index) => {
-                                        return (
-                                            <option key={index} value={genre}>
-                                                {toTitleCase(genre)}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
+                            <GenrePicker
+                                genre={genre1}
+                                handler={handleGenre1Select}
+                                label='first'
+                                x={1} />
                         )}
                         {genre2Field && (
-                            <div className='mb-3'>
-                                <label htmlFor='secondGenre'
-                                    className='form-label'>Genre 2</label>
-                                <select name='secondGenre' id='secondGenre'
-                                    className='form-select'
-                                    value={genre2 ? genre2 : 'Select One'}
-                                    onChange={handleGenre2Select}
-                                    aria-required={'true'}
-                                    required>
-                                    <option value={''}>Select one</option>
-                                    {genresText.map((genre, index) => {
-                                        return (
-                                            <option key={index} value={genre}>
-                                                {toTitleCase(genre)}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
+                            <GenrePicker
+                                genre={genre2}
+                                handler={handleGenre2Select}
+                                label='second'
+                                x={2} />
                         )}
                         {audioFeatureField && (
                             <div className='mb-3'>
                                 <label htmlFor='audioFeature'
                                     className='form-label'>Audio Feature</label>
                                 <select name='audioFeature' id='audioFeature'
-                                    className='form-select'
+                                    className='form-select hover-green'
                                     value={
                                         audioFeature ?
                                             audioFeature :
@@ -390,7 +378,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 Data Points to Draw
                                 </label>
                                 <select name='dataPoints' id='dataPoints'
-                                    className='form-select'
+                                    className='form-select hover-green'
                                     value={
                                         dataPoints ? dataPoints : 'Select One'}
                                     onChange={handleDataPointsSelect}
@@ -434,6 +422,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 type='button'
                                 id='reset-btn'
                                 className='col mx-1 mb-2 btn btn-danger'
+                                data-cy={'reset'}
                                 onClick={reset}
                                 value="Reset"/>
                         </div>

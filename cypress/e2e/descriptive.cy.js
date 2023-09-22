@@ -13,9 +13,13 @@ describe('Descriptive Statistics', () => {
         cy.get('#firstGenre').scrollIntoView().should('be.visible');
         cy.get('#seed').should('exist');
         cy.get('#secondGenre').should('not.be', 'visible');
-        cy.get('#firstGenre').select('Latin', {force: true});
+        cy.get('[data-cy="firstGenre"]').click();
+        cy.get('[data-cy="Option1-0"]').click();
+        cy.get('[data-cy="firstGenre"]').should('contain', '5th Wave Emo');
         cy.get('[data-cy="SampleDataHistogram"]').should('exist');
         cy.get('#submit-btn').click();
+        cy.get('[data-cy="reset"]').click();
+        cy.get('[data-cy="firstGenre"]').should('contain', 'Select One');
     });
     it('Checks tabs', () => {
         cy.get('[data-cy="0"]').should('exist');

@@ -36,8 +36,14 @@ describe('Comparing Genres', () => {
     });
 
     it('Checks form', () => {
+        cy.get('[data-cy="secondGenre"]').click();
+        cy.get('[data-cy="Option2-0"]').click();
+        cy.get('[data-cy="secondGenre"]').should('contain', '5th Wave Emo');
+        cy.get('[data-cy="reset"]').click();
+        cy.get('[data-cy="secondGenre"]').should('contain', 'Select One');
+
         cy.get('#submit-btn').click();
-        cy.get('#firstGenre')
+        cy.get('#audioFeature')
             .invoke('prop', 'validationMessage')
             .should((text) => {
                 expect(text).to.contain('Please select an item in the list.');
