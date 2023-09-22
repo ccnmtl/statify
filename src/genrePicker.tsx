@@ -72,7 +72,7 @@ export const GenrePicker: React.FC<GenreProps> = ({
         evt: React.ChangeEvent<HTMLInputElement>): void {
         setFilteredGenres(Object.entries(genreList)
             .filter((genre) => genre[0]
-                .includes(evt.target.value.toLowerCase())));
+                .includes(evt.target.value.toLowerCase().replace(' ', '_'))));
     };
 
     const generateListItem = function(
