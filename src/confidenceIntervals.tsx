@@ -3,6 +3,7 @@ import { TabNav } from './tabNavigation';
 import { GraphProps, InstructionData, TabData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
+import { KeyTermModal } from './keyTermModal';
 
 const confidenceTabs: TabData[] = [
     {title: 'Part 4.1',
@@ -58,6 +59,14 @@ const instructions: InstructionData[] = [
     }
 ];
 
+const keyTerm = [
+    ['Estimated Sampling Distribution', 'probability distribution that ' +
+        'approximates the sampling distribution (of the mean), but is based ' +
+        'only on a single sample. A sample mean is used to estimate the true ' +
+        'mean of the population, while the formula SE=SD/√N is used to ' +
+        'approximate the standard error of the sampling distribution.']
+];
+
 export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
 {
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -105,8 +114,8 @@ export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
                         />
                     </div>
                 </div>
-
             </section>
+            <KeyTermModal definitions={keyTerm} />
         </>
     );
 };

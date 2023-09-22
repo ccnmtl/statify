@@ -3,6 +3,7 @@ import { TabNav } from './tabNavigation';
 import { TabData, InstructionData, GraphProps } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
+import { KeyTermModal } from './keyTermModal';
 
 const comparingTabs: TabData[] = [
     {   title: 'Part 3.1',
@@ -71,6 +72,10 @@ const instructions: InstructionData[] = [
     },
 ];
 
+const keyTerms = [
+    ['', 'There are no key terms for the Comparing Genres exercises.']
+];
+
 export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
@@ -124,6 +129,7 @@ export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
                 </div>
 
             </section>
+            <KeyTermModal definitions={keyTerms} />
         </>
     );
 };

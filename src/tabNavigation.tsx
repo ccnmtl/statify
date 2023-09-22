@@ -18,7 +18,7 @@ export const TabNav: React.FC<TabNavProps> = (
 
     return (
         <>
-            <ul className={'nav nav-pills'}>
+            <ul className={'nav nav-pills d-flex'}>
                 {tabsInfo.map((tab: TabData, idx) => {
                     return (
                         <li key={idx} className='nav-item'>
@@ -32,6 +32,32 @@ export const TabNav: React.FC<TabNavProps> = (
                         </li>
                     );
                 })}
+                {document.getElementById('keyTermModal') ?
+                    <li
+                        className={'nav-item ms-auto'}
+                    >
+                        <button
+                            className={'nav-link'}
+                            data-bs-toggle={'modal'}
+                            data-bs-target={'#keyTermModal'}
+                        >
+                            <svg xmlns='http://www.w3.org/2000/svg' width='16'
+                                height='16' fill='currentColor'
+                                className='bi bi-info-circle-fill'
+                                viewBox='0 0 16 16'
+                            >
+                                <path d={'M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16z' +
+                                    'm.93-9.412-1 4.705c-.07.34.029.533.304.5' +
+                                    '33.194 0 .487-.07.686-.246l-.088.416c-.2' +
+                                    '87.346-.92.598-1.465.598-.703 0-1.002-.4' +
+                                    '22-.808-1.319l.738-3.468c.064-.293.006-.' +
+                                    '399-.287-.47l-.451-.081.082-.381 2.29-.2' +
+                                    '87zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'}/>
+                            </svg>
+                            <span className='mx-2'>Key Terms</span>
+                        </button>
+                    </li> : (null)
+                }
             </ul>
             <p className={'p-3'}>
                 {tabsInfo[activeTab].info}
