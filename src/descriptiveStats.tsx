@@ -4,6 +4,7 @@ import { GraphProps, InstructionData, Store, TabData } from './common';
 import { GraphForm } from './graphForm';
 import { Assignment } from './assignments/assignment';
 import { KeyTermModal } from './keyTermModal';
+import { ObjectiveModal } from './objectiveModal';
 
 const descriptiveTabs: TabData[] = [
     {
@@ -51,6 +52,13 @@ const keyTerms = [
         'have one or more data points and is a subset of the population.'],
     ['Population', 'The full set of data points that is of interest for some ' +
         'question or experiment.']
+];
+
+const objectives = [
+    'Students will learn to describe a dataset using standard terminology ' +
+        '(e.g., mean, standard deviation).',
+    'Students will be able to identify the limitations of what can be ' +
+        'inferred from a single sample.'
 ];
 
 export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
@@ -105,6 +113,7 @@ export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
                 </div>
             </section>
             <KeyTermModal definitions={keyTerms} />
+            <ObjectiveModal objectives={objectives} />
         </>
     );
 };
