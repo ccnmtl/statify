@@ -33,10 +33,12 @@ export const GenrePicker: React.FC<GenreProps> = ({
         evt:MouseEvent
     ): void => {
         const element = document.getElementById('genre' + x);
-        if (evt.target !== element && !element.contains(evt.target as Node))
-        {
-            document.getElementById('genreList' + x)
-                .classList.remove('show');
+        if (element){
+            if (evt.target !== element && !element.contains(evt.target as Node))
+            {
+                document.getElementById('genreList' + x)
+                    .classList.remove('show');
+            }
         }
     };
 
