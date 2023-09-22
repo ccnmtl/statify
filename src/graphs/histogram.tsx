@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
-    BinData, graphBins, toTitleCase, SECONDARY, GRAPH_BG, HIGHLIGHT_1,
-    HIGHLIGHT_2, AUDIO_DEFAULT
+    BinData, graphBins, toTitleCase, SECONDARY, GRAPH_BG, HIGHLIGHT_2,
+    AUDIO_DEFAULT, OVERLAP, HIGHLIGHT_OVERLAP,
 } from '../common';
 import { axisBottom, axisLeft } from 'd3';
 import { bin, Bin } from 'd3-array';
-import { scaleLinear, ScaleLinear } from 'd3-scale';
+import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 
 
@@ -22,6 +22,7 @@ const LEGEND_CIRCLE_STROKE = 1.5;
 
 interface HistogramProps {
     color: string;
+    highlight: string;
     data1: number[];
     data2: number[] | null;
     genre1: string;
@@ -30,31 +31,9 @@ interface HistogramProps {
     n: number | null;
 }
 
-export function overlappingBins(
-    bins1:Bin<number, number>[], bins2:Bin<number, number>[]
-) {
-    const overlap:Bin<number, number>[] = [];
-    for (let go = true, one = 0, two = 0; go;) {
-        if (bins1.length === one || bins2.length === two) {
-            go = false;
-        } else if(bins1[one].x0 < bins2[two].x0) {
-            one++;
-        } else if(bins1[one].x0 > bins2[two].x0) {
-            two++;
-        } else {
-            if (bins1[one].length > 0 &&
-                bins1[one].length < bins2[two].length
-            ) {
-                overlap.push(bins1[one]);
-            }
-            one++, two++;
-        }
-    }
-    return overlap;
-}
-
 export const Histogram: React.FC<HistogramProps>  = (
-    {color, data1, data2, genre1, genre2, audioFeature=AUDIO_DEFAULT, n}
+    {color, highlight, data1, data2, genre1, genre2,
+        audioFeature=AUDIO_DEFAULT, n}
 ) => {
     const svgRef = useRef(null);
     const whichHisto = n ? 'DistributionHistogram' : 'SampleDataHistogram';
@@ -75,12 +54,13 @@ export const Histogram: React.FC<HistogramProps>  = (
     window.addEventListener('resize', handleResize);
 
     const generateDetails = function(
-        d:Bin<number, number>,
+        bin:Bin<number, number>,
+        group: Selection<SVGGElement, unknown, null, undefined>,
         id:string,
-        x:ScaleLinear<number, number, never>,
-        y:ScaleLinear<number, number, never>,
+        x:number,
+        y:number,
     ) {
-        selection.append('text')
+        group.append('text')
             .attr('id', id)
             .attr('fill', 'white')
             .attr('font-size', FONT_SIZE)
@@ -88,10 +68,32 @@ export const Histogram: React.FC<HistogramProps>  = (
             .attr('stroke', 'black')
             .attr('stroke-width', 2)
             .attr('text-anchor', 'middle')
-            .attr('x', (x(d.x1) - x(d.x0)) / 2 + x(d.x0)
-                + BUCKET_PADDING/2)
-            .attr('y', Math.max(MARGIN, y(d.length)) - 10)
-            .text(`[${d.x0}, ${d.x1}] : ${d.length}`);
+            .attr('x', x)
+            .attr('y', y)
+            .text(`[${bin.x0}, ${bin.x1}] : ${bin.length}`);
+    };
+
+    const buildBar = function(
+        group: Selection<SVGGElement, unknown, null, undefined>,
+        bin: Bin<number, number>, color: string, highlight: string,
+        height: number, id: string, width: number, x: number, y: number,
+    ) {
+        group.append('rect')
+            .attr('fill', color)
+            .attr('height', height)
+            .attr('width', width)
+            .attr('x', x)
+            .attr('y', y)
+            .on('mouseenter', function(){
+                generateDetails(
+                    bin, group, id, x + width/2, Math.max(MARGIN + 10, y - 10));
+                select(this)
+                    .attr('fill', highlight);
+            })
+            .on('mouseout', function(){
+                select(this).attr('fill', color);
+                document.getElementById(id).remove();
+            });
     };
 
     useEffect(() => {
@@ -129,8 +131,6 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .domain([0, yCap])
                 .range([height, MARGIN]);
 
-            const id1 = 'detail-1';
-
             // Generate graph body
             selection.append('g')
                 .call((g) => g.append('rect')
@@ -140,72 +140,49 @@ export const Histogram: React.FC<HistogramProps>  = (
                     .attr('x', MARGIN + Y_LABEL)
                     .attr('y', MARGIN));
 
-            // Construct graph bars
-            selection.append('g')
-                .attr('id', `genre1-${whichHisto}-${color}`)
-                .attr('fill', color)
-                .selectAll()
-                .data(bins1)
-                .join('rect')
-                .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
-                .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
-                .attr('y', (d) => y(d.length))
-                .attr('height', (d) => y(0) - y(d.length))
-                .on('mouseenter', function(){
-                    const d = select(this).datum() as Bin<number, number>;
-                    generateDetails(d, id1, x, y);
-                    select(this).attr('fill', HIGHLIGHT_1);
-                })
-                .on('mouseout', function(){
-                    select(this).attr('fill', color);
-                    document.getElementById(id1).remove();
-                });
+            const id1 = 'detail-1';
+            const buckets = selection.append('g');
 
-            // Construct 2nd set of graph bars
+            // Construct buckets
             if (bins2) {
                 const id2 = 'detail-2';
-                selection.append('g')
-                    .attr('id', `genre2-${whichHisto}`)
-                    .attr('fill', SECONDARY)
-                    .selectAll()
-                    .data(bins2)
-                    .join('rect')
-                    .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
-                    .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
-                    .attr('y', (d) => y(d.length))
-                    .attr('height', (d) => y(0) - y(d.length))
-                    .on('mouseenter', function(){
-                        const d = select(this).datum() as Bin<number, number>;
-                        generateDetails(d, id2, x, y);
-                        select(this).attr('fill', HIGHLIGHT_2);
-                    })
-                    .on('mouseout', function(){
-                        select(this).attr('fill', SECONDARY);
-                        document.getElementById(id2).remove();
-                    });
-
-                // Shared data column
-                const binOverlap = overlappingBins(bins1, bins2);
-                const idOverlap = 'detail-1-overlap';
-                selection.append('g')
-                    .attr('id', 'genre2-overlap')
-                    .attr('fill', 'rgba(0, 0, 0, 0)')
-                    .selectAll()
-                    .data(binOverlap)
-                    .join('rect')
-                    .attr('x', (d) => x(d.x0) + BUCKET_PADDING/2)
-                    .attr('width', (d) => x(d.x1) - x(d.x0) - BUCKET_PADDING)
-                    .attr('y', (d) => y(d.length))
-                    .attr('height', (d) => y(0) - y(d.length))
-                    .on('mouseenter', function(){
-                        const d = select(this).datum() as Bin<number, number>;
-                        generateDetails(d, idOverlap, x, y);
-                        select(this).attr('fill', HIGHLIGHT_1);
-                    })
-                    .on('mouseout', function(){
-                        select(this).attr('fill', 'rgba(0, 0, 0, 0)');
-                        document.getElementById(idOverlap).remove();
-                    });
+                bins1.map((bin, i) => {
+                    if (bin.length < bins2[i].length) {
+                        if (bin.length > 0) {
+                            buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
+                                y(0) - y(bin.length), id1,
+                                x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                                x(bin.x0), y(bin.length));
+                        }
+                        buildBar(buckets, bins2[i], SECONDARY, HIGHLIGHT_2,
+                            y(bin.length) - y(bins2[i].length), id2,
+                            x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                            x(bin.x0), y(bins2[i].length));
+                    } else if (bin.length > bins2[i].length) {
+                        if (bins2[i].length > 0) {
+                            buildBar(
+                                buckets, bins2[i], OVERLAP, HIGHLIGHT_OVERLAP,
+                                y(0) - y(bins2[i].length), id2,
+                                x(bins2[i].x1) -
+                                    x(bins2[i].x0) - BUCKET_PADDING,
+                                x(bins2[i].x0), y(bins2[i].length));
+                        }
+                        buildBar(buckets, bin, color, highlight,
+                            y(bins2[i].length) - y(bin.length), id1,
+                            x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                            x(bin.x0), y(bin.length));
+                    } else if (bin.length > 0) {
+                        buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
+                            y(0) - y(bin.length), id1,
+                            x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                            x(bin.x0), y(bin.length));
+                    }
+                });
+            } else {
+                bins1.map(bin => buildBar(buckets, bin, color, highlight,
+                    y(0) - y(bin.length), id1,
+                    x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                    x(bin.x0), y(bin.length)));
             }
 
             // Construct the Y-axis
