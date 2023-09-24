@@ -59,9 +59,9 @@ const questions: string[] = [
         'describe the shape of the sampling distribution shown in the bottom '+
         'plot?',
     'Compare and contrast the distribution of data points (top histogram) to'+
-        'the distribution of sample means (bottom histogram).',
+        ' the distribution of sample means (bottom histogram).',
     'How would the bottom histogram look different if it showed the sample'+
-        'means for samples with 20 data points instead of 100? What if it '+
+        ' means for samples with 20 data points instead of 100? What if it '+
         'showed the sample means for samples with 3 data points?'
 ];
 
