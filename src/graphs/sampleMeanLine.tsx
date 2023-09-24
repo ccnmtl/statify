@@ -191,7 +191,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                     .style('opacity', 0);
             });
 
-        if(data2) {
+        if(data2.length > 0) {
             const cumulativeMean2 = cumulativeMeanFunc(data2);
             const cm2 = cumulativeMean2.map(
                 (c) => [x(c[1]), y(c[0])] as [number, number]);
@@ -307,7 +307,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                     .attr('y', 36)
                     .text('Cumulative Sample Mean');});
 
-    }, [data1, data2, audioFeature, width]);
+    }, [data1, audioFeature, width]);
     return (
         <div className='col-sm-12 mb-4'>
             <svg

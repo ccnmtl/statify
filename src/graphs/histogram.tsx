@@ -37,14 +37,6 @@ export const Histogram: React.FC<HistogramProps>  = (
 ) => {
     const svgRef = useRef(null);
     const whichHisto = n ? 'DistributionHistogram' : 'SampleDataHistogram';
-
-    const [selection, setSelection] = useState<null | Selection<
-        null,
-        unknown,
-        null,
-        undefined
-    >>(null);
-
     const [width, setWidth]  = useState<number>();
 
     const handleResize = function() {
@@ -97,188 +89,186 @@ export const Histogram: React.FC<HistogramProps>  = (
     };
 
     useEffect(() => {
-        if (!selection) {
-            setSelection(select(svgRef.current));
-        } else {
-            audioFeature ??= AUDIO_DEFAULT;
-            const binData = graphBins[audioFeature] as BinData;
+        const svgGraph = select(svgRef.current);
+        audioFeature ??= AUDIO_DEFAULT;
+        const binData = graphBins[audioFeature] as BinData;
 
-            selection.selectAll('g').remove();
-            // Generate the bins buckets
-            const bins1 = bin()
+        svgGraph.selectAll('g').remove();
+        // Generate the bins buckets
+        const bins1 = bin()
+            .domain([binData.min, binData.max])
+            .thresholds(
+                (binData.max - binData.min) / binData.ticks)(
+                data1); // First data goes here
+        const bins2 = data2 ?
+            bin()
                 .domain([binData.min, binData.max])
-                .thresholds(
-                    (binData.max - binData.min) / binData.ticks)(
-                    data1); // First data goes here
-            const bins2 = data2 ?
-                bin()
-                    .domain([binData.min, binData.max])
-                    .thresholds((binData.max - binData.min) / binData.ticks)(
-                        data2) :
-                null;
-            const over20 = [...bins1.map(d => d.length),
-                ...bins1.map(d => d.length)].find(x => x > Y_SCALE);
-            const yCap = over20 ? 20 * Math.ceil(over20 / Y_SCALE) : Y_SCALE;
+                .thresholds((binData.max - binData.min) / binData.ticks)(
+                    data2) :
+            null;
+        const over20 = [...bins1.map(d => d.length),
+            ...bins1.map(d => d.length)].find(x => x > Y_SCALE);
+        const yCap = over20 ? 20 * Math.ceil(over20 / Y_SCALE) : Y_SCALE;
 
-            const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
-            const height =
-                Number.parseInt(selection.style('height')) - MARGIN * 2;
+        const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
+        const height =
+                Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
 
-            const x = scaleLinear()
-                .domain([binData.min, binData.max]).nice()
-                .range([MARGIN + Y_LABEL, gWidth]);
-            const y = scaleLinear()
-                .domain([0, yCap])
-                .range([height, MARGIN]);
+        const x = scaleLinear()
+            .domain([binData.min, binData.max]).nice()
+            .range([MARGIN + Y_LABEL, gWidth]);
+        const y = scaleLinear()
+            .domain([0, yCap])
+            .range([height, MARGIN]);
 
-            // Generate graph body
-            selection.append('g')
-                .call((g) => g.append('rect')
-                    .attr('fill', GRAPH_BG)
-                    .attr('height', height-MARGIN)
-                    .attr('width', gWidth-MARGIN-Y_LABEL)
-                    .attr('x', MARGIN + Y_LABEL)
-                    .attr('y', MARGIN));
+        // Generate graph body
+        svgGraph.append('g')
+            .call((g) => g.append('rect')
+                .attr('fill', GRAPH_BG)
+                .attr('height', height-MARGIN)
+                .attr('width', gWidth-MARGIN-Y_LABEL)
+                .attr('x', MARGIN + Y_LABEL)
+                .attr('y', MARGIN));
 
-            const id1 = 'detail-1';
-            const buckets = selection.append('g');
+        const id1 = 'detail-1';
+        const buckets = svgGraph.append('g');
 
-            // Construct buckets
-            if (bins2) {
-                const id2 = 'detail-2';
-                bins1.map((bin, i) => {
-                    if (bin.length < bins2[i].length) {
-                        if (bin.length > 0) {
-                            buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
-                                y(0) - y(bin.length), id1,
-                                x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
-                                x(bin.x0), y(bin.length));
-                        }
-                        buildBar(buckets, bins2[i], SECONDARY, HIGHLIGHT_2,
-                            y(bin.length) - y(bins2[i].length), id2,
-                            x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
-                            x(bin.x0), y(bins2[i].length));
-                    } else if (bin.length > bins2[i].length) {
-                        if (bins2[i].length > 0) {
-                            buildBar(
-                                buckets, bins2[i], OVERLAP, HIGHLIGHT_OVERLAP,
-                                y(0) - y(bins2[i].length), id2,
-                                x(bins2[i].x1) -
-                                    x(bins2[i].x0) - BUCKET_PADDING,
-                                x(bins2[i].x0), y(bins2[i].length));
-                        }
-                        buildBar(buckets, bin, color, highlight,
-                            y(bins2[i].length) - y(bin.length), id1,
-                            x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
-                            x(bin.x0), y(bin.length));
-                    } else if (bin.length > 0) {
+        // Construct buckets
+        if (bins2) {
+            const id2 = 'detail-2';
+            bins1.map((bin, i) => {
+                if (bin.length < bins2[i].length) {
+                    if (bin.length > 0) {
                         buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
                             y(0) - y(bin.length), id1,
                             x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
                             x(bin.x0), y(bin.length));
                     }
-                });
-            } else {
-                bins1.map(bin => buildBar(buckets, bin, color, highlight,
-                    y(0) - y(bin.length), id1,
-                    x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
-                    x(bin.x0), y(bin.length)));
-            }
-
-            // Construct the Y-axis
-            selection.append('g')
-                .attr('transform', `translate(${MARGIN+Y_LABEL}, 0)`)
-                .call(axisLeft(y).ticks(10))
-                .call((g) => g.select('.domain').remove())
-                .call((g) => g.append('text')
-                    .attr('x', -height/2)
-                    .attr('y', -MARGIN-5)
-                    .attr('transform', 'rotate(270)')
-                    .attr('fill', 'white')
-                    .attr('text-anchor', 'middle')
-                    .text('Freq.' + (n ? ` -- Distribution, N = ${n}` : '')))
-                .attr('font-size', FONT_SIZE);
-
-            // Construct the X-axis
-            selection.append('g')
-                .attr('transform', `translate(0, ${height})`)
-                .call(axisBottom(x).ticks(6).tickSizeOuter(6))
-                .call((g) => g.append('text')
-                    .attr('x', gWidth/2 + MARGIN)
-                    .attr('y', MARGIN + 10)
-                    .attr('fill', 'white')
-                    .attr('text-anchor', 'center')
-                    .text(
-                        audioFeature === AUDIO_DEFAULT ?
-                            'Tempo, Beats Per Minute (BPM)' :
-                            toTitleCase(audioFeature)
-                    ))
-                .attr('font-size', FONT_SIZE);
-
-            // Construct Title and Ticker Label
-            selection.append('g')
-                .attr('id', `graph-header-${whichHisto}-${color}`)
-                .call((g) => {
-                    g.append('text')
-                        .attr('fill', 'white')
-                        .attr('font-size', FONT_SIZE)
-                        .attr('text-anchor', 'end')
-                        .attr('x', gWidth)
-                        .attr('y', 12)
-                        .text(`Count: ${data1.length}`);
-                    g.append('text')
-                        .attr('fill', 'white')
-                        .attr('font-size', FONT_SIZE * 1.5)
-                        .attr('text-anchor', gWidth - MARGIN - Y_LABEL < 480 ?
-                            'start' :
-                            'middle')
-                        .attr('x', gWidth - MARGIN - Y_LABEL < 480 ?
-                            MARGIN + Y_LABEL :
-                            gWidth/2 + MARGIN)
-                        .attr('y', 18)
-                        .text(
-                            whichHisto === 'SampleDataHistogram'
-                                ? 'Sample Data'
-                                : 'Sampling Distribution When N = 100');});
-
-            // Generate Legend
-            if (genre1 && genre2) {
-                selection.append('g')
-                    .attr('id', 'legend')
-                    .attr('transform',
-                        `translate(${gWidth}, ${3 * MARGIN / 2})`)
-                    .call((g) => g.append('g')
-                        .attr('transform',
-                            `translate(${-LEGEND_GAP}, 0)`)
-                        .call((g) => g.append('circle')
-                            .attr('stroke', 'black')
-                            .attr('stroke-width', LEGEND_CIRCLE_STROKE)
-                            .attr('fill', color)
-                            .attr('r', LEGEND_R))
-                        .call((g) => g.append('text')
-                            .attr('fill', 'white')
-                            .attr('text-anchor', 'end')
-                            .attr('x', -LEGEND_GAP)
-                            .attr('y', LEGEND_TEXT_DROP)
-                            .text(`${toTitleCase(genre1)}`)))
-                    .call((g) => g.append('g')
-                        .attr('transform',
-                            `translate(${-LEGEND_GAP}, ${30})`)
-                        .call((g) => g.append('circle')
-                            .attr('stroke', 'black')
-                            .attr('stroke-width', LEGEND_CIRCLE_STROKE)
-                            .attr('fill', SECONDARY)
-                            .attr('r', LEGEND_R))
-                        .call((g) => g.append('text')
-                            .attr('fill', 'white')
-                            .attr('text-anchor', 'end')
-                            .attr('x', -LEGEND_GAP)
-                            .attr('y', LEGEND_TEXT_DROP)
-                            .text(`${toTitleCase(genre2)}`)))
-                    .attr('font-size', FONT_SIZE);
-            }
+                    buildBar(buckets, bins2[i], SECONDARY, HIGHLIGHT_2,
+                        y(bin.length) - y(bins2[i].length), id2,
+                        x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                        x(bin.x0), y(bins2[i].length));
+                } else if (bin.length > bins2[i].length) {
+                    if (bins2[i].length > 0) {
+                        buildBar(
+                            buckets, bins2[i], OVERLAP, HIGHLIGHT_OVERLAP,
+                            y(0) - y(bins2[i].length), id2,
+                            x(bins2[i].x1) -
+                                    x(bins2[i].x0) - BUCKET_PADDING,
+                            x(bins2[i].x0), y(bins2[i].length));
+                    }
+                    buildBar(buckets, bin, color, highlight,
+                        y(bins2[i].length) - y(bin.length), id1,
+                        x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                        x(bin.x0), y(bin.length));
+                } else if (bin.length > 0) {
+                    buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
+                        y(0) - y(bin.length), id1,
+                        x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                        x(bin.x0), y(bin.length));
+                }
+            });
+        } else {
+            bins1.map(bin => buildBar(buckets, bin, color, highlight,
+                y(0) - y(bin.length), id1,
+                x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                x(bin.x0), y(bin.length)));
         }
-    }, [selection, data1, genre1, genre2, audioFeature, width]);
+
+        // Construct the Y-axis
+        svgGraph.append('g')
+            .attr('transform', `translate(${MARGIN+Y_LABEL}, 0)`)
+            .call(axisLeft(y).ticks(10))
+            .call((g) => g.select('.domain').remove())
+            .call((g) => g.append('text')
+                .attr('x', -height/2)
+                .attr('y', -MARGIN-5)
+                .attr('transform', 'rotate(270)')
+                .attr('fill', 'white')
+                .attr('text-anchor', 'middle')
+                .text('Freq.' + (n ? ` -- Distribution, N = ${n}` : '')))
+            .attr('font-size', FONT_SIZE);
+
+        // Construct the X-axis
+        svgGraph.append('g')
+            .attr('transform', `translate(0, ${height})`)
+            .call(axisBottom(x).ticks(6).tickSizeOuter(6))
+            .call((g) => g.append('text')
+                .attr('x', gWidth/2 + MARGIN)
+                .attr('y', MARGIN + 10)
+                .attr('fill', 'white')
+                .attr('text-anchor', 'center')
+                .text(
+                    audioFeature === AUDIO_DEFAULT ?
+                        'Tempo, Beats Per Minute (BPM)' :
+                        toTitleCase(audioFeature)
+                ))
+            .attr('font-size', FONT_SIZE);
+
+        // Construct Title and Ticker Label
+        svgGraph.append('g')
+            .attr('id', `graph-header-${whichHisto}-${color}`)
+            .call((g) => {
+                g.append('text')
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE)
+                    .attr('text-anchor', 'end')
+                    .attr('x', gWidth)
+                    .attr('y', 12)
+                    .text(`Count: ${data1.length}`);
+                g.append('text')
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE * 1.5)
+                    .attr('text-anchor', gWidth - MARGIN - Y_LABEL < 480 ?
+                        'start' :
+                        'middle')
+                    .attr('x', gWidth - MARGIN - Y_LABEL < 480 ?
+                        MARGIN + Y_LABEL :
+                        gWidth/2 + MARGIN)
+                    .attr('y', 18)
+                    .text(
+                        whichHisto === 'SampleDataHistogram'
+                            ? 'Sample Data'
+                            : 'Sampling Distribution When N = 100');});
+
+        // Generate Legend
+        if (data2) {
+            svgGraph.append('g')
+                .attr('id', 'legend')
+                .attr('transform',
+                    `translate(${gWidth}, ${3 * MARGIN / 2})`)
+                .call((g) => g.append('g')
+                    .attr('transform',
+                        `translate(${-LEGEND_GAP}, 0)`)
+                    .call((g) => g.append('circle')
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', LEGEND_CIRCLE_STROKE)
+                        .attr('fill', color)
+                        .attr('r', LEGEND_R))
+                    .call((g) => g.append('text')
+                        .attr('fill', 'white')
+                        .attr('text-anchor', 'end')
+                        .attr('x', -LEGEND_GAP)
+                        .attr('y', LEGEND_TEXT_DROP)
+                        .text(`${toTitleCase(genre1)}`)))
+                .call((g) => g.append('g')
+                    .attr('transform',
+                        `translate(${-LEGEND_GAP}, ${30})`)
+                    .call((g) => g.append('circle')
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', LEGEND_CIRCLE_STROKE)
+                        .attr('fill', SECONDARY)
+                        .attr('r', LEGEND_R))
+                    .call((g) => g.append('text')
+                        .attr('fill', 'white')
+                        .attr('text-anchor', 'end')
+                        .attr('x', -LEGEND_GAP)
+                        .attr('y', LEGEND_TEXT_DROP)
+                        .text(`${toTitleCase(genre2)}`)))
+                .attr('font-size', FONT_SIZE);
+        }
+
+    }, [data1, audioFeature, width]);
 
     return (
         <div className='col-sm-12'>
