@@ -110,10 +110,12 @@ export const graphBins = {
     popularity: popularity
 };
 
-export const PRIMARY = 'rgba(82, 208, 80, 1.0)';
-export const SECONDARY = 'rgba(255, 100, 100, 0.7)';
-export const HIGHLIGHT_1 = 'yellow';
-export const HIGHLIGHT_2 = 'rgba(255, 100, 255, 0.7)';
+export const PRIMARY = 'rgba(0, 119, 178, 1.0)';
+export const SECONDARY = 'rgba(254, 207, 73, 1.0)';
+export const OVERLAP = 'rgba(76, 187, 81, 1.0)';
+export const HIGHLIGHT_1 = 'rgba(83, 175, 220, 1.0)';
+export const HIGHLIGHT_2 = 'rgba(254, 237, 185, 1.0)';
+export const HIGHLIGHT_OVERLAP = 'rgba(159, 229, 162, 1.0)';
 export const GRAPH_BG = 'rgba(64, 64, 64, 1.0)';
 export const FONT_SIZE = 14;
 export const MARGIN = 30;

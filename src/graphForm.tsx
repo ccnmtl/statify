@@ -4,7 +4,7 @@ import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import {
     Genre, toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
-    AUDIO_DEFAULT
+    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2
 } from './common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
@@ -253,6 +253,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     {graphTypes.includes(SAMPLEDATAHISTOGRAM1) && (
                         <Histogram
                             color={PRIMARY}
+                            highlight={HIGHLIGHT_1}
                             data1={data1}
                             data2={null}
                             genre1={genre1}
@@ -263,6 +264,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     {graphTypes.includes(SAMPLEDATAHISTOGRAM2) && (
                         <Histogram
                             color={SECONDARY}
+                            highlight={HIGHLIGHT_2}
                             data1={data2}
                             data2={null}
                             genre1={genre2}
@@ -273,6 +275,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     {graphTypes.includes(SAMPLEDATAHISTOGRAMBOTH) && (
                         <Histogram
                             color={PRIMARY}
+                            highlight={HIGHLIGHT_1}
                             data1={data1}
                             data2={data2}
                             genre1={genre1}
@@ -306,6 +309,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     {graphTypes.includes(DISTRIBUTIONHISTOGRAM) && (
                         <Histogram
                             color={PRIMARY}
+                            highlight={HIGHLIGHT_1}
                             data1={meanData1}
                             data2={meanData2}
                             genre1={genre1}
