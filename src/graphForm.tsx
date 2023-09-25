@@ -22,6 +22,7 @@ interface GraphFormProps {
     instructions: InstructionData[];
     store: Store;
     setStore: React.Dispatch<React.SetStateAction<Store>> | null;
+    initialSeed: string;
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
@@ -47,12 +48,9 @@ export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
         graphTypes, instructions, activeTab, seedField, defaultPoints,
-        store, setStore
+        store, setStore, initialSeed
     }:
     GraphFormProps) => {
-    const initialSeed = [...Array(8) as null[]].map(
-        // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
-        () => Math.floor(Math.random() * 16).toString(16)).join('');
 
     const [audioFeature, setAudioFeature] = useState<string|null>(
         audioFeatureField ? store.audioFeature : null);

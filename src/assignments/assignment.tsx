@@ -10,11 +10,12 @@ import { AssignmentData } from '../common';
 interface AssignmentProps {
     questions: string[];
     module: string;
+    initialSeed: string;
 }
 
 
 export const Assignment: React.FC<AssignmentProps>  = (
-    {questions, module}
+    {questions, module, initialSeed}
 ) => {
     const [answers, setAnswers] = useState({});
     const [screenshot, setScreenshot] = useState<string>();
@@ -57,6 +58,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
                     name={name}
                     module={module}
                     uni={uni}
+                    initialSeed={initialSeed}
                 />
             )).toBlob();
             saveAs(blob, `${name.replace(/ /g,'_')}_${module}`);

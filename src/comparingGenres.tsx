@@ -85,6 +85,13 @@ const objectives = [
 export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
+    const [initialSeed, setInitialSeed] = useState('');
+
+    useEffect(() => {
+        setInitialSeed([...Array(8) as null[]].map(
+            // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+            () => Math.floor(Math.random() * 16).toString(16)).join(''));
+    }, []);
 
     useEffect(() => {
         if (activeTab === 3) {
@@ -124,12 +131,14 @@ export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
                             instructions={instructions}
                             activeTab={activeTab}
                             store={store}
-                            setStore={setStore} />
+                            setStore={setStore}
+                            initialSeed={initialSeed} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'ComparingGenres'}
+                            initialSeed={initialSeed}
                         />
                     </div>
                 </div>
