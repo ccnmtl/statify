@@ -1,8 +1,11 @@
 import React from 'react';
 import Logo from './images/logo-footer-ctl.svg';
 import {Link} from 'react-router-dom';
+import { PageSelect } from './common';
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC<PageSelect> = (
+    {selected, setSelected}: PageSelect
+) => {
 
     return (
 
@@ -11,8 +14,12 @@ export const Footer: React.FC = () => {
                 <li className='nav-item me-5'>
                     <Link to='/about/'
                         className='nav-link'
+                        onClick={() => setSelected('/about/')}
                         title='About'>
-                        About
+                        {
+                            selected === '/about/' ?
+                                <strong>About</strong> : 'About'
+                        }
                     </Link>
                 </li>
                 <li className='nav-item'>

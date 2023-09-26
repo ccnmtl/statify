@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from './images/logo.svg';
 import { Link } from 'react-router-dom';
+import { PageSelect } from './common';
 
-export const Nav: React.FC = () => {
-
-    const [selected, setSelected] = useState(location.pathname);
+export const Nav: React.FC<PageSelect> = (
+    {selected, setSelected}: PageSelect
+) => {
 
     const path = [
         ['Introduction', '/'],

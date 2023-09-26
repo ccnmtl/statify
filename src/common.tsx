@@ -57,6 +57,11 @@ export interface GraphProps {
     setStore: React.Dispatch<React.SetStateAction<Store>>
 }
 
+export interface PageSelect {
+    selected: string,
+    setSelected: React.Dispatch<React.SetStateAction<string>>
+}
+
 export interface BinData {
     min: number;
     max: number;
