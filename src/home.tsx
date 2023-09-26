@@ -1,5 +1,4 @@
 import React from 'react';
-import Phone from './images/phone.png';
 import {Link} from 'react-router-dom';
 
 export const Home: React.FC = () => {
@@ -40,7 +39,7 @@ export const Home: React.FC = () => {
                         </Link>
                     </div>
                     <div className={'col-sm-4 py-5 mx-auto'}>
-                        <img src={Phone}
+                        <img src={'/dist/images/phone.png'}
                             alt={`A hand holding a phone with the spotify
                                 logo. The image is made up shades of
                                 green.`}

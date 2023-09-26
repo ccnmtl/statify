@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import genres from '../data/trackDataByGenre.json';
+import genres from './data/trackDataByGenre.json';
 import { CumulativeSampleMean } from './graphs/sampleMeanLine';
 import { Histogram } from './graphs/histogram';
 import {

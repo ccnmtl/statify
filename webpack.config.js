@@ -21,7 +21,7 @@ module.exports = {
                 loader: 'babel-loader'
             },
             {
-                test: /\.css$/,
+                test: /\.css$/i,
                 use: [devMode ?
                     'style-loader' : MiniCssExtractPlugin.loader, 'css-loader']
             },
