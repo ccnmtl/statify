@@ -42,8 +42,8 @@ export const Glossary: React.FC = () => {
 
     return (
         <>
-            <h1 className='mx-4 mt-4'>Glossary of Terms</h1>
             <section className='container'>
+                <h1 className='mx-4 mt-4'>Glossary of Terms</h1>
                 <div className="mx-auto">
                     <ul className='row align-items-stretch'>
                         {definitions.map((term, key) =>

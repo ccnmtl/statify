@@ -11,6 +11,7 @@ import { Footer } from './footer';
 import ReactGA from 'react-ga4';
 import { About } from './about';
 import { Store } from './common';
+import { NotFound } from './notFound';
 
 
 export const App: React.FC = () => {
@@ -37,7 +38,7 @@ export const App: React.FC = () => {
             <Nav />
 
             <Routes>
-                <Route path='*' element={<h1>404</h1>} />
+                <Route path='*' element={<NotFound />} />
                 <Route path='/' element={<Home />} />
                 <Route path='/about/' element={<About />} />
                 <Route path='/descriptive/'
