@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from './images/logo-ctl-color.png';
+import Logo from './images/logo-footer-ctl.svg';
 import {Link} from 'react-router-dom';
 
 export const Footer: React.FC = () => {
