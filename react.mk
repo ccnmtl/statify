@@ -1,6 +1,6 @@
 S3CMD ?= s3cmd
 S3_FLAGS ?= --acl-public --delete-removed --no-progress --no-mime-magic --guess-mime-type
-INTERMEDIATE_STEPS = cp src/images/* dist/images/.
+INTERMEDIATE_STEPS = mkdir -p dist/images && cp src/images/* dist/images/.
 DIST_CLEAN = rm -rf dist
 
 all: test js-typecheck
