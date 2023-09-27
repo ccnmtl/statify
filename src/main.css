@@ -15,6 +15,11 @@ body
     margin: 0px;
 }
 
+main
+{
+    min-height: 100vh;
+}
+
 #intro
 {
     background-color: #0f0f0f;

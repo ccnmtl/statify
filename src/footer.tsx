@@ -6,7 +6,9 @@ export const Footer: React.FC = () => {
 
     return (
 
-        <footer className='bg-dark pt-2 pb-5 navbar-dark' id='footer-global'>
+        <footer className='bg-dark pt-2 pb-5 navbar-dark mt-auto'
+            id='footer-global'
+        >
             <ul className='navbar-nav footer'>
                 <li className='nav-item me-5'>
                     <Link to='/about/'
