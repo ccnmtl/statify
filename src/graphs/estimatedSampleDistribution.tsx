@@ -43,17 +43,9 @@ export const stdError = function(data:number[], n:number) {
 };
 
 export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
-    {data1, data2, genre1, genre2, audioFeature=AUDIO_DEFAULT, n}
+    {data1, data2, audioFeature=AUDIO_DEFAULT, n}
 ) => {
     const svgRef = useRef(null);
-
-    const [selection, setSelection] = useState<null | Selection<
-        null,
-        unknown,
-        null,
-        undefined
-    >>(null);
-
     const [width, setWidth]  = useState<number>();
 
     const handleResize = function() {
@@ -78,7 +70,8 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
      * @param y Scaling for the Y-axis
      */
     const generateCurve = function(
-        selection:Selection<null, unknown, null, undefined>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        selection:Selection<any, unknown, null, undefined>,
         id:string,
         projection:number[],
         data:number[],
@@ -125,125 +118,123 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
     };
 
     useEffect(() => {
-        if (!selection) {
-            setSelection(select(svgRef.current));
-        } else {
-            audioFeature ??= AUDIO_DEFAULT;
-            const binData = graphBins[audioFeature] as BinData;
-            const se1 = stdError(data1, n), mean1 = mean(data1) ?? 0;
-            const se2 = stdError(data2, n), mean2 = mean(data2) ?? 0;
-            const gWidth = Number.parseInt(selection.style('width')) - MARGIN;
-            const height =
-                Number.parseInt(selection.style('height')) - MARGIN * 2;
+        const svgGraph = select(svgRef.current);
+        audioFeature ??= AUDIO_DEFAULT;
+        const binData = graphBins[audioFeature] as BinData;
+        const se1 = stdError(data1, n), mean1 = mean(data1) ?? 0;
+        const se2 = stdError(data2, n), mean2 = mean(data2) ?? 0;
+        const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
+        const height =
+                Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
 
-            const yScale = data1.length > 0  && data2.length > 0 ? Math.max(
-                gaussian(mean1, se1, mean1, n),
-                gaussian(mean2, se2, mean2, n)):
-                20;
-            const yMagnitude = 8 * Math.floor(Math.log10(yScale));
-            const x = scaleLinear()
-                .domain([binData.min, binData.max])
-                .range([MARGIN + Y_LABEL + yMagnitude, gWidth]);
-            const y = scaleLinear()
-                .domain([0, yScale])
-                .range([height, MARGIN]);
+        const yScale = data1.length > 0  && data2.length > 0 ? Math.max(
+            gaussian(mean1, se1, mean1, n),
+            gaussian(mean2, se2, mean2, n)):
+            20;
+        const yMagnitude = 8 * Math.floor(Math.log10(yScale));
+        const x = scaleLinear()
+            .domain([binData.min, binData.max])
+            .range([MARGIN + Y_LABEL + yMagnitude, gWidth]);
+        const y = scaleLinear()
+            .domain([0, yScale])
+            .range([height, MARGIN]);
 
-            const curve = line()
-                .curve(curveNatural)
-                .x(d => x(d[0]))
-                .y(d => y(d[1])) as unknown;
-            const fill = area()
-                .x(d => x(d[0]))
-                .y0(y(0))
-                .y1(d => y(d[1])) as unknown;
+        const curve = line()
+            .curve(curveNatural)
+            .x(d => x(d[0]))
+            .y(d => y(d[1])) as unknown;
+        const fill = area()
+            .x(d => x(d[0]))
+            .y0(y(0))
+            .y1(d => y(d[1])) as unknown;
             // Keep the number high to increase the smoothness of the curve
-            const projection = Array.from(Array(1001).keys())
-                .map(x => x * (binData.max - binData.min) / 1000
+        const projection = Array.from(Array(1001).keys())
+            .map(x => x * (binData.max - binData.min) / 1000
                         + binData.min);
 
-            selection.selectAll('g').remove();
+        svgGraph.selectAll('g').remove();
 
-            // Generate graph body
-            selection.append('g')
-                .call((g) => g.append('rect')
-                    .attr('fill', GRAPH_BG)
-                    .attr('height', height - MARGIN)
-                    .attr('width', gWidth - x(binData.min))
-                    .attr('x', x(binData.min))
-                    .attr('y', MARGIN));
+        // Generate graph body
+        svgGraph.append('g')
+            .call((g) => g.append('rect')
+                .attr('fill', GRAPH_BG)
+                .attr('height', height - MARGIN)
+                .attr('width', gWidth - x(binData.min))
+                .attr('x', x(binData.min))
+                .attr('y', MARGIN));
 
-            if (data1.length > 0 && data2.length > 0){
-                generateCurve(selection, 'curve1', projection, data1, curve,
-                    fill, PRIMARY, se1, mean1, x, y);
-                generateCurve(selection, 'curve2', projection, data2, curve,
-                    fill, SECONDARY, se2, mean2, x, y);
-            }
-            // Construct the Y-axis
-            selection.append('g')
-                .attr(
-                    'transform',
-                    `translate(${MARGIN + Y_LABEL + yMagnitude}, 0)`)
-                .call(axisLeft(y)
-                    .ticks(10))
-                .call((g) => g.select('.domain').remove())
-                .call((g) => g.append('text')
-                    .attr('x', -height/2)
-                    .attr('y', -x(binData.min) + Y_LABEL)
-                    .attr('transform', 'rotate(270)')
-                    .attr('fill', 'white')
-                    .attr('text-anchor', 'middle')
-                    .text('Estimated Frequency'))
-                .attr('font-size', FONT_SIZE);
-
-            // Construct the X-axis
-            selection.append('g')
-                .attr('transform', `translate(0, ${height})`)
-                .call(axisBottom(x).ticks(6).tickSizeOuter(6))
-                .call((g) => g.append('text')
-                    .attr('x', gWidth/2 + MARGIN)
-                    .attr('y', MARGIN + 10)
-                    .attr('fill', 'white')
-                    .attr('text-anchor', 'center')
-                    .text(
-                        audioFeature === 'tempo' ?
-                            'Tempo, Beats Per Minute (BPM)' :
-                            toTitleCase(audioFeature  ?? AUDIO_DEFAULT)
-                    ))
-                .attr('font-size', FONT_SIZE);
-
-            // Display the P-value
-            const t = Math.abs(tTestTwoSample(data1, data2) ?? 0);
-            const sig = 1/(Math.pow(t, Math.PI)+1);
-            selection.append('g')
-                .attr('id', 'title-header')
-                .call((g) => {
-                    g.append('text')
-                        .attr('x', gWidth - 4)
-                        .attr('y', MARGIN + FONT_SIZE)
-                        .attr('paint-order', 'stroke')
-                        .attr('stroke', 'black')
-                        .attr('stroke-width', 4)
-                        .attr('fill', 'white')
-                        .attr('font-size', FONT_SIZE)
-                        .attr('text-anchor', 'end')
-                        .text(sig < 0.001 ?
-                            'p-value < 0.001' :
-                            `p-value = ${sig.toFixed(3)}`);
-                    g.append('text')
-                        .attr('fill', 'white')
-                        .attr('font-size', FONT_SIZE * 1.5)
-                        .attr('text-anchor', gWidth - x(binData.min) < 480 ?
-                            'start':
-                            'middle')
-                        .attr('x', gWidth - x(binData.min) < 480 ?
-                            x(binData.min) :
-                            gWidth/2 + MARGIN)
-                        .attr('y', 18)
-                        .text(gWidth - x(binData.min) < 650 ?
-                            `Est. Sampling Dist.: N = ${n}` :
-                            `Estimated Sampling Distribution when N = ${n}`);});
+        if (data1.length > 0 && data2.length > 0){
+            generateCurve(svgGraph, 'curve1', projection, data1, curve,
+                fill, PRIMARY, se1, mean1, x, y);
+            generateCurve(svgGraph, 'curve2', projection, data2, curve,
+                fill, SECONDARY, se2, mean2, x, y);
         }
-    }, [selection, data1, genre1, genre2, audioFeature, width]);
+        // Construct the Y-axis
+        svgGraph.append('g')
+            .attr(
+                'transform',
+                `translate(${MARGIN + Y_LABEL + yMagnitude}, 0)`)
+            .call(axisLeft(y)
+                .ticks(10))
+            .call((g) => g.select('.domain').remove())
+            .call((g) => g.append('text')
+                .attr('x', -height/2)
+                .attr('y', -x(binData.min) + Y_LABEL)
+                .attr('transform', 'rotate(270)')
+                .attr('fill', 'white')
+                .attr('text-anchor', 'middle')
+                .text('Estimated Frequency'))
+            .attr('font-size', FONT_SIZE);
+
+        // Construct the X-axis
+        svgGraph.append('g')
+            .attr('transform', `translate(0, ${height})`)
+            .call(axisBottom(x).ticks(6).tickSizeOuter(6))
+            .call((g) => g.append('text')
+                .attr('x', gWidth/2 + MARGIN)
+                .attr('y', MARGIN + 10)
+                .attr('fill', 'white')
+                .attr('text-anchor', 'center')
+                .text(
+                    audioFeature === 'tempo' ?
+                        'Tempo, Beats Per Minute (BPM)' :
+                        toTitleCase(audioFeature  ?? AUDIO_DEFAULT)
+                ))
+            .attr('font-size', FONT_SIZE);
+
+        // Display the P-value
+        const t = Math.abs(tTestTwoSample(data1, data2) ?? 0);
+        const sig = 1/(Math.pow(t, Math.PI)+1);
+        svgGraph.append('g')
+            .attr('id', 'title-header')
+            .call((g) => {
+                g.append('text')
+                    .attr('x', gWidth - 4)
+                    .attr('y', MARGIN + FONT_SIZE)
+                    .attr('paint-order', 'stroke')
+                    .attr('stroke', 'black')
+                    .attr('stroke-width', 4)
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE)
+                    .attr('text-anchor', 'end')
+                    .text(sig < 0.001 ?
+                        'p-value < 0.001' :
+                        `p-value = ${sig.toFixed(3)}`);
+                g.append('text')
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE * 1.5)
+                    .attr('text-anchor', gWidth - x(binData.min) < 480 ?
+                        'start':
+                        'middle')
+                    .attr('x', gWidth - x(binData.min) < 480 ?
+                        x(binData.min) :
+                        gWidth/2 + MARGIN)
+                    .attr('y', 18)
+                    .text(gWidth - x(binData.min) < 650 ?
+                        `Est. Sampling Dist.: N = ${n}` :
+                        `Estimated Sampling Distribution when N = ${n}`);});
+
+    }, [data1, audioFeature, width]);
 
     return (
         <div className='col-sm-12'>
