@@ -10,9 +10,12 @@ Makefile
 *.mk
 *.md
 package*
-cypress.json
+cypress.config.ts
 cypress/*
 .dependabot/*
-.eslintrc.json
 .github/*
 jest.config.js
+tests/*
+LICENSE
+Dockerfile
+docker-compose.yml

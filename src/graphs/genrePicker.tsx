@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import genreList from './data/trackDataByGenre.json';
-import { toTitleCase } from './common';
+import genreList from '../../data/trackDataByGenre.json';
+import { toTitleCase } from '../common';
 import { descending } from 'd3';
 
 interface GenreProps {

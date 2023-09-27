@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TabNav } from './tabNavigation';
-import { GraphProps, InstructionData, TabData } from './common';
-import { GraphForm } from './graphForm';
-import { Assignment } from './assignments/assignment';
-import { KeyTermModal } from './keyTermModal';
-import { ObjectiveModal } from './objectiveModal';
+import { TabNav } from '../tabNavigation';
+import { GraphProps, InstructionData, TabData } from '../common';
+import { GraphForm } from '../graphs/graphForm';
+import { Assignment } from '../assignments/assignment';
+import { KeyTermModal } from '../keyTermModal';
+import { ObjectiveModal } from '../objectiveModal';
 
 const confidenceTabs: TabData[] = [
     {title: 'Part 4.1',

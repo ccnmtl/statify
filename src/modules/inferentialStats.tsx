@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TabNav } from './tabNavigation';
-import { TabData, InstructionData, Store, GraphProps } from './common';
-import { GraphForm } from './graphForm';
-import { Assignment } from './assignments/assignment';
-import { KeyTermModal } from './keyTermModal';
-import { ObjectiveModal } from './objectiveModal';
+import { TabNav } from '../tabNavigation';
+import { TabData, InstructionData, Store, GraphProps } from '../common';
+import { GraphForm } from '../graphs/graphForm';
+import { Assignment } from '../assignments/assignment';
+import { KeyTermModal } from '../keyTermModal';
+import { ObjectiveModal } from '../objectiveModal';
 
 const inferentialTabs: TabData[] = [
     {title: 'Part 2.1', info:

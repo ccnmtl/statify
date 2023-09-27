@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import genres from './data/trackDataByGenre.json';
-import { CumulativeSampleMean } from './graphs/sampleMeanLine';
-import { Histogram } from './graphs/histogram';
+import genres from '../../data/trackDataByGenre.json';
+import { CumulativeSampleMean } from './sampleMeanLine';
+import { Histogram } from './histogram';
 import {
     Genre, toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
     AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2
-} from './common';
+} from '../common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
-import { EstimatedDistribution } from './graphs/estimatedSampleDistribution';
+import { EstimatedDistribution } from './estimatedSampleDistribution';
 import { GenrePicker } from './genrePicker';
 
 interface GraphFormProps {
