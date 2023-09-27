@@ -77,7 +77,7 @@ li.no-bullet
     font-weight: 600;
 }
 
-#nav-global strong
+.nav-link strong
 {
     font-weight: 800;
     color: white;

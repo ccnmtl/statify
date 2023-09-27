@@ -24,6 +24,7 @@ export const App: React.FC = () => {
     ReactGA.initialize('G-TKVQP6RR12', options);
 
     const [store, setStore] = useState<Store>({} as Store);
+    const [selected, setSelected] = useState(location.pathname);
 
     useEffect(() => {
         ReactGA.send({
@@ -35,7 +36,7 @@ export const App: React.FC = () => {
 
     return (
         <>
-            <Nav />
+            <Nav {...{selected, setSelected}}/>
 
             <Routes>
                 <Route path='*' element={<NotFound />} />
@@ -53,7 +54,7 @@ export const App: React.FC = () => {
                     element={<Glossary />} />
             </Routes>
 
-            <Footer />
+            <Footer {...{selected, setSelected}}/>
         </>
     );
 };
