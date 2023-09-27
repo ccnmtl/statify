@@ -1,7 +1,7 @@
 S3CMD ?= s3cmd
 S3_FLAGS ?= --acl-public --delete-removed --no-progress --no-mime-magic --guess-mime-type
-INTERMEDIATE_STEPS = mkdir -p dist/images && cp src/images/* dist/images/.
-
+INTERMEDIATE_STEPS = cp src/images/* dist/images/.
+DIST_CLEAN = rm -rf dist
 
 all: test js-typecheck
 
@@ -31,12 +31,14 @@ cypress:
 	npm run cypress:open
 
 deploy-stage: $(JS_SENTINAL) 
-	npm run build:prod \
+	$(DIST_CLEAN) \
+	&& npm run build:prod \
 	&& $(INTERMEDIATE_STEPS) \
 	&& $(S3CMD) $(S3_FLAGS) sync --exclude-from='.s3ignore' . s3://$(STAGING_BUCKET)/
 
 deploy-prod: $(JS_SENTINAL) 
-	npm run build:prod \
+	$(DIST_CLEAN) \
+	&& npm run build:prod \
 	&& $(INTERMEDIATE_STEPS) \
 	&& $(S3CMD) $(S3_FLAGS) sync --exclude-from='.s3ignore' . s3://$(PROD_BUCKET)/
 
