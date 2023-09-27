@@ -1,4 +1,4 @@
-import { getDataPoints } from '../src/graphForm'
+import { getDataPoints } from '../src/graphs/graphForm'
 import seedrandom from 'seedrandom'; 
 
 describe('Get Datapoints Function', () => {

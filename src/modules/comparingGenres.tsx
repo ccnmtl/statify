@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { TabNav } from './tabNavigation';
-import { TabData, InstructionData, GraphProps } from './common';
-import { GraphForm } from './graphForm';
-import { Assignment } from './assignments/assignment';
-import { KeyTermModal } from './keyTermModal';
-import { ObjectiveModal } from './objectiveModal';
+import { TabNav } from '../tabNavigation';
+import { TabData, InstructionData, GraphProps } from '../common';
+import { GraphForm } from '../graphs/graphForm';
+import { Assignment } from '../assignments/assignment';
+import { KeyTermModal } from '../keyTermModal';
+import { ObjectiveModal } from '../objectiveModal';
 
 const comparingTabs: TabData[] = [
     {   title: 'Part 3.1',

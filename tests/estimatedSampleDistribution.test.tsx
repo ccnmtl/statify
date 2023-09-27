@@ -1,8 +1,6 @@
 import { 
     GAUSSIAN, gaussian, stdError
 } from '../src/graphs/estimatedSampleDistribution';
-import React from 'react';
-import renderer from 'react-test-renderer';
 
 const N = 100;
 
