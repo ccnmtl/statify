@@ -1,14 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const devMode = process.env.NODE_ENV !== 'production';
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
-        publicPath: '/dist/'
+        publicPath: '/dist/',
+        clean: true
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx']
@@ -22,8 +23,8 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: [devMode ?
-                    'style-loader' : MiniCssExtractPlugin.loader, 'css-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+                sideEffects: true
             },
             {
                 test: /\.(gif|png|jpe?g|svg)$/i,
@@ -31,11 +32,18 @@ module.exports = {
             }
         ]
     },
+    optimization: {
+        usedExports: true,
+        minimize: true,
+        minimizer: [
+            new TerserPlugin(),
+        ],
+    },
     plugins: [
         new webpack.DefinePlugin({
             __BUILD__: JSON.stringify(Date.now())
         })
-    ].concat(devMode ? [] : [new MiniCssExtractPlugin()]),
+    ].concat([new MiniCssExtractPlugin()]),
     devServer: {
         port: 8000,
         historyApiFallback: true,

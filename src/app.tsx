@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { init } from '@sentry/react';
 import { Route, Routes } from 'react-router-dom';
 import { Nav } from './nav';
 import { DescriptiveStats} from './descriptiveStats';
@@ -13,6 +14,12 @@ import { About } from './about';
 import { Store } from './common';
 import { NotFound } from './notFound';
 
+
+if (process.env.NODE_ENV === 'production') {
+    init({
+        dsn: 'https://ad0efe61f65143d6b66e7b1a643988fb@o46310.ingest.sentry.io/4505127209992192'
+    });
+}
 
 export const App: React.FC = () => {
     const options = {
