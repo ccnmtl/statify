@@ -212,9 +212,9 @@ export const Histogram: React.FC<HistogramProps>  = (
                 g.append('text')
                     .attr('fill', 'white')
                     .attr('font-size', FONT_SIZE)
-                    .attr('text-anchor', 'end')
-                    .attr('x', gWidth)
-                    .attr('y', 12)
+                    .attr('text-anchor', 'start')
+                    .attr('x', MARGIN + Y_LABEL + 8)
+                    .attr('y', MARGIN + FONT_SIZE + 4)
                     .text(`Count: ${data1.length}`);
                 g.append('text')
                     .attr('fill', 'white')
