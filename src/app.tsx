@@ -47,7 +47,7 @@ export const App: React.FC = () => {
 
             <Routes>
                 <Route path='*' element={<NotFound />} />
-                <Route path='/' element={<Home />} />
+                <Route path='/' element={<Home {...{setSelected}}/>} />
                 <Route path='/about/' element={<About />} />
                 <Route path='/descriptive/'
                     element={<DescriptiveStats {...{store, setStore}} />} />

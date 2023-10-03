@@ -2,7 +2,13 @@ import React from 'react';
 import Phone from './images/phone.png';
 import {Link} from 'react-router-dom';
 
-export const Home: React.FC = () => {
+interface SelectionWrapper {
+    setSelected: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const Home: React.FC<SelectionWrapper> = (
+    {setSelected}: SelectionWrapper
+) => {
     return (
         <section className='container'>
             <div id={'intro'} className={'p-5 rounded my-5'}>
@@ -33,6 +39,7 @@ export const Home: React.FC = () => {
                         <Link
                             to={'/descriptive/'}
                             className={'btn btn-primary btn-statify'}
+                            onClick={() => setSelected('/descriptive/')}
                             data-cy={'statify-start'}
                             type={'submit'}
                         >
