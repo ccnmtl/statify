@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import genres from '../../data/trackDataByGenre.json';
 import { CumulativeSampleMean } from './sampleMeanLine';
 import { Histogram } from './histogram';
 import {
-    Genre, toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
-    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2
+    toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
+    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2, Genres
 } from '../common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './estimatedSampleDistribution';
 import { GenrePicker } from './genrePicker';
+import { getDataPoints } from './utils';
 
 interface GraphFormProps {
     genre1Field: boolean;
@@ -27,22 +27,8 @@ interface GraphFormProps {
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
     'speechiness', 'acousticness', 'tempo'];
-
 const dataPointOptions: number[] = [1, 10, 25, 50, 75, 100];
 
-export const getDataPoints = function(
-    genre:string, feature:string|null , n:number, prng:seedrandom.PRNG)
-{
-    const data:number[] = [];
-    const chosenGenre = genres[genre] as Genre;
-    const chosenFeature = chosenGenre[feature ?? AUDIO_DEFAULT] as number[];
-    for (let i = 0; i < n; i++) {
-        data.push(chosenFeature[
-            Math.floor(prng() * (chosenGenre.count-1))
-        ]);
-    }
-    return data;
-};
 
 export const GraphForm: React.FC<GraphFormProps> = (
     {
@@ -71,6 +57,22 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [oldData2, setOldData2] = useState(data1);
     const [prevData, setPrevData] = useState<[number, number][][]>([]);
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
+    const [genres, setGenres] = useState<Genres | null>(null);
+
+
+    useEffect(() => {
+
+        fetch('/public/trackDataByGenre.json')
+            .then(response => response.json())
+            .then(data => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                setGenres(data);
+            })
+            .catch(error => {
+                console.error('Error fetching JSON data:', error);
+            });
+    }, []);
+
 
     useEffect(() => {
         if (setStore) {
@@ -116,15 +118,12 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 if (dataPoints === N) {
                     setMeanData1([
                         ...meanData1,
-                        getDataPoints(
-                            genre1,
-                            audioFeature,
-                            N,
-                            prng
+                        getDataPoints(genre1, audioFeature, N, prng, genres
                         ).reduce((i, sum) => i + sum) / N]);
                 }
                 setData1([
-                    ...getDataPoints(genre1, audioFeature, dataPoints, prng)
+                    ...getDataPoints(genre1, audioFeature, dataPoints, prng,
+                        genres)
                 ]);
                 if (genre2 !== '') {
                     if (dataPoints === N) {
@@ -134,12 +133,13 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 genre2,
                                 audioFeature,
                                 N,
-                                prng
+                                prng,
+                                genres
                             ).reduce((i, sum) => i + sum) / N]);
                     }
                     setData2([
                         ...getDataPoints(
-                            genre2, audioFeature, dataPoints, prng)
+                            genre2, audioFeature, dataPoints, prng, genres)
                     ]);
                 }
             } else if (data1.length + dataPoints >= N) {
@@ -151,39 +151,40 @@ export const GraphForm: React.FC<GraphFormProps> = (
                             genre1,
                             audioFeature,
                             N - data1.length,
-                            prng
+                            prng,
+                            genres
                         )
                     ].reduce((i, sum) => i + sum) / N]);
                 setData1([
                     ...data1,
                     ...getDataPoints(
-                        genre1, audioFeature, N - data1.length, prng)
+                        genre1, audioFeature, N - data1.length, prng, genres)
                 ]);
                 if (genre2) {
                     setMeanData2([
                         ...meanData2,
-                        getDataPoints(
-                            genre2,
-                            audioFeature,
-                            N - data1.length,
-                            prng
+                        getDataPoints(genre2, audioFeature, N - data1.length,
+                            prng, genres
                         ).reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...data2,
                         ...getDataPoints(
-                            genre2, audioFeature, N - data1.length, prng)
+                            genre2, audioFeature, N - data1.length, prng,
+                            genres)
                     ]);
                 }
             } else {
                 setData1([
                     ...data1,
-                    ...getDataPoints(genre1, audioFeature, dataPoints, prng)
+                    ...getDataPoints(genre1, audioFeature, dataPoints,
+                        prng, genres)
                 ]);
                 if (genre2) {
                     setData2([
                         ...data2,
                         ...getDataPoints(
-                            genre2, audioFeature, dataPoints, prng)
+                            genre2, audioFeature, dataPoints, prng,
+                            genres)
                     ]);
                 }
             }
@@ -331,21 +332,30 @@ export const GraphForm: React.FC<GraphFormProps> = (
                     <form
                         className='p-2 graph-inputs'
                         data-cy={'graphForm'}
-                        onSubmit={handleDataUpdate}
-                    >
-                        {genre1Field && (
-                            <GenrePicker
-                                genre={genre1}
-                                handler={handleGenre1Select}
-                                label='first'
-                                x={1} />
-                        )}
-                        {genre2Field && (
-                            <GenrePicker
-                                genre={genre2}
-                                handler={handleGenre2Select}
-                                label='second'
-                                x={2} />
+                        onSubmit={handleDataUpdate}>
+                        {!genres ? (
+                            <p className='loading fs-5 fw-bold'>
+                                Loading genres...
+                            </p>
+                        ) : (
+                            <>
+                                {genre1Field && (
+                                    <GenrePicker
+                                        genre={genre1}
+                                        handler={handleGenre1Select}
+                                        label='first'
+                                        x={1}
+                                        genreList={genres} />
+                                )}
+                                {genre2Field && (
+                                    <GenrePicker
+                                        genre={genre2}
+                                        handler={handleGenre2Select}
+                                        label='second'
+                                        x={2}
+                                        genreList={genres} />
+                                )}
+                            </>
                         )}
                         {audioFeatureField && (
                             <div className='mb-3'>

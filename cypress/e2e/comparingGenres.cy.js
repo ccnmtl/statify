@@ -9,6 +9,7 @@ describe('Comparing Genres', () => {
     });
     it('Contains Comparing Genres attributes', () => {
         cy.get('h1.py-4').contains('3.Comparing Genres');
+        cy.wait(6000);
         cy.get('[data-cy="graphForm"]').should('exist');
         cy.get('#firstGenre').scrollIntoView().should('be.visible');
         cy.get('#secondGenre').scrollIntoView().should('be.visible');

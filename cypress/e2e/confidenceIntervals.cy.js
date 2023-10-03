@@ -9,6 +9,7 @@ describe('Confidence Intervals', () => {
     });
     it('Contains Confidence Intervals attributes', () => {
         cy.get('h1.py-4').contains('4.Confidence Intervals');
+        cy.wait(6000);
         cy.get('[data-cy="graphForm"]').should('exist');
         cy.get('#firstGenre').scrollIntoView().should('be.visible');
         cy.get('#secondGenre').scrollIntoView().should('be.visible');

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import genreList from '../../data/trackDataByGenre.json';
-import { toTitleCase } from '../common';
+import { toTitleCase, Genres } from '../common';
 import { descending } from 'd3';
 
 interface GenreProps {
-    genre:string|undefined,
-    handler:React.MouseEventHandler<HTMLButtonElement>,
-    label:string,
-    x:number
+    genre: string|undefined;
+    handler: React.MouseEventHandler<HTMLButtonElement>;
+    label: string;
+    x: number;
+    genreList: Genres | null;
 }
 
 export const GenrePicker: React.FC<GenreProps> = ({
-    genre, handler, label, x
+    genre, handler, label, x, genreList
 }) => {
     const [genreNames, setGenreNames] =
         useState<string[]>(Object.keys(genreList));
