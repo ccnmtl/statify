@@ -19,6 +19,7 @@ export const GenrePicker: React.FC<GenreProps> = ({
     const [sortedPopular, setsortedPopular] = useState<boolean>(false);
     const [filteredGenres, setFilteredGenres] =
         useState(Object.entries(genreList));
+    const [limit, setLimit] = useState<boolean>(true);
 
     const sortAlphabet = function() {
         if (sortAsc) {
@@ -47,6 +48,7 @@ export const GenrePicker: React.FC<GenreProps> = ({
     const sortPopular = function() {
         setGenreNames(Object.values(filteredGenres)
             .sort((a, b) => b[1].count - a[1].count)
+            .slice(0,(limit ? 50 : undefined))
             .map(genre => genre[0]));
         setsortedPopular(true);
     };
@@ -128,11 +130,7 @@ export const GenrePicker: React.FC<GenreProps> = ({
         } else {
             sortAlphabet();
         }
-    }, [filteredGenres]);
-
-    useEffect(() => {
-        sortAlphabet();
-    }, [sortAsc]);
+    }, [filteredGenres, limit, sortAsc]);
 
     return (
         <div className='mb-3' id={'genre' + x}>
@@ -161,32 +159,51 @@ export const GenrePicker: React.FC<GenreProps> = ({
             >
                 <div
                     className='row mb-2'
-                    aria-label='Sorting options'
+                    aria-label={'Sorting options ' + x}
                 >
                     <button
-                        className='btn text-white col'
+                        className={
+                            'btn text-white col mx-1 ' +
+                            (!sortedPopular ? 'selected' : 'unselected')}
                         onClick={handleAlphabet}
                     >
                         {displaySortDirection()}
                     </button>
                     <button
-                        className='btn text-white col'
+                        className={
+                            'btn text-white col mx-1 popularity ' +
+                            (sortedPopular ? 'selected' : 'unselected')}
                         onClick={handlePopular}
                         disabled={sortedPopular}
                     >
                         Popularity
                     </button>
                 </div>
+                <label htmlFor='search'>
+                    Search:
+                </label>
                 <input
+                    id={'search' + x}
                     className='form-control'
                     onChange={filterSearch}
                     placeholder='Search'
                     type='text' />
+                {sortedPopular &&
+                    <label htmlFor='limit' className='mt-3'>
+                        <input
+                            className='form-check-input mx-2'
+                            id={'limit' + x}
+                            type='checkbox'
+                            onChange={(e) => setLimit(!e.target.checked)}/>
+                        Show All Genres
+                    </label>
+                }
                 <hr />
                 <ul
                     className='list-group'
                     style={{
-                        height: '35rem',
+                        height: '40vh',
+                        minHeight: '200px',
                         overflowX: 'clip',
                         overflowY: 'scroll',
                     }}

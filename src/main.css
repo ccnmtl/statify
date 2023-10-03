@@ -175,6 +175,33 @@ form select
     --bs-btn-active-shadow: 0;
 }
 
+.unselected
+{
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: #fff;
+    --bs-btn-hover-border-color: #fff;
+    --bs-btn-focus-border-color: #fff;
+    --bs-btn-focus-shadow-rgb: 0;
+    --bs-btn-active-border-color: #0;
+    --bs-btn-active-shadow: 0;
+}
+
+.selected
+{
+    --bs-btn-bg: #37D247;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #32CA44;
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: #fff;
+    --bs-btn-hover-border-color: #0;
+    --bs-btn-focus-border-color: #fff;
+    --bs-btn-focus-shadow-rgb: 0;
+    --bs-btn-active-border-color: #0;
+    --bs-btn-active-shadow: 0;
+    --bs-btn-disabled-bg: #37D247;
+    --bs-btn-disabled-color: #fff;
+}
+
 #reset-btn
 {
     padding: .75em 1.5em .75em 1.5em;
