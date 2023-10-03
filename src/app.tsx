@@ -11,7 +11,7 @@ import { Glossary } from './glossary';
 import { Footer } from './footer';
 import ReactGA from 'react-ga4';
 import { About } from './about';
-import { Store } from './common';
+import { Store, createSeedString } from './common';
 import { NotFound } from './notFound';
 
 
@@ -32,14 +32,19 @@ export const App: React.FC = () => {
 
     const [store, setStore] = useState<Store>({} as Store);
     const [selected, setSelected] = useState(location.pathname);
+    const [seed, setSeed] = useState('');
 
     useEffect(() => {
         ReactGA.send({
             hitType: 'pageview',
             page: window.location.pathname + window.location.search
         });
-
+        setSeed(createSeedString());
     }, []);
+
+    useEffect(() => {
+        setStore({seed} as Store);
+    }, [seed]);
 
     return (
         <>

@@ -61,16 +61,11 @@ const objectives = [
         'inferred from a single sample.'
 ];
 
-export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
+export const DescriptiveStats: React.FC<GraphProps> = ({store, setStore}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [initialSeed, setInitialSeed] = useState('');
-
-    useEffect(() => setStore({} as Store), []);
 
     useEffect(() => {
-        setInitialSeed([...Array(8) as null[]].map(
-            // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
-            () => Math.floor(Math.random() * 16).toString(16)).join(''));
+        setStore({} as Store);
     }, []);
 
     return (
@@ -108,15 +103,14 @@ export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
                             graphTypes={[1]}
                             instructions={instructions}
                             activeTab={activeTab}
-                            store={{} as Store}
-                            setStore={null}
-                            initialSeed={initialSeed}/>
+                            store={store}
+                            setStore={null} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'DescriptiveStatistics'}
-                            initialSeed={initialSeed}
+                            seed={store.seed}
                         />
                     </div>
                 </div>
