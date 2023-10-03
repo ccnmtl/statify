@@ -34,6 +34,7 @@ describe('Confidence Intervals', () => {
     });
 
     it('Checks form', () => {
+        cy.wait(6000);
         cy.get('[data-cy="secondGenre"]').click();
         cy.get('[data-cy="Option2-0"]').click();
         cy.get('[data-cy="secondGenre"]').should('contain', '5th Wave Emo');

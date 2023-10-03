@@ -62,7 +62,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
 
     useEffect(() => {
 
-        fetch('/public/trackDataByGenre.json')
+        fetch('https://s3.amazonaws.com/statify.stage.ctl.columbia.edu/public/trackDataByGenre.json')
             .then(response => response.json())
             .then(data => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
