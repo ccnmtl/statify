@@ -223,3 +223,8 @@ form select
     justify-content: center!important;
     flex-direction: row;
 }
+
+.loading
+{
+    color: #37D247;
+}

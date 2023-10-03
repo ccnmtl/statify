@@ -39,6 +39,9 @@ export interface Genre {
     speechiness: number[],
     tempo: number[]
 }
+export interface Genres {
+    [genre: string]: Genre;
+}
 
 export interface Store {
     audioFeature: string,

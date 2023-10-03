@@ -9,6 +9,7 @@ describe('Inferential Statistics', () => {
     });
     it('Contains the Inferential Stats attributes', () => {
         cy.get('h1.py-4').contains('2.Inferential Statistics');
+        cy.wait(6000);
         cy.get('[data-cy="graphForm"]').should('exist');
         cy.get('#firstGenre').scrollIntoView().should('be.visible');
         cy.get('#dataPoints').scrollIntoView().should('be.visible');

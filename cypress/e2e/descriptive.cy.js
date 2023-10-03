@@ -9,6 +9,7 @@ describe('Descriptive Statistics', () => {
     });
     it('Contains the Descriptive Stats attributes', () => {
         cy.get('h1.py-4').contains('1.Descriptive Statistics');
+        cy.wait(6000);
         cy.get('[data-cy="graphForm"]').should('exist');
         cy.get('#firstGenre').scrollIntoView().should('be.visible');
         cy.get('#seed').should('exist');
