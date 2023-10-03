@@ -32,6 +32,7 @@ describe('Inferential Statistics', () => {
     });
 
     it('Checks form', () => {
+        cy.wait(6000);
         cy.get('[data-cy="firstGenre"]').click();
         cy.get('[data-cy="Option1-0"]').click();
         cy.get('[data-cy="firstGenre"]').should('contain', '5th Wave Emo');
