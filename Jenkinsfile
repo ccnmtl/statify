@@ -6,5 +6,10 @@ pipeline {
                 sh 'make deploy-stage'
             }
         }
+        stage('prod') {
+            steps {
+                sh 'make deploy-prod'
+            }
+        }
     }
 }
