@@ -291,9 +291,9 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 g.append('text')
                     .attr('fill', 'white')
                     .attr('font-size', FONT_SIZE)
-                    .attr('text-anchor', 'end')
-                    .attr('x', gWidth + 20)
-                    .attr('y', 24)
+                    .attr('text-anchor', 'start')
+                    .attr('x', MARGIN + 8)
+                    .attr('y', MARGIN + FONT_SIZE + 4)
                     .text(`Count: ${data1.length}`);
                 g.append('text')
                     .attr('fill', 'white')
