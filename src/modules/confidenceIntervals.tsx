@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { GraphProps, InstructionData, TabData } from '../common';
+import {
+    GraphProps, InstructionData, TabData
+} from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -80,13 +82,6 @@ export const ConfidenceIntervals: React.FC<GraphProps> = (
     {store, setStore, genres}
 ) => {
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [initialSeed, setInitialSeed] = useState('');
-
-    useEffect(() => {
-        setInitialSeed([...Array(8) as null[]].map(
-            // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
-            () => Math.floor(Math.random() * 16).toString(16)).join(''));
-    }, []);
 
     return (
         <>
@@ -123,14 +118,13 @@ export const ConfidenceIntervals: React.FC<GraphProps> = (
                             activeTab={activeTab}
                             store={store}
                             setStore={setStore}
-                            initialSeed={initialSeed}
                             genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'ConfidenceIntervals'}
-                            initialSeed={initialSeed}
+                            seed={store.seed}
                         />
                     </div>
                 </div>

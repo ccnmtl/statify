@@ -29,6 +29,16 @@ export function toTitleCase(text: string) {
         word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
+/**
+ * A pseudorandomized string generator for the seedrandom generator
+ * @returns string
+ */
+export function createSeedString() {
+    // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+    return [...Array(8) as null[]].map(
+        () => Math.floor(Math.random() * 16).toString(16)).join('');
+}
+
 export interface Genre {
     count: number;
     acousticness: number[];
@@ -50,6 +60,7 @@ export interface Store {
     dataPoints: number | null;
     genre1: string;
     genre2: string;
+    seed: string;
     meanData1: number[];
     meanData2: number[];
     prng: seedrandom.PRNG;
