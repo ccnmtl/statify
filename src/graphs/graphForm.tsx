@@ -23,6 +23,7 @@ interface GraphFormProps {
     store: Store;
     setStore: React.Dispatch<React.SetStateAction<Store>> | null;
     initialSeed: string;
+    genres: Genres | null;
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
@@ -34,7 +35,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
         graphTypes, instructions, activeTab, seedField, defaultPoints,
-        store, setStore, initialSeed
+        store, setStore, initialSeed, genres
     }:
     GraphFormProps) => {
 
@@ -57,22 +58,6 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [oldData2, setOldData2] = useState(data1);
     const [prevData, setPrevData] = useState<[number, number][][]>([]);
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
-    const [genres, setGenres] = useState<Genres | null>(null);
-
-
-    useEffect(() => {
-
-        fetch('https://s3.amazonaws.com/statify.stage.ctl.columbia.edu/public/trackDataByGenre.json')
-            .then(response => response.json())
-            .then(data => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                setGenres(data);
-            })
-            .catch(error => {
-                console.error('Error fetching JSON data:', error);
-            });
-    }, []);
-
 
     useEffect(() => {
         if (setStore) {

@@ -61,7 +61,7 @@ const objectives = [
         'inferred from a single sample.'
 ];
 
-export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
+export const DescriptiveStats: React.FC<GraphProps> = ({setStore, genres}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [initialSeed, setInitialSeed] = useState('');
 
@@ -110,7 +110,8 @@ export const DescriptiveStats: React.FC<GraphProps> = ({setStore}) => {
                             activeTab={activeTab}
                             store={{} as Store}
                             setStore={null}
-                            initialSeed={initialSeed}/>
+                            initialSeed={initialSeed}
+                            genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment

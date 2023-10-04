@@ -85,7 +85,7 @@ const objectives = [
         'size on the standard error.'
 ];
 
-export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
+export const InferentialStats: React.FC<GraphProps> = ({setStore, genres}) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([1, 5]);
     const [initialSeed, setInitialSeed] = useState('');
@@ -140,7 +140,8 @@ export const InferentialStats: React.FC<GraphProps> = ({setStore}) => {
                             activeTab={activeTab}
                             store={{} as Store}
                             initialSeed={initialSeed}
-                            setStore={null} />
+                            setStore={null}
+                            genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment

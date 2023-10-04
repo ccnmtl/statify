@@ -82,7 +82,9 @@ const objectives = [
         'tests.'
 ];
 
-export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
+export const ComparingGenres: React.FC<GraphProps> = (
+    {store, setStore, genres}
+) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
     const [initialSeed, setInitialSeed] = useState('');
@@ -132,7 +134,8 @@ export const ComparingGenres: React.FC<GraphProps> = ({store, setStore}) => {
                             activeTab={activeTab}
                             store={store}
                             setStore={setStore}
-                            initialSeed={initialSeed} />
+                            initialSeed={initialSeed}
+                            genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
