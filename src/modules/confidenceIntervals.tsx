@@ -76,8 +76,9 @@ const objectives = [
         'tests.'
 ];
 
-export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
-{
+export const ConfidenceIntervals: React.FC<GraphProps> = (
+    {store, setStore, genres}
+) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [initialSeed, setInitialSeed] = useState('');
 
@@ -122,7 +123,8 @@ export const ConfidenceIntervals: React.FC<GraphProps> = ({store, setStore}) =>
                             activeTab={activeTab}
                             store={store}
                             setStore={setStore}
-                            initialSeed={initialSeed} />
+                            initialSeed={initialSeed}
+                            genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment

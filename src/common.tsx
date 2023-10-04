@@ -30,39 +30,40 @@ export function toTitleCase(text: string) {
 }
 
 export interface Genre {
-    count: number,
-    acousticness: number[],
-    danceability: number[],
-    energy: number[],
-    key: number[],
-    loudness: number[],
-    speechiness: number[],
-    tempo: number[]
+    count: number;
+    acousticness: number[];
+    danceability: number[];
+    energy: number[];
+    key: number[];
+    loudness: number[];
+    speechiness: number[];
+    tempo: number[];
 }
 export interface Genres {
     [genre: string]: Genre;
 }
 
 export interface Store {
-    audioFeature: string,
-    data1: number[],
-    data2: number[],
-    dataPoints: number | null,
-    genre1: string,
-    genre2: string,
-    meanData1: number[],
-    meanData2: number[],
-    prng: seedrandom.PRNG
+    audioFeature: string;
+    data1: number[];
+    data2: number[];
+    dataPoints: number | null;
+    genre1: string;
+    genre2: string;
+    meanData1: number[];
+    meanData2: number[];
+    prng: seedrandom.PRNG;
 }
 
 export interface GraphProps {
-    store: Store,
-    setStore: React.Dispatch<React.SetStateAction<Store>>
+    store: Store;
+    setStore: React.Dispatch<React.SetStateAction<Store>>;
+    genres: Genres;
 }
 
 export interface PageSelect {
-    selected: string,
-    setSelected: React.Dispatch<React.SetStateAction<string>>
+    selected: string;
+    setSelected: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface BinData {
