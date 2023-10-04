@@ -81,14 +81,14 @@ interface AssignmentDocumentProps {
     uni: string;
     name: string;
     module: string;
-    initialSeed: string;
+    seed: string;
 }
 const d = new Date();
 const date = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
 
 
 export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
-    {questions, answers, screenshot, name, uni, module, initialSeed}
+    {questions, answers, screenshot, name, uni, module, seed}
 ) =>
 {
     const createQA = questions.map((question, index) => {
@@ -127,7 +127,7 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
                             {uni}
                         </Text>
                         <Text>
-                            Seed: {initialSeed}
+                            Seed: {seed}
                         </Text>
                         <Text>
                             {date}

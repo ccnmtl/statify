@@ -11,7 +11,7 @@ import { Glossary } from './glossary';
 import { Footer } from './footer';
 import ReactGA from 'react-ga4';
 import { About } from './about';
-import { Store, Genres } from './common';
+import { Store, Genres, createSeedString } from './common';
 import { NotFound } from './notFound';
 
 
@@ -33,13 +33,14 @@ export const App: React.FC = () => {
     const [store, setStore] = useState<Store>({} as Store);
     const [selected, setSelected] = useState(location.pathname);
     const [genres, setGenres] = useState<Genres | null>(null);
+    const [seed, setSeed] = useState('');
 
     useEffect(() => {
         ReactGA.send({
             hitType: 'pageview',
             page: window.location.pathname + window.location.search
         });
-
+        setSeed(createSeedString());
         fetch('https://s3.amazonaws.com/statify.stage.ctl.columbia.edu/public/trackDataByGenre.json')
             .then(response => response.json())
             .then(data => {
@@ -51,6 +52,10 @@ export const App: React.FC = () => {
             });
 
     }, []);
+
+    useEffect(() => {
+        setStore({seed} as unknown as Store);
+    }, [seed]);
 
     return (
         <>

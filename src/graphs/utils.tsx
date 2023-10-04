@@ -12,7 +12,7 @@ export const cumulativeMeanFunc = (array: number[]): number[][] => {
 export const getDataPoints = (
     genre: string, feature: string|null , n: number, prng: seedrandom.PRNG,
     genres: Genres
-) => {
+): number[] => {
     const data:number[] = [];
     const chosenGenre = genres[genre];
     const chosenFeature = chosenGenre[feature ?? AUDIO_DEFAULT] as number[];

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { TabData, InstructionData, GraphProps } from '../common';
+import {
+    TabData, InstructionData, GraphProps
+} from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -87,13 +89,6 @@ export const ComparingGenres: React.FC<GraphProps> = (
 ) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
-    const [initialSeed, setInitialSeed] = useState('');
-
-    useEffect(() => {
-        setInitialSeed([...Array(8) as null[]].map(
-            // Pulled from https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
-            () => Math.floor(Math.random() * 16).toString(16)).join(''));
-    }, []);
 
     useEffect(() => {
         if (activeTab === 3) {
@@ -102,6 +97,7 @@ export const ComparingGenres: React.FC<GraphProps> = (
             setGraphTypes([5]);
         }
     }, [activeTab]);
+
     return (
         <>
             <section className={'statify-section'}>
@@ -134,14 +130,13 @@ export const ComparingGenres: React.FC<GraphProps> = (
                             activeTab={activeTab}
                             store={store}
                             setStore={setStore}
-                            initialSeed={initialSeed}
                             genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'ComparingGenres'}
-                            initialSeed={initialSeed}
+                            seed={store.seed}
                         />
                     </div>
                 </div>

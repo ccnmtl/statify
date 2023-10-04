@@ -3,7 +3,7 @@ import { CumulativeSampleMean } from './sampleMeanLine';
 import { Histogram } from './histogram';
 import {
     toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
-    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2, Genres
+    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2, Genres, createSeedString
 } from '../common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './estimatedSampleDistribution';
@@ -22,7 +22,6 @@ interface GraphFormProps {
     instructions: InstructionData[];
     store: Store;
     setStore: React.Dispatch<React.SetStateAction<Store>> | null;
-    initialSeed: string;
     genres: Genres | null;
 }
 
@@ -35,7 +34,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
         graphTypes, instructions, activeTab, seedField, defaultPoints,
-        store, setStore, initialSeed, genres
+        store, setStore, genres
     }:
     GraphFormProps) => {
 
@@ -52,18 +51,21 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [genre1, setGenre1] = useState<string>(store.genre1 || '');
     const [genre2, setGenre2] = useState<string>(store.genre2 || '');
     const [prng, setPRNG] = useState<seedrandom.PRNG>(
-        () => store.prng || seedrandom(initialSeed));
+        () => store.prng || seedrandom(store.seed));
 
     const [oldData, setOldData] = useState(data1);
     const [oldData2, setOldData2] = useState(data1);
     const [prevData, setPrevData] = useState<[number, number][][]>([]);
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
+    const [seed, setSeed] = useState<string>(
+        store.seed || createSeedString());
 
     useEffect(() => {
         if (setStore) {
             const checkAudio = audioFeature ?? AUDIO_DEFAULT;
             setStore({audioFeature: checkAudio, data1, data2, meanData1,
-                meanData2, genre1, genre2, dataPoints, prng});
+                meanData2, genre1, genre2, seed,
+                dataPoints, prng});
         }
     }, [audioFeature, data1, data2, meanData1, meanData2, genre1, genre2,
         dataPoints, prng]);
@@ -85,7 +87,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
         setGenre1('');
         setGenre2('');
         setAudioFeature(null);
-        setPRNG(() => seedrandom(initialSeed));
+        setPRNG(() => seedrandom(seed));
     };
 
     const SAMPLEDATAHISTOGRAM1 = 1;
@@ -212,6 +214,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const handleSeed = (
         evt: React.ChangeEvent<HTMLInputElement>): void =>
     {
+        setSeed(evt.target.value);
         setPRNG(() => seedrandom(evt.target.value));
         clearData();
     };
@@ -401,7 +404,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
                                 <input name='seed' id='seed'
                                     type='text'
                                     className='form-control'
-                                    defaultValue={initialSeed}
+                                    defaultValue={seed}
                                     onChange={handleSeed}
                                     aria-required={'true'}
                                     required>
