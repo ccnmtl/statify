@@ -108,26 +108,37 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         //Old lines of 100 pts
         if(cm.length === 100 && data1 !== oldData) {
-            setPrevData([
-                ...prevData, cm
-            ]);
+            setPrevData([ ...prevData, cm ]);
             setOldData(data1);
         }
 
         //Old lines
+        let opacity1 = 0.36;
         svgGraph.append('g').attr('id', 'genre1old')
-            .call((g) =>  prevData.forEach((oldData) =>
-                g.append('path')
+            .call((g) =>  prevData.forEach((oldData) => {
+                opacity1 = (opacity1 - 0.01);
+
+                return g.append('path')
                     .datum(oldData)
                     .attr('d', lnMkr(oldData))
                     .attr('fill', 'none')
                     .attr('stroke', PRIMARY)
-                    .attr('opacity', 0.35)
-                    .attr('stroke-width', 2)
-            ));
+                    .attr('opacity', opacity1)
+                    .attr('stroke-width', 2);
+            }));
 
-        //lines
-        svgGraph.append('g').attr('id', 'genre1line')
+        const lineGroup = svgGraph.append('g').attr('id', 'genre1line');
+
+        // border line
+        lineGroup
+            .append('path')
+            .datum(cm)
+            .attr('d', lnMkr(cm))
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2.5);
+        // main line
+        lineGroup
             .append('path')
             .datum(cm)
             .attr('d', lnMkr(cm))
@@ -200,25 +211,37 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
             //Old lines of 100 pts
             if(cm2.length === 100 && data2 !== oldData2) {
-                setPrevData2([
-                    ...prevData2, cm2
-                ]);
+                setPrevData2([ ...prevData2, cm2]);
                 setOldData2(data2);
             }
-            prevData2.forEach((oldData) => {
-                //lines
-                svgGraph.append('g').attr('id', 'genre2old')
-                    .append('path')
-                    .datum(oldData)
-                    .attr('d', lnMkr2(oldData))
-                    .attr('fill', 'none')
-                    .attr('stroke', SECONDARY)
-                    .attr('opacity', 0.35)
-                    .attr('stroke-width', 2);
-            });
 
-            //lines
-            svgGraph.append('g').attr('id', 'genre2line')
+            let opacity2 = 0.36;
+            svgGraph.append('g').attr('id', 'genre2old')
+                .call((g) =>  prevData2.forEach((oldData) => {
+                    opacity2 = (opacity1 - 0.01);
+
+                    return g.append('path')
+                        .datum(oldData)
+                        .attr('d', lnMkr2(oldData))
+                        .attr('fill', 'none')
+                        .attr('stroke', SECONDARY)
+                        .attr('opacity', opacity2)
+                        .attr('stroke-width', 2);
+                }));
+
+            const lineGroup2 = svgGraph.append('g').attr('id', 'genre2line');
+
+            // border line
+            lineGroup2
+                .append('path')
+                .datum(cm2)
+                .attr('d', lnMkr2(cm2))
+                .attr('fill', 'none')
+                .attr('stroke', 'black')
+                .attr('stroke-width', 2.5);
+
+            // main line
+            lineGroup2
                 .append('path')
                 .datum(cm2)
                 .attr('d', lnMkr2(cm2))
