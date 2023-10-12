@@ -88,6 +88,10 @@ export const Histogram: React.FC<HistogramProps>  = (
             });
     };
 
+    const binMax = (bin: Bin<number, number>[]): number =>
+        bin.reduce((a:number, b:Bin<number, number>) =>
+            a > b.length ? a : b.length, 0);
+
     useEffect(() => {
         const svgGraph = select(svgRef.current);
         audioFeature ??= AUDIO_DEFAULT;
@@ -106,9 +110,9 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .thresholds((binData.max - binData.min) / binData.ticks)(
                     data2) :
             null;
-        const over20 = [...bins1.map(d => d.length),
-            ...bins1.map(d => d.length)].find(x => x > Y_SCALE);
-        const yCap = over20 ? 20 * Math.ceil(over20 / Y_SCALE) : Y_SCALE;
+        const over20 = Math.max(
+            binMax(bins1), (bins2 ? binMax(bins2) : 0), Y_SCALE);
+        const yCap = 20 * Math.ceil(over20 / Y_SCALE);
 
         const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
         const height =
