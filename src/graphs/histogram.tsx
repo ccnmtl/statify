@@ -9,7 +9,6 @@ import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 
 
-const BUCKET_PADDING = 4;
 const FONT_SIZE = 14;
 const MARGIN = 30;
 const Y_LABEL = 20;
@@ -113,6 +112,8 @@ export const Histogram: React.FC<HistogramProps>  = (
         const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
         const height =
                 Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
+        const activeArea = gWidth - MARGIN - Y_LABEL;
+        const bucketPadding = activeArea < 480 ? 1 : 4;
 
         const x = scaleLinear()
             .domain([binData.min, binData.max]).nice()
@@ -126,7 +127,7 @@ export const Histogram: React.FC<HistogramProps>  = (
             .call((g) => g.append('rect')
                 .attr('fill', GRAPH_BG)
                 .attr('height', height-MARGIN)
-                .attr('width', gWidth-MARGIN-Y_LABEL)
+                .attr('width', activeArea)
                 .attr('x', MARGIN + Y_LABEL)
                 .attr('y', MARGIN));
 
@@ -141,12 +142,12 @@ export const Histogram: React.FC<HistogramProps>  = (
                     if (bin.length > 0) {
                         buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
                             y(0) - y(bin.length), id1,
-                            x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                            x(bin.x1) - x(bin.x0) - bucketPadding,
                             x(bin.x0), y(bin.length));
                     }
                     buildBar(buckets, bins2[i], SECONDARY, HIGHLIGHT_2,
                         y(bin.length) - y(bins2[i].length), id2,
-                        x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                        x(bin.x1) - x(bin.x0) - bucketPadding,
                         x(bin.x0), y(bins2[i].length));
                 } else if (bin.length > bins2[i].length) {
                     if (bins2[i].length > 0) {
@@ -154,24 +155,24 @@ export const Histogram: React.FC<HistogramProps>  = (
                             buckets, bins2[i], OVERLAP, HIGHLIGHT_OVERLAP,
                             y(0) - y(bins2[i].length), id2,
                             x(bins2[i].x1) -
-                                    x(bins2[i].x0) - BUCKET_PADDING,
+                                    x(bins2[i].x0) - bucketPadding,
                             x(bins2[i].x0), y(bins2[i].length));
                     }
                     buildBar(buckets, bin, color, highlight,
                         y(bins2[i].length) - y(bin.length), id1,
-                        x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                        x(bin.x1) - x(bin.x0) - bucketPadding,
                         x(bin.x0), y(bin.length));
                 } else if (bin.length > 0) {
                     buildBar(buckets, bin, OVERLAP, HIGHLIGHT_OVERLAP,
                         y(0) - y(bin.length), id1,
-                        x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                        x(bin.x1) - x(bin.x0) - bucketPadding,
                         x(bin.x0), y(bin.length));
                 }
             });
         } else {
             bins1.map(bin => buildBar(buckets, bin, color, highlight,
                 y(0) - y(bin.length), id1,
-                x(bin.x1) - x(bin.x0) - BUCKET_PADDING,
+                x(bin.x1) - x(bin.x0) - bucketPadding,
                 x(bin.x0), y(bin.length)));
         }
 
@@ -219,10 +220,10 @@ export const Histogram: React.FC<HistogramProps>  = (
                 g.append('text')
                     .attr('fill', 'white')
                     .attr('font-size', FONT_SIZE * 1.5)
-                    .attr('text-anchor', gWidth - MARGIN - Y_LABEL < 480 ?
+                    .attr('text-anchor', activeArea < 480 ?
                         'start' :
                         'middle')
-                    .attr('x', gWidth - MARGIN - Y_LABEL < 480 ?
+                    .attr('x', activeArea < 480 ?
                         MARGIN + Y_LABEL :
                         gWidth/2 + MARGIN)
                     .attr('y', 18)
