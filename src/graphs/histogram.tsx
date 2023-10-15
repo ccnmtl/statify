@@ -234,7 +234,9 @@ export const Histogram: React.FC<HistogramProps>  = (
                     .text(
                         whichHisto === 'SampleDataHistogram'
                             ? 'Sample Data'
-                            : 'Sampling Distribution When N = 100');});
+                            : activeArea < 480 ?
+                                'Sampling Dist. N = 100' :
+                                'Sampling Distribution When N = 100');});
 
         // Generate Legend
         if (data2) {
