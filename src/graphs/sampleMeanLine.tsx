@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
     BinData, graphBins, PRIMARY, SECONDARY, GRAPH_BG, FONT_SIZE, HIGHLIGHT_1,
-    HIGHLIGHT_2, AUDIO_DEFAULT, LineProps, LineSetProps, StdProps
+    HIGHLIGHT_2, AUDIO_DEFAULT, LineProps, LineSetProps, StdProps, GraphRange
 } from '../common';
 import { cumulativeMeanFunc } from './utils';
-import { extent, line, axisBottom, axisLeft } from 'd3';
-import { scaleLinear } from 'd3-scale';
+import { line, axisBottom, axisLeft } from 'd3';
+import { scaleLinear, ScaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 
 
@@ -15,16 +15,22 @@ interface CumulativeSampleMeanProps {
     stdProps: StdProps;
     lineProps: LineProps;
     lineSetProps: LineSetProps;
+    graphRange: GraphRange;
 }
 
 export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
     stdProps: {data1, data2, audioFeature=AUDIO_DEFAULT},
     lineProps: {oldData, oldData2, prevData, prevData2},
-    lineSetProps: {setOldData, setOldData2, setPrevData, setPrevData2}
+    lineSetProps: {setOldData, setOldData2, setPrevData, setPrevData2},
+    graphRange
 }) => {
     const svgRef = useRef(null);
 
-    const [width, setWidth]  = useState<number>();
+    const [width, setWidth] = useState<number>();
+    const [cumulativeMean, setCumulativeMean] =
+        useState<number[]>(cumulativeMeanFunc(data1));
+    const [cumulativeMean2, setCumulativeMean2] =
+        useState<number[]>(cumulativeMeanFunc(data2));
     let resizeTimeout;
 
     const handleResize = () => {
@@ -35,11 +41,48 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
         }, 10); // Adjust the timeout duration as needed
     };
 
+    const getRange = function(data: number[], min: number, max: number
+    ):[number, number] {
+        const binData = graphBins[audioFeature ?? AUDIO_DEFAULT] as BinData;
+        data.map((x) => {
+            if (x < min) {
+                min = x - (2 * binData.ticks);
+            }
+            if (x > max) {
+                max = x + (2 * binData.ticks);
+            }
+        });
+        return [min, max];
+    };
+
+    const scaleData = function(
+        x:ScaleLinear<number, number>, y: ScaleLinear<number, number>,
+        data:number[]
+    ): [number, number][] {
+        if (data) {
+            return data.map(
+                (c, i) => [x(i+1), y(c)]);
+        }
+    };
+
     window.addEventListener('resize', handleResize);
 
     useEffect(() => {
+        const cm = cumulativeMeanFunc(data1);
+        const cm2 = cumulativeMeanFunc(data2);
+        let [min, max] = getRange(
+            cm, graphRange.min ?? 1000, graphRange.max ?? 0);
+        if (cm2) {
+            [min, max] = getRange(cm2, min, max);
+        }
+        graphRange.setMin(min);
+        graphRange.setMax(max);
+        setCumulativeMean(cm);
+        setCumulativeMean2(cm2);
+    }, [data1]);
+
+    useEffect(() => {
         audioFeature ??= AUDIO_DEFAULT;
-        const cumulativeMean = cumulativeMeanFunc(data1);
         const svgGraph = select(svgRef.current);
         const binData = graphBins[audioFeature] as BinData;
 
@@ -54,11 +97,14 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
 
         // Create scales for x and y axes
         const x = scaleLinear()
-            .domain(extent(datapoints))
+            .domain([1, data1.length])
             .range([MARGIN, gWidth + 20]);
 
         const y = scaleLinear()
-            .domain([binData.min, binData.max]).nice()
+            .domain(data1.length > 0 ?
+                [graphRange.min, graphRange.max] :
+                [binData.min, binData.max])
+            .nice()
             .range([HEIGHT, MARGIN]);
 
         // Generate graph body
@@ -96,31 +142,54 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
                 .text('# of data points'))
             .attr('font-size', FONT_SIZE);
 
-        const cm = cumulativeMean.map(
-            (c) => [x(c[1]), y(c[0])] as [number, number]);
+        const cm = scaleData(x, y, cumulativeMean);
+        const cm2 = scaleData(x, y, cumulativeMean2);
 
         const lnMkr = line();
 
         //Old lines of 100 pts
-        if(cm.length === 100 && data1 !== oldData) {
-            setPrevData([ ...prevData, cm]);
+        if(cm && cm.length === 100 && data1 !== oldData) {
+            setPrevData([...prevData, cumulativeMean]);
             setOldData(data1);
         }
 
-        //Old lines
-        let opacity1 = 0.36;
-        svgGraph.append('g').attr('id', 'genre1old')
-            .call((g) =>  prevData.forEach((prev) => {
-                opacity1 = (opacity1 - 0.01);
+        if (prevData) {
+            //Old lines
+            let opacity1 = 0.36;
+            opacity1 = (opacity1 - 0.01);
+            svgGraph.append('g').attr('id', 'genre1old')
+                .call((g) =>  prevData.forEach((data) => {
+                    opacity1 = (opacity1 - 0.01);
+                    const old = scaleData(x, y, data.slice(0, data1.length));
+                    g.append('path')
+                        .datum(old)
+                        .attr('d', lnMkr(old))
+                        .attr('fill', 'none')
+                        .attr('stroke', PRIMARY)
+                        .attr('opacity', opacity1)
+                        .attr('stroke-width', 2);
+                }));
+        }
 
-                return g.append('path')
-                    .datum(prev)
-                    .attr('d', lnMkr(prev))
-                    .attr('fill', 'none')
-                    .attr('stroke', PRIMARY)
-                    .attr('opacity', opacity1)
-                    .attr('stroke-width', 2);
-            }));
+        if (data2) {
+            if (prevData2) {
+                let opacity2 = 0.36;
+                opacity2 = (opacity2 - 0.01);
+                svgGraph.append('g').attr('id', 'genre2old')
+                    .call((g) => prevData2.forEach((data2) => {
+                        opacity2 = (opacity2 - 0.01);
+                        const old =
+                            scaleData(x, y, data2.slice(0, data1.length));
+                        g.append('path')
+                            .datum(old)
+                            .attr('d', lnMkr(old))
+                            .attr('fill', 'none')
+                            .attr('stroke', SECONDARY)
+                            .attr('opacity', opacity2)
+                            .attr('stroke-width', 2);
+                    }));
+            }
+        }
 
         const lineGroup = svgGraph.append('g').attr('id', 'genre1line');
 
@@ -176,8 +245,9 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
             .attr('dy', -20)
             .attr('text-anchor', 'middle')
             .attr('class', 'circle-label')
+            .attr('z-index', 100)
             .style('opacity', 0)
-            .text((d, i) => `[${i+1}, ${cumulativeMean[i][0].toFixed(2)}]`);
+            .text((_, i) => `[${i+1}, ${cumulativeMean[i].toFixed(2)}]`);
 
         hover
             .on('mouseenter', function(event, d) {
@@ -198,31 +268,14 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
             });
 
         if(data2) {
-            const cumulativeMean2 = cumulativeMeanFunc(data2);
-            const cm2 = cumulativeMean2.map(
-                (c) => [x(c[1]), y(c[0])] as [number, number]);
 
             const lnMkr2 = line();
 
             //Old lines of 100 pts
             if(cm2.length === 100 && data2 !== oldData2) {
-                setPrevData2([ ...prevData2, cm2]);
+                setPrevData2([ ...prevData2, cumulativeMean2]);
                 setOldData2(data2);
             }
-
-            let opacity2 = 0.36;
-            svgGraph.append('g').attr('id', 'genre2old')
-                .call((g) =>  prevData2.forEach((prev2) => {
-                    opacity2 = (opacity2 - 0.01);
-
-                    return g.append('path')
-                        .datum(prev2)
-                        .attr('d', lnMkr2(prev2))
-                        .attr('fill', 'none')
-                        .attr('stroke', SECONDARY)
-                        .attr('opacity', opacity2)
-                        .attr('stroke-width', 2);
-                }));
 
             const lineGroup2 = svgGraph.append('g').attr('id', 'genre2line');
 
@@ -280,8 +333,8 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
                 .attr('text-anchor', 'middle')
                 .attr('class', 'circle-label2')
                 .style('opacity', 0)
-                .text((d, i) => `[${i+1},
-                    ${cumulativeMean2[i][0].toFixed(2)}]`);
+                .attr('z-index', 100)
+                .text((_, i) => `[${i+1}, ${cumulativeMean2[i].toFixed(2)}]`);
 
             hover2
                 .on('mouseenter', function(event, d) {
@@ -325,7 +378,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
                     .attr('y', 36)
                     .text('Cumulative Sample Mean');});
 
-    }, [data1, audioFeature, width]);
+    }, [audioFeature, width, cumulativeMean]);
     return (
         <div className='col-sm-12 mb-4'>
             <svg

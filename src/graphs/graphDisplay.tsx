@@ -3,19 +3,20 @@ import { Histogram } from './histogram';
 import { EstimatedDistribution } from './estimatedSampleDistribution';
 import { CumulativeSampleMean } from './sampleMeanLine';
 import { toTitleCase, PRIMARY, SECONDARY, HIGHLIGHT_1, HIGHLIGHT_2, LineProps,
-    LineSetProps, StdProps} from '../common';
+    LineSetProps, StdProps, GraphRange} from '../common';
 
 interface GraphDisplayProps {
     stdProps: StdProps;
     graphTypes: number[];
     lineProps: LineProps;
     lineSetProps: LineSetProps;
+    graphRange: GraphRange;
 }
 
 export const GraphDisplay: React.FC<GraphDisplayProps> = ({
     stdProps: {audioFeature, data1, data2, genre1, genre2, meanData1,
         meanData2},
-    graphTypes, lineProps, lineSetProps
+    graphTypes, lineProps, lineSetProps, graphRange
 }: GraphDisplayProps) => {
 
     const SAMPLEDATAHISTOGRAM1 = 1;
@@ -75,7 +76,7 @@ export const GraphDisplay: React.FC<GraphDisplayProps> = ({
                 )}
                 {graphTypes.includes(SAMPLEMEANLINE) && (
                     <CumulativeSampleMean
-                        {...{lineProps, lineSetProps}}
+                        {...{lineProps, lineSetProps, graphRange}}
                         stdProps={{audioFeature, data1, data2} as StdProps} />
                 )}
                 {graphTypes.includes(DISTRIBUTIONHISTOGRAM) && (

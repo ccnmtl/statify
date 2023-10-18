@@ -17,6 +17,13 @@ export type InstructionData = {
     instruction: string;
 }
 
+export type GraphRange = {
+    min: number;
+    max: number;
+    setMin: React.Dispatch<React.SetStateAction<number>>;
+    setMax: React.Dispatch<React.SetStateAction<number>>;
+}
+
 /**
  * Given a string, the first character of each subset separated by a space is
  * capitalized. E.g. a tale of two cities => A Tale Of Two Cities
@@ -57,17 +64,15 @@ export interface Genres {
 export interface LineProps {
     oldData: number[];
     oldData2: number[] | null;
-    prevData: [number, number][][];
-    prevData2: [number, number][][] | null;
+    prevData: number[][];
+    prevData2: number[][] | null;
 }
 
 export interface LineSetProps {
     setOldData: React.Dispatch<React.SetStateAction<number[]>>;
     setOldData2: React.Dispatch<React.SetStateAction<number[]>> | null;
-    setPrevData:
-        React.Dispatch<React.SetStateAction<[number, number][][]>>;
-    setPrevData2:
-        React.Dispatch<React.SetStateAction<[number, number][][]>> | null;
+    setPrevData: React.Dispatch<React.SetStateAction<number[][]>>;
+    setPrevData2: React.Dispatch<React.SetStateAction<number[][]>> | null;
 }
 
 export interface FieldProps {
@@ -88,9 +93,11 @@ export interface Store {
     seed: string;
     meanData1: number[];
     meanData2: number[];
-    prevData: [number, number][][];
-    prevData2: [number, number][][];
+    prevData: number[][];
+    prevData2: number[][];
     prng: seedrandom.PRNG;
+    min: number | null;
+    max: number | null;
 }
 
 export interface StdProps {

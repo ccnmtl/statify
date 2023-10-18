@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { toTitleCase, InstructionData, LineSetProps, StdProps, SetStdProps,
-    FieldProps, GraphProps, LineProps} from '../common';
+    FieldProps, GraphProps, LineProps, GraphRange} from '../common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { GenrePicker } from './genrePicker';
 import { getDataPoints } from './utils';
@@ -14,6 +14,7 @@ interface GraphFormProps {
     graphProps: GraphProps;
     setStdProps: SetStdProps;
     stdProps: StdProps;
+    graphRange: GraphRange | null;
 }
 
 const audioFeatures: string[] = ['danceability', 'energy', 'key', 'loudness',
@@ -31,14 +32,16 @@ export const GraphForm: React.FC<GraphFormProps> = ({
     stdProps: {audioFeature, data1, data2, dataPoints, genre1, genre2,
         meanData1, meanData2, seed, prng},
     setStdProps: {setAudioFeature, setData1, setData2, setDataPoints, setGenre1,
-        setGenre2, setMeanData1, setMeanData2, setPRNG, setSeed}
+        setGenre2, setMeanData1, setMeanData2, setPRNG, setSeed},
+    graphRange
 }: GraphFormProps) => {
 
     useEffect(() => {
         if (setStore) {
             setStore({audioFeature, data1, data2, meanData1,
                 meanData2, genre1, genre2, seed, prevData,
-                prevData2, dataPoints, prng});
+                prevData2, dataPoints, prng, min: graphRange.min,
+                max: graphRange.max});
         }
     }, [audioFeature, data1, data2, meanData1, meanData2, genre1, genre2,
         dataPoints, prng]);
@@ -59,6 +62,10 @@ export const GraphForm: React.FC<GraphFormProps> = ({
             if (setPrevData2) {
                 setPrevData2([]);
             }
+        }
+        if (graphRange.min) {
+            graphRange.setMax(null);
+            graphRange.setMin(null);
         }
     };
 

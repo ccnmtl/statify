@@ -97,12 +97,14 @@ export const InferentialStats: React.FC<GraphProps> = ({
     const [data1, setData1] = useState<number[]>([]);
     const [meanData1, setMeanData1] = useState<number[]>([]);
     const [oldData, setOldData] = useState<number[]>([]);
-    const [prevData, setPrevData] = useState<[number, number][][]>([]);
+    const [prevData, setPrevData] = useState<number[][]>([]);
     const [dataPoints, setDataPoints] = useState<number>();
     const [genre1, setGenre1] = useState<string>();
     const [graphTypes, setGraphTypes] = useState([1, 5]);
     const [prng, setPRNG] = useState<seedrandom.PRNG>(() => seedrandom());
     const [seed, setSeed] = useState<string>(createSeedString());
+    const [graphMin, setGraphMin] = useState<number>();
+    const [graphMax, setGraphMax] = useState<number>();
 
     useEffect(() => {
         if (activeTab === 2) {
@@ -152,7 +154,13 @@ export const InferentialStats: React.FC<GraphProps> = ({
                                 genre1, meanData1, prng, seed} as StdProps}
                             setStdProps={{setAudioFeature, setData1,
                                 setDataPoints, setGenre1, setMeanData1,
-                                setPRNG, setSeed} as SetStdProps} />
+                                setPRNG, setSeed} as SetStdProps}
+                            graphRange={{
+                                min: graphMin,
+                                max: graphMax,
+                                setMin: setGraphMin,
+                                setMax: setGraphMax
+                            }} />
                         <div className="col-md-9">
                             <GraphDisplay
                                 {...{graphTypes}}
@@ -160,7 +168,12 @@ export const InferentialStats: React.FC<GraphProps> = ({
                                     genre1, meanData1} as StdProps}
                                 lineProps={{oldData, prevData} as LineProps}
                                 lineSetProps={{setOldData,
-                                    setPrevData} as LineSetProps} />
+                                    setPrevData} as LineSetProps}
+                                graphRange={{
+                                    min: graphMin,
+                                    max: graphMax,
+                                    setMin: setGraphMin,
+                                    setMax: setGraphMax}} />
                             <Assignment
                                 {...{questions, seed}}
                                 module={'InferentialStatistics'}
