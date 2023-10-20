@@ -5,6 +5,7 @@ import { Answer } from './answer';
 import { AssignmentDocument } from './assignmentDocument';
 import html2canvas from 'html2canvas';
 import { AssignmentData } from '../common';
+import { ImagePreview } from './imagePreview';
 
 
 interface AssignmentProps {
@@ -18,7 +19,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
     {questions, module, seed}
 ) => {
     const [answers, setAnswers] = useState({});
-    const [screenshot, setScreenshot] = useState<string>();
+    const [screenshot, setScreenshot] = useState<string[]>([]);
     const [name, setName] = useState<string>('');
     const [uni, setUni] = useState<string>('');
     const [uniError, setUniError] = useState<boolean>(false);
@@ -71,7 +72,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
         }).then(canvas => {
 
             const dataURL = canvas.toDataURL('image/png');
-            setScreenshot(dataURL);
+            setScreenshot([...screenshot, dataURL]);
         });
     };
 
@@ -99,7 +100,8 @@ export const Assignment: React.FC<AssignmentProps>  = (
     };
 
     const pdfButton =
-    (module === 'DescriptiveStatistics' && !screenshot) ? true : false;
+        (module === 'DescriptiveStatistics' && screenshot.length === 0) ?
+            true : false;
 
     useEffect(() => {
         setLocalStorage(module);
@@ -171,11 +173,25 @@ export const Assignment: React.FC<AssignmentProps>  = (
                         </div>
                     </div>
                     {(module === 'DescriptiveStatistics') && (
-                        <button
-                            onClick={() => void generateScreenshot()}
-                            className={'btn btn-primary btn-statify me-2'}>
-                                                    Screenshot Graph
-                        </button>
+                        <>
+                            <ImagePreview {...{screenshot, setScreenshot}} />
+                            {
+                                screenshot.length > 0 ?
+                                    <p className='text-primary'>
+                                        Screenshots generated
+                                        : {screenshot.length}
+                                    </p> :
+                                    <p className='text-warning'>
+                                        Must have at least 1 screenshot before
+                                         the assignment can be created.
+                                    </p>
+                            }
+                            <button
+                                onClick={() => void generateScreenshot()}
+                                className={'btn btn-primary btn-statify me-2'}>
+                                                        Screenshot Graph
+                            </button>
+                        </>
                     )}
                     <button
                         disabled={pdfButton}

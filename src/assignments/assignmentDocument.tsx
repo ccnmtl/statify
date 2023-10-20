@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 interface AssignmentDocumentProps {
     questions: string[];
     answers: object;
-    screenshot: string | null;
+    screenshot: string[] | null;
     uni: string;
     name: string;
     module: string;
@@ -139,14 +139,17 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
                     {module.replace(/([A-Z])/g, ' $1').trim()}
                 </Text>
                 {createQA}
-                {(screenshot) && (
+                {(screenshot.length > 0) && (
                     <>
                         <Text style={styles.answerTitle} break>
                         Evidence (Screenshot)
                         </Text>
-                        <Image
-                            style={styles.image}
-                            source={screenshot} />
+                        {screenshot.map((image, key) =>
+                            <Image
+                                key={key}
+                                style={styles.image}
+                                source={image} />
+                        )}
                     </>
                 )}
             </Page>
