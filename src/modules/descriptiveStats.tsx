@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { GraphProps, InstructionData, Store, TabData } from '../common';
+import { GraphProps, InstructionData, Store, TabData,
+    createSeedString } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -62,12 +63,13 @@ const objectives = [
 ];
 
 export const DescriptiveStats: React.FC<GraphProps> = ({
-    store, setStore, genres
+    genres, setStore
 }) => {
     const [activeTab, setActiveTab] = useState<number>(0);
+    const [seed, setSeed] = useState<string>(createSeedString);
 
     useEffect(() => {
-        setStore({} as Store);
+        setStore({seed} as Store);
     }, []);
 
     return (
@@ -107,13 +109,15 @@ export const DescriptiveStats: React.FC<GraphProps> = ({
                             activeTab={activeTab}
                             store={{} as Store}
                             setStore={null}
+                            seed={seed}
+                            setSeed={setSeed}
                             genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'DescriptiveStatistics'}
-                            seed={store.seed}
+                            seed={seed}
                         />
                     </div>
                 </div>

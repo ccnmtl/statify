@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { CumulativeSampleMean } from './sampleMeanLine';
 import { Histogram } from './histogram';
-import {
-    toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
-    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2, Genres, createSeedString
-} from '../common';
+import { toTitleCase, InstructionData, PRIMARY, SECONDARY, Store,
+    AUDIO_DEFAULT, HIGHLIGHT_1, HIGHLIGHT_2, Genres } from '../common';
 import seedrandom from 'seedrandom'; // https://github.com/davidbau/seedrandom
 import { EstimatedDistribution } from './estimatedSampleDistribution';
 import { GenrePicker } from './genrePicker';
@@ -20,8 +18,10 @@ interface GraphFormProps {
     graphTypes: number[];
     activeTab: number;
     instructions: InstructionData[];
-    store: Store;
+    seed: string;
+    setSeed: React.Dispatch<React.SetStateAction<string>>;
     setStore: React.Dispatch<React.SetStateAction<Store>> | null;
+    store: Store;
     genres: Genres | null;
 }
 
@@ -34,7 +34,7 @@ export const GraphForm: React.FC<GraphFormProps> = (
     {
         genre1Field, genre2Field, audioFeatureField, dataPointsField,
         graphTypes, instructions, activeTab, seedField, defaultPoints,
-        store, setStore, genres
+        store, setStore, seed, setSeed, genres
     }:
     GraphFormProps) => {
 
@@ -57,8 +57,6 @@ export const GraphForm: React.FC<GraphFormProps> = (
     const [oldData2, setOldData2] = useState(data1);
     const [prevData, setPrevData] = useState<[number, number][][]>([]);
     const [prevData2, setPrevData2] = useState<[number, number][][]>([]);
-    const [seed, setSeed] = useState<string>(
-        store.seed || createSeedString());
 
     useEffect(() => {
         if (setStore) {

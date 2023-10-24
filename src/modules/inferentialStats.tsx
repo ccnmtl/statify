@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TabNav } from '../tabNavigation';
-import { TabData, InstructionData, Store, GraphProps } from '../common';
+import { TabData, InstructionData, Store, GraphProps,
+    createSeedString } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -86,10 +87,11 @@ const objectives = [
 ];
 
 export const InferentialStats: React.FC<GraphProps> = ({
-    store, setStore, genres
+    setStore, genres
 }) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([1, 5]);
+    const [seed, setSeed] = useState<string>(createSeedString());
 
     useEffect(() => {
         if (activeTab === 2) {
@@ -100,7 +102,7 @@ export const InferentialStats: React.FC<GraphProps> = ({
     }, [activeTab]);
 
     useEffect(() => {
-        setStore({} as Store);
+        setStore({seed} as Store);
     }, []);
 
     return (
@@ -137,13 +139,15 @@ export const InferentialStats: React.FC<GraphProps> = ({
                             activeTab={activeTab}
                             store={{} as Store}
                             setStore={null}
+                            seed={seed}
+                            setSeed={setSeed}
                             genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'InferentialStatistics'}
-                            seed={store.seed}
+                            seed={seed}
                         />
                     </div>
                 </div>

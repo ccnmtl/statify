@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import {
-    GraphProps, InstructionData, TabData
-} from '../common';
+import { GraphProps, InstructionData, TabData } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -81,7 +79,9 @@ const objectives = [
 export const ConfidenceIntervals: React.FC<GraphProps> = (
     {store, setStore, genres}
 ) => {
+
     const [activeTab, setActiveTab] = useState<number>(0);
+    const [seed, setSeed] = useState<string>(store.seed);
 
     return (
         <>
@@ -118,13 +118,15 @@ export const ConfidenceIntervals: React.FC<GraphProps> = (
                             activeTab={activeTab}
                             store={store}
                             setStore={setStore}
+                            seed={seed}
+                            setSeed={setSeed}
                             genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'ConfidenceIntervals'}
-                            seed={store.seed}
+                            seed={seed}
                         />
                     </div>
                 </div>
