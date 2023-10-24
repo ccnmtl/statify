@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BinData, graphBins, PRIMARY, SECONDARY, GRAPH_BG,
-    FONT_SIZE, HIGHLIGHT_1, HIGHLIGHT_2, AUDIO_DEFAULT } from '../common';
+import {
+    BinData, graphBins, PRIMARY, SECONDARY, GRAPH_BG, FONT_SIZE, HIGHLIGHT_1,
+    HIGHLIGHT_2, AUDIO_DEFAULT, LineProps, LineSetProps, StdProps
+} from '../common';
 import { cumulativeMeanFunc } from './utils';
 import { extent, line, axisBottom, axisLeft } from 'd3';
 import { scaleLinear } from 'd3-scale';
@@ -10,23 +12,16 @@ import { select } from 'd3-selection';
 const MARGIN = 50;
 
 interface CumulativeSampleMeanProps {
-    audioFeature: string | null;
-    data1: number[];
-    data2: number[] | null;
-    oldData: number[];
-    setOldData: React.Dispatch<React.SetStateAction<number[]>>;
-    oldData2: number[] | null;
-    setOldData2: React.Dispatch<React.SetStateAction<number[]>>;
-    prevData: [number, number][][];
-    setPrevData: React.Dispatch<React.SetStateAction<[number, number][][]>>
-    prevData2: [number, number][][];
-    setPrevData2: React.Dispatch<React.SetStateAction<[number, number][][]>>
+    stdProps: StdProps;
+    lineProps: LineProps;
+    lineSetProps: LineSetProps;
 }
 
-export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
-    { data1, data2, audioFeature=AUDIO_DEFAULT, oldData, oldData2, setOldData,
-        setOldData2, prevData, prevData2, setPrevData, setPrevData2}
-) => {
+export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = ({
+    stdProps: {data1, data2, audioFeature=AUDIO_DEFAULT},
+    lineProps: {oldData, oldData2, prevData, prevData2},
+    lineSetProps: {setOldData, setOldData2, setPrevData, setPrevData2}
+}) => {
     const svgRef = useRef(null);
 
     const [width, setWidth]  = useState<number>();
@@ -73,7 +68,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                 .attr('height', HEIGHT-MARGIN)
                 .attr('width', gWidth + 20 - MARGIN)
                 .attr('x', MARGIN)
-                .attr('y', y(binData.max)));
+                .attr('y', MARGIN));
 
         // Construct the Y-axis
         svgGraph.append('g')
@@ -108,19 +103,19 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
         //Old lines of 100 pts
         if(cm.length === 100 && data1 !== oldData) {
-            setPrevData([ ...prevData, cm ]);
+            setPrevData([ ...prevData, cm]);
             setOldData(data1);
         }
 
         //Old lines
         let opacity1 = 0.36;
         svgGraph.append('g').attr('id', 'genre1old')
-            .call((g) =>  prevData.forEach((oldData) => {
+            .call((g) =>  prevData.forEach((prev) => {
                 opacity1 = (opacity1 - 0.01);
 
                 return g.append('path')
-                    .datum(oldData)
-                    .attr('d', lnMkr(oldData))
+                    .datum(prev)
+                    .attr('d', lnMkr(prev))
                     .attr('fill', 'none')
                     .attr('stroke', PRIMARY)
                     .attr('opacity', opacity1)
@@ -202,7 +197,7 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
                     .style('opacity', 0);
             });
 
-        if(data2.length > 0) {
+        if(data2) {
             const cumulativeMean2 = cumulativeMeanFunc(data2);
             const cm2 = cumulativeMean2.map(
                 (c) => [x(c[1]), y(c[0])] as [number, number]);
@@ -217,12 +212,12 @@ export const CumulativeSampleMean: React.FC<CumulativeSampleMeanProps>  = (
 
             let opacity2 = 0.36;
             svgGraph.append('g').attr('id', 'genre2old')
-                .call((g) =>  prevData2.forEach((oldData) => {
-                    opacity2 = (opacity1 - 0.01);
+                .call((g) =>  prevData2.forEach((prev2) => {
+                    opacity2 = (opacity2 - 0.01);
 
                     return g.append('path')
-                        .datum(oldData)
-                        .attr('d', lnMkr2(oldData))
+                        .datum(prev2)
+                        .attr('d', lnMkr2(prev2))
                         .attr('fill', 'none')
                         .attr('stroke', SECONDARY)
                         .attr('opacity', opacity2)

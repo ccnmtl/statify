@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { GraphProps, InstructionData, Store, TabData,
+import { AUDIO_DEFAULT, FieldProps, GraphProps, InstructionData, LineProps,
+    LineSetProps, SetStdProps, StdProps, Store, TabData,
     createSeedString } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
 import { ObjectiveModal } from '../objectiveModal';
+import { GraphDisplay } from '../graphs/graphDisplay';
+import seedrandom from 'seedrandom';
 
 const descriptiveTabs: TabData[] = [
     {
@@ -66,10 +69,14 @@ export const DescriptiveStats: React.FC<GraphProps> = ({
     genres, setStore
 }) => {
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [seed, setSeed] = useState<string>(createSeedString);
+    const [data1, setData1] = useState<number[]>([]);
+    const [genre1, setGenre1] = useState<string>();
+    const [prng, setPRNG] = useState<seedrandom.PRNG>(
+        () => seedrandom());
+    const [seed, setSeed] = useState<string>(createSeedString());
 
     useEffect(() => {
-        setStore({seed} as Store);
+        setStore({seed: createSeedString()} as Store);
     }, []);
 
     return (
@@ -96,29 +103,32 @@ export const DescriptiveStats: React.FC<GraphProps> = ({
             </section>
             <section className={'mt-4 graph'}>
                 <div className={'container-fluid'}>
-                    <div className={'row'}>
+                    <div className={'d-flex flex-row-reverse'}>
                         <GraphForm
-                            genre1Field={true}
-                            genre2Field={false}
-                            audioFeatureField={false}
-                            dataPointsField={false}
-                            seedField={true}
-                            defaultPoints={1}
-                            graphTypes={[1]}
-                            instructions={instructions}
-                            activeTab={activeTab}
-                            store={{} as Store}
-                            setStore={null}
-                            seed={seed}
-                            setSeed={setSeed}
-                            genres={genres} />
-                    </div>
-                    <div className='row'>
-                        <Assignment
-                            questions={questions}
-                            module={'DescriptiveStatistics'}
-                            seed={seed}
-                        />
+                            {...{activeTab, instructions}}
+                            fieldProps={{genre1Field: true,
+                                seedField: true} as FieldProps}
+                            graphProps={{
+                                genres, store: {} as Store} as GraphProps}
+                            lineProps={{} as LineProps}
+                            lineSetProps={{} as LineSetProps}
+                            setStdProps={{setData1,
+                                setGenre1, setPRNG, setSeed} as SetStdProps}
+                            stdProps={{audioFeature: AUDIO_DEFAULT, data1,
+                                dataPoints: 1, genre1, prng,
+                                seed} as StdProps} />
+                        <div className="col-md-9">
+                            <GraphDisplay
+                                stdProps= {{ audioFeature: AUDIO_DEFAULT,
+                                    data1, genre1} as StdProps}
+                                graphTypes={[1]}
+                                lineProps={{} as LineProps}
+                                lineSetProps={{} as LineSetProps} />
+                            <Assignment
+                                {...{questions, seed}}
+                                module={'DescriptiveStatistics'}
+                            />
+                        </div>
                     </div>
                 </div>
             </section>

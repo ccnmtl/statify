@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { TabNav } from '../tabNavigation';
-import { TabData, InstructionData, Store, GraphProps,
+import { TabData, InstructionData, Store, GraphProps, LineProps,
+    LineSetProps, StdProps, SetStdProps, FieldProps,
     createSeedString } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
 import { ObjectiveModal } from '../objectiveModal';
+import { GraphDisplay } from '../graphs/graphDisplay';
+import seedrandom from 'seedrandom';
 
 const inferentialTabs: TabData[] = [
     {title: 'Part 2.1', info:
@@ -90,7 +93,15 @@ export const InferentialStats: React.FC<GraphProps> = ({
     setStore, genres
 }) => {
     const [activeTab, setActiveTab] = useState<number>(0);
+    const [audioFeature, setAudioFeature] = useState<string>();
+    const [data1, setData1] = useState<number[]>([]);
+    const [meanData1, setMeanData1] = useState<number[]>([]);
+    const [oldData, setOldData] = useState<number[]>([]);
+    const [prevData, setPrevData] = useState<[number, number][][]>([]);
+    const [dataPoints, setDataPoints] = useState<number>();
+    const [genre1, setGenre1] = useState<string>();
     const [graphTypes, setGraphTypes] = useState([1, 5]);
+    const [prng, setPRNG] = useState<seedrandom.PRNG>(() => seedrandom());
     const [seed, setSeed] = useState<string>(createSeedString());
 
     useEffect(() => {
@@ -102,7 +113,7 @@ export const InferentialStats: React.FC<GraphProps> = ({
     }, [activeTab]);
 
     useEffect(() => {
-        setStore({seed} as Store);
+        setStore({seed: createSeedString()} as Store);
     }, []);
 
     return (
@@ -126,29 +137,35 @@ export const InferentialStats: React.FC<GraphProps> = ({
             </section>
             <section className={'mt-4 graph'}>
                 <div className={'container-fluid'}>
-                    <div className={'row'}>
+                    <div className={'d-flex flex-row-reverse'}>
                         <GraphForm
-                            genre1Field={true}
-                            genre2Field={false}
-                            audioFeatureField={false}
-                            dataPointsField={true}
-                            seedField={true}
-                            defaultPoints={0}
-                            graphTypes={graphTypes}
-                            instructions={instructions}
-                            activeTab={activeTab}
-                            store={{} as Store}
-                            setStore={null}
-                            seed={seed}
-                            setSeed={setSeed}
-                            genres={genres} />
-                    </div>
-                    <div className='row'>
-                        <Assignment
-                            questions={questions}
-                            module={'InferentialStatistics'}
-                            seed={seed}
-                        />
+                            {...{activeTab, instructions}}
+                            lineProps={{} as LineProps}
+                            lineSetProps={{setOldData,
+                                setPrevData} as LineSetProps}
+                            fieldProps={{dataPointsField: true,
+                                genre1Field: true,
+                                seedField: true} as FieldProps}
+                            graphProps={{
+                                genres, store: {} as Store} as GraphProps}
+                            stdProps={{audioFeature, data1, dataPoints,
+                                genre1, meanData1, prng, seed} as StdProps}
+                            setStdProps={{setAudioFeature, setData1,
+                                setDataPoints, setGenre1, setMeanData1,
+                                setPRNG, setSeed} as SetStdProps} />
+                        <div className="col-md-9">
+                            <GraphDisplay
+                                {...{graphTypes}}
+                                stdProps={{audioFeature, data1,
+                                    genre1, meanData1} as StdProps}
+                                lineProps={{oldData, prevData} as LineProps}
+                                lineSetProps={{setOldData,
+                                    setPrevData} as LineSetProps} />
+                            <Assignment
+                                {...{questions, seed}}
+                                module={'InferentialStatistics'}
+                            />
+                        </div>
                     </div>
                 </div>
             </section>

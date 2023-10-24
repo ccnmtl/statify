@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
     BinData, graphBins, toTitleCase, SECONDARY, GRAPH_BG, HIGHLIGHT_2,
-    AUDIO_DEFAULT, OVERLAP, HIGHLIGHT_OVERLAP,
+    AUDIO_DEFAULT, OVERLAP, HIGHLIGHT_OVERLAP, StdProps,
 } from '../common';
 import { axisBottom, axisLeft } from 'd3';
 import { bin, Bin } from 'd3-array';
@@ -22,17 +22,13 @@ const LEGEND_CIRCLE_STROKE = 1.5;
 interface HistogramProps {
     color: string;
     highlight: string;
-    data1: number[];
-    data2: number[] | null;
-    genre1: string;
-    genre2: string | null;
-    audioFeature: string | null;
+    stdProps: StdProps;
     n: number | null;
 }
 
 export const Histogram: React.FC<HistogramProps>  = (
-    {color, highlight, data1, data2, genre1, genre2,
-        audioFeature=AUDIO_DEFAULT, n}
+    {color, highlight, stdProps: {data1, data2, genre1, genre2,
+        audioFeature=AUDIO_DEFAULT}, n}
 ) => {
     const svgRef = useRef(null);
     const whichHisto = n ? 'DistributionHistogram' : 'SampleDataHistogram';
@@ -204,7 +200,7 @@ export const Histogram: React.FC<HistogramProps>  = (
                 .attr('fill', 'white')
                 .attr('text-anchor', 'center')
                 .text(
-                    audioFeature === AUDIO_DEFAULT ?
+                    !audioFeature || audioFeature === 'tempo' ?
                         'Tempo, Beats Per Minute (BPM)' :
                         toTitleCase(audioFeature)
                 ))
@@ -239,7 +235,7 @@ export const Histogram: React.FC<HistogramProps>  = (
                                 'Sampling Distribution When N = 100');});
 
         // Generate Legend
-        if (data2) {
+        if (genre1) {
             svgGraph.append('g')
                 .attr('id', 'legend')
                 .attr('transform',
@@ -257,21 +253,22 @@ export const Histogram: React.FC<HistogramProps>  = (
                         .attr('text-anchor', 'end')
                         .attr('x', -LEGEND_GAP)
                         .attr('y', LEGEND_TEXT_DROP)
-                        .text(`${toTitleCase(genre1)}`)))
-                .call((g) => g.append('g')
-                    .attr('transform',
-                        `translate(${-LEGEND_GAP}, ${30})`)
-                    .call((g) => g.append('circle')
-                        .attr('stroke', 'black')
-                        .attr('stroke-width', LEGEND_CIRCLE_STROKE)
-                        .attr('fill', SECONDARY)
-                        .attr('r', LEGEND_R))
-                    .call((g) => g.append('text')
-                        .attr('fill', 'white')
-                        .attr('text-anchor', 'end')
-                        .attr('x', -LEGEND_GAP)
-                        .attr('y', LEGEND_TEXT_DROP)
-                        .text(`${toTitleCase(genre2)}`)))
+                        .text(`${toTitleCase(genre1 ?? '')}`)))
+                .call((g) => {if (genre2) {
+                    g.append('g')
+                        .attr('transform',
+                            `translate(${-LEGEND_GAP}, ${30})`)
+                        .call((g) => g.append('circle')
+                            .attr('stroke', 'black')
+                            .attr('stroke-width', LEGEND_CIRCLE_STROKE)
+                            .attr('fill', SECONDARY)
+                            .attr('r', LEGEND_R))
+                        .call((g) => g.append('text')
+                            .attr('fill', 'white')
+                            .attr('text-anchor', 'end')
+                            .attr('x', -LEGEND_GAP)
+                            .attr('y', LEGEND_TEXT_DROP)
+                            .text(`${toTitleCase(genre2 ?? '')}`));}})
                 .attr('font-size', FONT_SIZE);
         }
 

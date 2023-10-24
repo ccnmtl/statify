@@ -49,8 +49,33 @@ export interface Genre {
     speechiness: number[];
     tempo: number[];
 }
+
 export interface Genres {
     [genre: string]: Genre;
+}
+
+export interface LineProps {
+    oldData: number[];
+    oldData2: number[] | null;
+    prevData: [number, number][][];
+    prevData2: [number, number][][] | null;
+}
+
+export interface LineSetProps {
+    setOldData: React.Dispatch<React.SetStateAction<number[]>>;
+    setOldData2: React.Dispatch<React.SetStateAction<number[]>> | null;
+    setPrevData:
+        React.Dispatch<React.SetStateAction<[number, number][][]>>;
+    setPrevData2:
+        React.Dispatch<React.SetStateAction<[number, number][][]>> | null;
+}
+
+export interface FieldProps {
+    audioFeatureField: boolean;
+    dataPointsField: boolean;
+    genre1Field: boolean;
+    genre2Field: boolean;
+    seedField: boolean;
 }
 
 export interface Store {
@@ -63,7 +88,35 @@ export interface Store {
     seed: string;
     meanData1: number[];
     meanData2: number[];
+    prevData: [number, number][][];
+    prevData2: [number, number][][];
     prng: seedrandom.PRNG;
+}
+
+export interface StdProps {
+    audioFeature: string;
+    data1: number[];
+    data2: number[];
+    dataPoints: number;
+    genre1: string;
+    genre2: string;
+    meanData1: number[];
+    meanData2: number[];
+    prng: seedrandom.PRNG;
+    seed: string;
+}
+
+export interface SetStdProps {
+    setAudioFeature: React.Dispatch<React.SetStateAction<string>> | null;
+    setData1: React.Dispatch<React.SetStateAction<number[]>>
+    setData2: React.Dispatch<React.SetStateAction<number[]>>
+    setDataPoints: React.Dispatch<React.SetStateAction<number>>
+    setGenre1: React.Dispatch<React.SetStateAction<string>>;
+    setGenre2: React.Dispatch<React.SetStateAction<string>>;
+    setMeanData1: React.Dispatch<React.SetStateAction<number[]>>
+    setMeanData2: React.Dispatch<React.SetStateAction<number[]>>
+    setPRNG: React.Dispatch<React.SetStateAction<seedrandom.PRNG>>
+    setSeed: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface GraphProps {

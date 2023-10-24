@@ -109,60 +109,57 @@ export const Assignment: React.FC<AssignmentProps>  = (
     },[]);
 
     return (
+        <div id='assignment'>
+            <h3>Questions</h3>
+            {questions.map((question, index) => {
+                return (
+                    <div className='px-2' key={index}>
+                        <p>
+                            {index + 1}. {question}
+                        </p>
+                        <Answer
+                            questionId={index}
+                            answers={answers}
+                            setAnswers={setAnswers}
+                            module={module} />
+                    </div>
+                );
+            })}
 
-        <>
-            <div className='col-md-9'>
-                <h3>Questions</h3>
-                {questions.map((question, index) => {
-                    return (
-                        <div key={index}>
-                            <p>
-                                {index + 1}. {question}
-                            </p>
-                            <Answer
-                                questionId={index}
-                                answers={answers}
-                                setAnswers={setAnswers}
-                                module={module} />
+            <div className={'mb-3'}>
+                <div className='row'>
+                    <div className='col-4'>
+                        <div>
+                            <label htmlFor={'name-input'}
+                                className={'form-label'}>
+                                    Name:
+                            </label>
+                            {nameError && (
+                                <span className={'text-danger fs-6 ms-5'}>
+                                    * Required
+                                </span>
+                            )}
                         </div>
-                    );
-                })}
+                        <input type='text'
+                            className='form-control w-100 mb-4'
+                            id='name-input'
+                            placeholder='Name'
+                            onChange={handleName}
+                            defaultValue={name}
+                            name="name" />
+                    </div>
+                    <div className='col-4'>
+                        <div>
+                            <label htmlFor={'uni-input'}
+                                className={'form-label'}>
+                                    Uni:
+                            </label>
+                            {uniError && (
+                                <span className={'text-danger fs-6 ms-5'}>
+                                    * Required
+                                </span>
 
-                <div className={'mb-3'}>
-                    <div className='row'>
-                        <div className='col-4'>
-                            <div>
-                                <label htmlFor={'name-input'}
-                                    className={'form-label'}>
-                                        Name:
-                                </label>
-                                {nameError && (
-                                    <span className={'text-danger fs-6 ms-5'}>
-                                        * Required
-                                    </span>
-                                )}
-                            </div>
-                            <input type='text'
-                                className='form-control w-100 mb-4'
-                                id='name-input'
-                                placeholder='Name'
-                                onChange={handleName}
-                                defaultValue={name}
-                                name="name" />
-                        </div>
-                        <div className='col-4'>
-                            <div>
-                                <label htmlFor={'uni-input'}
-                                    className={'form-label'}>
-                                        Uni:
-                                </label>
-                                {uniError && (
-                                    <span className={'text-danger fs-6 ms-5'}>
-                                        * Required
-                                    </span>
-
-                                )}
-                            </div>
+                            )}
                             <input type='text'
                                 className='form-control w-50 mb-4'
                                 id='uni-input'
@@ -172,36 +169,40 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                 name='uni' />
                         </div>
                     </div>
-                    {(module === 'DescriptiveStatistics') && (
-                        <>
-                            <ImagePreview {...{screenshot, setScreenshot}} />
-                            {
-                                screenshot.length > 0 ?
-                                    <p className='text-primary'>
-                                        Screenshots generated
-                                        : {screenshot.length}
-                                    </p> :
-                                    <p className='text-warning'>
-                                        Must have at least 1 screenshot before
-                                         the assignment can be created.
-                                    </p>
-                            }
-                            <button
-                                onClick={() => void generateScreenshot()}
-                                className={'btn btn-primary btn-statify me-2'}>
-                                                        Screenshot Graph
-                            </button>
-                        </>
-                    )}
-                    <button
-                        disabled={pdfButton}
-                        onClick={() => void generatePdfDocument()}
-                        className={'btn btn-primary btn-statify'}>
-                                Create Assignment
-                    </button>
+                    <div className='mx-2'>
+                        {(module === 'DescriptiveStatistics') && (
+                            <>
+                                <ImagePreview {...{screenshot,
+                                    setScreenshot}} />
+                                {
+                                    screenshot.length > 0 ?
+                                        <p className='text-primary'>
+                                            Screenshots generated
+                                            : {screenshot.length}
+                                        </p> :
+                                        <p className='text-warning'>
+                                            Must have at least 1 screenshot
+                                                before the assignment can be
+                                                created.
+                                        </p>
+                                }
+                                <button
+                                    onClick={() => void generateScreenshot()}
+                                    className={'btn btn-primary btn-statify ' +
+                                        'me-2 col-4'}>
+                                    Screenshot Graph
+                                </button>
+                            </>
+                        )}
+                        <button
+                            disabled={pdfButton}
+                            onClick={() => void generatePdfDocument()}
+                            className={'btn btn-primary btn-statify col-4'}>
+                                    Create Assignment
+                        </button>
+                    </div>
                 </div>
             </div>
-        </>
-
+        </div>
     );
 };

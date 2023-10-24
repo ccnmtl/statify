@@ -2,12 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import { tTestTwoSample } from 'simple-statistics';
-import {
-    area, axisBottom, axisLeft, deviation, mean, line, curveNatural, ScaleLinear
-} from 'd3';
-import {
-    BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG, AUDIO_DEFAULT
-} from '../common';
+import { area, axisBottom, axisLeft, deviation, mean, line, curveNatural,
+    ScaleLinear } from 'd3';
+import { BinData, graphBins, toTitleCase, PRIMARY, SECONDARY, GRAPH_BG,
+    AUDIO_DEFAULT, StdProps } from '../common';
 
 const FONT_SIZE = 14;
 const MARGIN = 30;
@@ -18,11 +16,7 @@ const Z_97_5 = 1.96; // 97.5th percentile, use negative for 2.5th percentile
 // https://www.statology.org/z-table/
 
 interface EstimatedDistributionProps {
-    data1: number[];
-    data2: number[];
-    genre1: string;
-    genre2: string;
-    audioFeature: string | null;
+    stdProps: StdProps;
     n: number;
 }
 
@@ -43,7 +37,7 @@ export const stdError = function(data:number[], n:number) {
 };
 
 export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
-    {data1, data2, audioFeature=AUDIO_DEFAULT, n}
+    {stdProps: {data1, data2, audioFeature}, n}
 ) => {
     const svgRef = useRef(null);
     const [width, setWidth]  = useState<number>();
@@ -93,6 +87,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                     .filter(f => f > lowerBound && f < upperBound)
                     .map(d => [d, gaussian(d, se, mu, n)]))
                 .attr('fill', color)
+                .attr('opacity', 0.5)
                 .attr('d', fill as number[]))
             .call((g) => g.append('path')
                 .datum(projection
