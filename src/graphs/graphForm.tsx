@@ -110,69 +110,53 @@ export const GraphForm: React.FC<GraphFormProps> = (
                 }
                 setData1([
                     ...getDataPoints(genre1, audioFeature, dataPoints, prng,
-                        genres)
-                ]);
+                        genres)]);
                 if (genre2 !== '') {
                     if (dataPoints === N) {
                         setMeanData2([
                             ...meanData2,
-                            getDataPoints(
-                                genre2,
-                                audioFeature,
-                                N,
-                                prng,
-                                genres
+                            getDataPoints(genre2, audioFeature, N, prng, genres
                             ).reduce((i, sum) => i + sum) / N]);
                     }
                     setData2([
                         ...getDataPoints(
-                            genre2, audioFeature, dataPoints, prng, genres)
-                    ]);
+                            genre2, audioFeature, dataPoints, prng, genres)]);
                 }
             } else if (data1.length + dataPoints >= N) {
                 setMeanData1([
                     ...meanData1,
                     [
                         ...data1,
-                        ...getDataPoints(
-                            genre1,
-                            audioFeature,
-                            N - data1.length,
-                            prng,
-                            genres
-                        )
-                    ].reduce((i, sum) => i + sum) / N]);
+                        ...getDataPoints(genre1, audioFeature, N - data1.length,
+                            prng, genres)].reduce((i, sum) => i + sum) / N]);
                 setData1([
                     ...data1,
-                    ...getDataPoints(
-                        genre1, audioFeature, N - data1.length, prng, genres)
-                ]);
+                    ...getDataPoints(genre1, audioFeature, N - data1.length,
+                        prng, genres)]);
                 if (genre2) {
                     setMeanData2([
                         ...meanData2,
-                        getDataPoints(genre2, audioFeature, N - data1.length,
-                            prng, genres
-                        ).reduce((i, sum) => i + sum) / N]);
+                        [
+                            ...data2,
+                            ...getDataPoints(genre2, audioFeature,
+                                N - data2.length, prng, genres)
+                        ].reduce((i, sum) => i + sum) / N]);
                     setData2([
                         ...data2,
                         ...getDataPoints(
                             genre2, audioFeature, N - data1.length, prng,
-                            genres)
-                    ]);
+                            genres)]);
                 }
             } else {
                 setData1([
                     ...data1,
-                    ...getDataPoints(genre1, audioFeature, dataPoints,
-                        prng, genres)
-                ]);
+                    ...getDataPoints(genre1, audioFeature, dataPoints, prng,
+                        genres)]);
                 if (genre2) {
                     setData2([
                         ...data2,
-                        ...getDataPoints(
-                            genre2, audioFeature, dataPoints, prng,
-                            genres)
-                    ]);
+                        ...getDataPoints(genre2, audioFeature, dataPoints,
+                            prng, genres)]);
                 }
             }
         }
