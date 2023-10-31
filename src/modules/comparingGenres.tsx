@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import {
-    TabData, InstructionData, GraphProps
-} from '../common';
+import { TabData, InstructionData, GraphProps } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -87,8 +85,10 @@ const objectives = [
 export const ComparingGenres: React.FC<GraphProps> = (
     {store, setStore, genres}
 ) => {
+
     const [activeTab, setActiveTab] = useState<number>(0);
     const [graphTypes, setGraphTypes] = useState([5]);
+    const [seed, setSeed] = useState<string>(store.seed);
 
     useEffect(() => {
         if (activeTab === 3) {
@@ -130,13 +130,15 @@ export const ComparingGenres: React.FC<GraphProps> = (
                             activeTab={activeTab}
                             store={store}
                             setStore={setStore}
+                            seed={seed}
+                            setSeed={setSeed}
                             genres={genres} />
                     </div>
                     <div className='row'>
                         <Assignment
                             questions={questions}
                             module={'ComparingGenres'}
-                            seed={store.seed}
+                            seed={seed}
                         />
                     </div>
                 </div>
