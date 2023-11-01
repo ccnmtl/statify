@@ -122,7 +122,8 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
         const height =
                 Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
 
-        const yScale = data1.length > 0  && data2.length > 0 ? Math.max(
+        // Data arrays must contain at least two datapoints
+        const yScale = data1.length > 1  && data2.length > 1 ? Math.max(
             gaussian(mean1, se1, mean1, n),
             gaussian(mean2, se2, mean2, n)):
             20;
@@ -151,18 +152,67 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
 
         // Generate graph body
         svgGraph.append('g')
-            .call((g) => g.append('rect')
-                .attr('fill', GRAPH_BG)
-                .attr('height', height - MARGIN)
-                .attr('width', gWidth - x(binData.min))
-                .attr('x', x(binData.min))
-                .attr('y', MARGIN));
+            .call((g) => {
+                g.append('rect')
+                    .attr('fill', GRAPH_BG)
+                    .attr('height', height - MARGIN)
+                    .attr('width', gWidth - x(binData.min))
+                    .attr('x', x(binData.min))
+                    .attr('y', MARGIN);
+                g.append('text')
+                    .attr('fill', 'white')
+                    .attr('font-size', FONT_SIZE * 1.5)
+                    .attr('text-anchor', gWidth - x(binData.min) < 480 ?
+                        'start':
+                        'middle')
+                    .attr('x', gWidth - x(binData.min) < 480 ?
+                        x(binData.min) :
+                        gWidth/2 + MARGIN)
+                    .attr('y', 18)
+                    .text(gWidth - x(binData.min) < 650 ?
+                        `Est. Sampling Dist.: N = ${n}` :
+                        `Estimated Sampling Distribution when N = ${n}`);});
 
-        if (data1.length > 0 && data2.length > 0){
+        if (data1.length > 99 && data2.length > 99){
             generateCurve(svgGraph, 'curve1', projection, data1, curve,
                 fill, PRIMARY, se1, mean1, x, y);
             generateCurve(svgGraph, 'curve2', projection, data2, curve,
                 fill, SECONDARY, se2, mean2, x, y);
+            // Display the P-value
+            const t = Math.abs(data1.length > 1 ?
+                tTestTwoSample(data1, data2) : 0);
+            const sig = 1/(Math.pow(t, Math.PI)+1);
+            svgGraph.append('g')
+                .attr('id', 'title-header')
+                .call((g) => {
+                    g.append('text')
+                        .attr('x', gWidth - 4)
+                        .attr('y', MARGIN + FONT_SIZE)
+                        .attr('paint-order', 'stroke')
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', 4)
+                        .attr('fill', 'white')
+                        .attr('font-size', FONT_SIZE)
+                        .attr('text-anchor', 'end')
+                        .text(sig < 0.001 ?
+                            'p-value < 0.001' :
+                            `p-value = ${sig.toFixed(3)}`);
+                });
+        } else {
+            svgGraph.append('g')
+                .call((g) => {
+                    g.append('text')
+                        .attr('fill', 'white')
+                        .attr('text-anchor', 'middle')
+                        .attr('x', gWidth/2 + MARGIN)
+                        .attr('y', (height + MARGIN)/2)
+                        .text(() => 'Fewer than 100 datapoints.');
+                    g.append('text')
+                        .attr('fill', 'white')
+                        .attr('text-anchor', 'middle')
+                        .attr('x', gWidth/2 + MARGIN)
+                        .attr('y', (height + MARGIN)/2 + FONT_SIZE * 2)
+                        .text('Click "Submit" to populate the datasets.');});
         }
         // Construct the Y-axis
         svgGraph.append('g')
@@ -196,38 +246,6 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
                         toTitleCase(audioFeature  ?? AUDIO_DEFAULT)
                 ))
             .attr('font-size', FONT_SIZE);
-
-        // Display the P-value
-        const t = Math.abs(tTestTwoSample(data1, data2) ?? 0);
-        const sig = 1/(Math.pow(t, Math.PI)+1);
-        svgGraph.append('g')
-            .attr('id', 'title-header')
-            .call((g) => {
-                g.append('text')
-                    .attr('x', gWidth - 4)
-                    .attr('y', MARGIN + FONT_SIZE)
-                    .attr('paint-order', 'stroke')
-                    .attr('stroke', 'black')
-                    .attr('stroke-width', 4)
-                    .attr('fill', 'white')
-                    .attr('font-size', FONT_SIZE)
-                    .attr('text-anchor', 'end')
-                    .text(sig < 0.001 ?
-                        'p-value < 0.001' :
-                        `p-value = ${sig.toFixed(3)}`);
-                g.append('text')
-                    .attr('fill', 'white')
-                    .attr('font-size', FONT_SIZE * 1.5)
-                    .attr('text-anchor', gWidth - x(binData.min) < 480 ?
-                        'start':
-                        'middle')
-                    .attr('x', gWidth - x(binData.min) < 480 ?
-                        x(binData.min) :
-                        gWidth/2 + MARGIN)
-                    .attr('y', 18)
-                    .text(gWidth - x(binData.min) < 650 ?
-                        `Est. Sampling Dist.: N = ${n}` :
-                        `Estimated Sampling Distribution when N = ${n}`);});
 
     }, [data1, audioFeature, width]);
 
