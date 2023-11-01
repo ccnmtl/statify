@@ -55,7 +55,7 @@ export const Answer: React.FC<AnswerProps> = (
 
     return (
         <textarea
-            className={'form-control mb-3 mx-3'}
+            className={'form-control mb-3'}
             id={`answer-${module + questionId.toString()}`}
             name={'answer'}
             onChange={handleAnswers}

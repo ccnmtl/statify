@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { GraphProps, InstructionData, TabData } from '../common';
+import { FieldProps, GraphProps, InstructionData, LineProps, LineSetProps,
+    SetStdProps, StdProps, TabData, createSeedString } from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
 import { ObjectiveModal } from '../objectiveModal';
+import { GraphDisplay } from '../graphs/graphDisplay';
+import seedrandom from 'seedrandom';
 
 const confidenceTabs: TabData[] = [
     {title: 'Part 4.1',
@@ -76,12 +79,26 @@ const objectives = [
         'tests.'
 ];
 
-export const ConfidenceIntervals: React.FC<GraphProps> = (
-    {store, setStore, genres}
-) => {
-
+export const ConfidenceIntervals: React.FC<GraphProps> = (graphProps) => {
+    const store = graphProps.store;
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [seed, setSeed] = useState<string>(store.seed);
+    const [audioFeature, setAudioFeature] =
+        useState<string>(store.audioFeature);
+    const [data1, setData1] = useState<number[]>(store.data1 ?? []);
+    const [data2, setData2] = useState<number[]>(store.data2 ?? []);
+    const [dataPoints, setDataPoints] = useState<number>(100);
+    const [meanData1, setMeanData1] = useState<number[]>(store.meanData1 ?? []);
+    const [meanData2, setMeanData2] = useState<number[]>(store.meanData2 ?? []);
+    const [genre1, setGenre1] = useState<string>(store.genre1);
+    const [genre2, setGenre2] = useState<string>(store.genre2);
+    const [prevData, setPrevData] =
+        useState<[number, number][][]>(store.prevData ?? []);
+    const [prevData2, setPrevData2] =
+        useState<[number, number][][]>(store.prevData2 ?? []);
+    const [prng, setPRNG] = useState<seedrandom.PRNG>(
+        () => store.prng ?? seedrandom(store.seed));
+    const [seed, setSeed] = useState<string>(
+        store.seed ?? createSeedString());
 
     return (
         <>
@@ -105,29 +122,34 @@ export const ConfidenceIntervals: React.FC<GraphProps> = (
             </section>
             <section className={'mt-4 graph'}>
                 <div className={'container-fluid'}>
-                    <div className={'row'}>
+                    <div className={'d-flex flex-row-reverse'}>
                         <GraphForm
-                            genre1Field={true}
-                            genre2Field={true}
-                            audioFeatureField={true}
-                            dataPointsField={false}
-                            seedField={true}
-                            defaultPoints={100}
-                            graphTypes={[1, 2, 6]}
-                            instructions={instructions}
-                            activeTab={activeTab}
-                            store={store}
-                            setStore={setStore}
-                            seed={seed}
-                            setSeed={setSeed}
-                            genres={genres} />
-                    </div>
-                    <div className='row'>
-                        <Assignment
-                            questions={questions}
-                            module={'ConfidenceIntervals'}
-                            seed={seed}
-                        />
+                            {...{activeTab, graphProps, instructions}}
+                            lineProps={{prevData, prevData2} as LineProps}
+                            lineSetProps={{setPrevData,
+                                setPrevData2} as LineSetProps}
+                            fieldProps={{audioFeatureField: true,
+                                genre1Field: true, genre2Field: true,
+                                seedField: true} as FieldProps}
+                            stdProps={{audioFeature, data1, data2, dataPoints,
+                                genre1, genre2, meanData1, meanData2, prng,
+                                seed} as StdProps}
+                            setStdProps={{setAudioFeature, setData1, setData2,
+                                setDataPoints, setGenre1, setGenre2,
+                                setMeanData1, setMeanData2, setPRNG,
+                                setSeed} as SetStdProps} />
+                        <div className="col-md-9">
+                            <GraphDisplay
+                                graphTypes={[1, 2, 6]}
+                                stdProps={{audioFeature, data1, data2, genre1,
+                                    genre2} as StdProps}
+                                lineProps={{} as LineProps}
+                                lineSetProps={{} as LineSetProps} />
+                            <Assignment
+                                {...{questions, seed}}
+                                module={'ConfidenceIntervals'}
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
