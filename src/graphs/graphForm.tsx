@@ -65,7 +65,7 @@ export const GraphForm: React.FC<GraphFormProps> = ({
     const reset = function() {
         clearData();
         if (dataPointsField) {
-            setDataPoints(0);
+            setDataPoints(null);
         }
         setGenre1('');
         if (genre2) {
@@ -166,14 +166,18 @@ export const GraphForm: React.FC<GraphFormProps> = ({
     const handleAudioFeatureSelect = (
         evt: React.ChangeEvent<HTMLSelectElement>): void =>
     {
-        setAudioFeature(evt.target.value);
-        clearData();
+        if (evt.target.value !== '') {
+            setAudioFeature(evt.target.value);
+            clearData();
+        }
     };
 
     const handleDataPointsSelect = (
         evt: React.ChangeEvent<HTMLSelectElement>): void =>
     {
-        setDataPoints(Number(evt.target.value));
+        if (evt.target.value !== '') {
+            setDataPoints(Number(evt.target.value));
+        }
     };
 
     const handleSeed = (
