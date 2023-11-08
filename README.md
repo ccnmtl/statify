@@ -1,8 +1,6 @@
 # Statify
 [![Actions Status](https://github.com/ccnmtl/statify/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/statify/actions)
 
-Logic Learner is an online learning tool that helps computer science, engineering, and mathematics students improve their fluency and problem solving process in writing proofs for propositional logic.
-
 
 ## Configuration
 
