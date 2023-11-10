@@ -104,13 +104,15 @@ export const ComparingGenres: React.FC<GraphProps> = (graphProps) => {
     const [oldData, setOldData] = useState(data1);
     const [oldData2, setOldData2] = useState(data1);
     const [prevData, setPrevData] =
-        useState<[number, number][][]>(store.prevData ?? []);
+        useState<number[][]>(store.prevData ?? []);
     const [prevData2, setPrevData2] =
-        useState<[number, number][][]>(store.prevData2 ?? []);
+        useState<number[][]>(store.prevData2 ?? []);
     const [seed, setSeed] =
         useState<string>(store.seed ?? createSeedString());
     const [prng, setPRNG] = useState<seedrandom.PRNG>(
         () => store.prng ?? seedrandom(store.seed));
+    const [graphMin, setGraphMin] = useState<number>(store.min);
+    const [graphMax, setGraphMax] = useState<number>(store.max);
 
     useEffect(() => {
         if (activeTab === 3) {
@@ -155,7 +157,12 @@ export const ComparingGenres: React.FC<GraphProps> = (graphProps) => {
                             setStdProps={{setAudioFeature, setData1, setData2,
                                 setDataPoints, setGenre1, setGenre2,
                                 setMeanData1, setMeanData2, setPRNG,
-                                setSeed} as SetStdProps} />
+                                setSeed} as SetStdProps}
+                            graphRange={{
+                                min: graphMin,
+                                max: graphMax,
+                                setMin: setGraphMin,
+                                setMax: setGraphMax}} />
                         <div className="col-md-9">
                             <GraphDisplay
                                 {...{graphTypes}}
@@ -166,7 +173,13 @@ export const ComparingGenres: React.FC<GraphProps> = (graphProps) => {
                                     prevData2} as LineProps}
                                 lineSetProps={{setOldData, setOldData2,
                                     setPrevData,
-                                    setPrevData2} as LineSetProps} />
+                                    setPrevData2} as LineSetProps}
+                                graphRange={{
+                                    min: graphMin,
+                                    max: graphMax,
+                                    setMin: setGraphMin,
+                                    setMax: setGraphMax
+                                }} />
                             <Assignment
                                 {...{questions, seed}}
                                 module={'ComparingGenres'}

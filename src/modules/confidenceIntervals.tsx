@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { FieldProps, GraphProps, InstructionData, LineProps, LineSetProps,
-    SetStdProps, StdProps, TabData, createSeedString } from '../common';
+import { FieldProps,
+    GraphProps, GraphRange, InstructionData, LineProps, LineSetProps,
+    SetStdProps, StdProps, TabData, createSeedString
+} from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -91,10 +93,9 @@ export const ConfidenceIntervals: React.FC<GraphProps> = (graphProps) => {
     const [meanData2, setMeanData2] = useState<number[]>(store.meanData2 ?? []);
     const [genre1, setGenre1] = useState<string>(store.genre1);
     const [genre2, setGenre2] = useState<string>(store.genre2);
-    const [prevData, setPrevData] =
-        useState<[number, number][][]>(store.prevData ?? []);
+    const [prevData, setPrevData] = useState<number[][]>(store.prevData ?? []);
     const [prevData2, setPrevData2] =
-        useState<[number, number][][]>(store.prevData2 ?? []);
+        useState<number[][]>(store.prevData2 ?? []);
     const [prng, setPRNG] = useState<seedrandom.PRNG>(
         () => store.prng ?? seedrandom(store.seed));
     const [seed, setSeed] = useState<string>(
@@ -137,14 +138,16 @@ export const ConfidenceIntervals: React.FC<GraphProps> = (graphProps) => {
                             setStdProps={{setAudioFeature, setData1, setData2,
                                 setDataPoints, setGenre1, setGenre2,
                                 setMeanData1, setMeanData2, setPRNG,
-                                setSeed} as SetStdProps} />
+                                setSeed} as SetStdProps}
+                            graphRange={{} as GraphRange} />
                         <div className="col-md-9">
                             <GraphDisplay
                                 graphTypes={[1, 2, 6]}
                                 stdProps={{audioFeature, data1, data2, genre1,
                                     genre2} as StdProps}
                                 lineProps={{} as LineProps}
-                                lineSetProps={{} as LineSetProps} />
+                                lineSetProps={{} as LineSetProps}
+                                graphRange={{} as GraphRange} />
                             <Assignment
                                 {...{questions, seed}}
                                 module={'ConfidenceIntervals'}

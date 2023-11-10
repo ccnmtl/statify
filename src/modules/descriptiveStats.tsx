@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { TabNav } from '../tabNavigation';
-import { AUDIO_DEFAULT, FieldProps, GraphProps, InstructionData, LineProps,
+import { AUDIO_DEFAULT, FieldProps,
+    GraphProps, GraphRange, InstructionData, LineProps,
     LineSetProps, SetStdProps, StdProps, Store, TabData,
-    createSeedString } from '../common';
+    createSeedString
+} from '../common';
 import { GraphForm } from '../graphs/graphForm';
 import { Assignment } from '../assignments/assignment';
 import { KeyTermModal } from '../keyTermModal';
@@ -116,14 +118,16 @@ export const DescriptiveStats: React.FC<GraphProps> = ({
                                 setGenre1, setPRNG, setSeed} as SetStdProps}
                             stdProps={{audioFeature: AUDIO_DEFAULT, data1,
                                 dataPoints: 1, genre1, prng,
-                                seed} as StdProps} />
+                                seed} as StdProps}
+                            graphRange={{} as GraphRange} />
                         <div className="col-md-9">
                             <GraphDisplay
                                 stdProps= {{ audioFeature: AUDIO_DEFAULT,
                                     data1, genre1} as StdProps}
                                 graphTypes={[1]}
                                 lineProps={{} as LineProps}
-                                lineSetProps={{} as LineSetProps} />
+                                lineSetProps={{} as LineSetProps}
+                                graphRange={{} as GraphRange} />
                             <Assignment
                                 {...{questions, seed}}
                                 module={'DescriptiveStatistics'}
