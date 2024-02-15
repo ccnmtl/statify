@@ -11,7 +11,7 @@ import { Glossary } from './glossary';
 import { Footer } from './footer';
 import ReactGA from 'react-ga4';
 import { About } from './about';
-import { Store, Genres, createSeedString } from './common';
+import { Store, Genres, createSeedString, failureCallback } from './common';
 import { NotFound } from './notFound';
 
 
@@ -42,11 +42,11 @@ export const App: React.FC = () => {
             page: window.location.pathname + window.location.search
         });
         fetch('https://s3.amazonaws.com/statify.stage.ctl.columbia.edu/public/trackDataByGenre.json')
-            .then(response => response.json())
+            .then(response => response.json(), failureCallback)
             .then(data => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 setGenres(data);
-            })
+            }, failureCallback)
             .catch(error => {
                 console.error('Error fetching JSON data:', error);
             });

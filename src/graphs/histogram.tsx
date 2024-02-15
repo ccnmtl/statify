@@ -79,7 +79,10 @@ export const Histogram: React.FC<HistogramProps>  = (
             })
             .on('mouseout', function(){
                 select(this).attr('fill', color);
-                document.getElementById(id).remove();
+                const details = document.getElementById(id);
+                if (details) {
+                    details.remove();
+                }
             });
     };
 

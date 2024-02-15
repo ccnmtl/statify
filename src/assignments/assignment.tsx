@@ -4,7 +4,7 @@ import { pdf } from '@react-pdf/renderer';
 import { Answer } from './answer';
 import { AssignmentDocument } from './assignmentDocument';
 import html2canvas from 'html2canvas';
-import { AssignmentData } from '../common';
+import { AssignmentData, failureCallback } from '../common';
 import { ImagePreview } from './imagePreview';
 
 
@@ -73,7 +73,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
 
             const dataURL = canvas.toDataURL('image/png');
             setScreenshot([...screenshot, dataURL]);
-        });
+        }, failureCallback);
     };
 
     const setLocalStorage = (module: string) => {
