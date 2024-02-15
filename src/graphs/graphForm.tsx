@@ -292,6 +292,7 @@ export const GraphForm: React.FC<GraphFormProps> = ({
                         </label>
                         <input name='seed' id='seed'
                             type='text'
+                            placeholder='<Empty seed>'
                             className='form-control'
                             defaultValue={seed}
                             onChange={handleSeed}

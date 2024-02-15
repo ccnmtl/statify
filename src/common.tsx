@@ -46,6 +46,10 @@ export function createSeedString() {
         () => Math.floor(Math.random() * 16).toString(16)).join('');
 }
 
+export function failureCallback(error) {
+    console.error(`Error fetching data: ${error}`);
+}
+
 export interface Genre {
     count: number;
     acousticness: number[];
