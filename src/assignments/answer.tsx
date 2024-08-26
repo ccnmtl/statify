@@ -59,7 +59,6 @@ export const Answer: React.FC<AnswerProps> = (
             id={`answer-${module + questionId.toString()}`}
             name={'answer'}
             onChange={handleAnswers}
-            // eslint-disable-next-line max-len
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             defaultValue={answers[questionId]}
             placeholder='Enter your answer here'
