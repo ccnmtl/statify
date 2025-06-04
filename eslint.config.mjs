@@ -1,5 +1,5 @@
 import security from 'eslint-plugin-security';
-import cypress from 'eslint-plugin-cypress';
+import pluginCypress from 'eslint-plugin-cypress';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
@@ -26,7 +26,7 @@ security.configs.recommended,
 {
     plugins: {
         security,
-        cypress,
+        pluginCypress,
         '@typescript-eslint': typescriptEslint,
     },
 
@@ -34,8 +34,7 @@ security.configs.recommended,
         globals: {
             ...globals.browser,
             ...globals.amd,
-            ...globals.jquery,
-            ...cypress.environments.globals.globals,
+            ...globals.jquery
         },
     },
 
