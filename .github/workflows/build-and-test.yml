@@ -8,6 +8,6 @@ jobs:
           node-version: [20.x]
     name: Node ${{ matrix.node }} run
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build with Makefile
         run: make all
