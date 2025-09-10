@@ -264,7 +264,7 @@ export const GraphForm: React.FC<GraphFormProps> = ({
                     <div className='mb-3'>
                         <label htmlFor='dataPoints'
                             className='form-label'>
-                        Data Points to Draw
+                            Data Points to Draw
                         </label>
                         <select name='dataPoints' id='dataPoints'
                             className='form-select hover-green'
@@ -288,7 +288,7 @@ export const GraphForm: React.FC<GraphFormProps> = ({
                     <div className='mb-3'>
                         <label htmlFor='seed'
                             className='form-label col-12'>
-                        Seed
+                            Seed
                         </label>
                         <input name='seed' id='seed'
                             type='text'

@@ -17,15 +17,15 @@ export const NotFound: React.FC = () => {
                         <h1>Page not found</h1>
 
                         <p className='fs-4 mt-5'>
-                        We&apos;re sorry. The page you&apos;re looking for
-                        doesn&apos;t exist at this address.
+                            We&apos;re sorry. The page you&apos;re looking for
+                            doesn&apos;t exist at this address.
                         </p>
 
                         <div className='text-center mt-3'>
                             <a href={'/'}
                                 className='btn btn-lg btn-statify'>
                                 <span>
-                                Return to Home page
+                                    Return to Home page
                                 </span>
                             </a>
                         </div>

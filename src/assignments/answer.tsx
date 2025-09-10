@@ -38,7 +38,7 @@ export const Answer: React.FC<AnswerProps> = (
 
                 if(localAnswers[questionId]){
                     setAnswers(() => {
-                        // eslint-disable-next-line max-len
+                        /* eslint-disable-next-line @stylistic/max-len */
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                         answers[questionId] = localAnswers[questionId];
                         return answers;

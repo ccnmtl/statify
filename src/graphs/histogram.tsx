@@ -114,7 +114,7 @@ export const Histogram: React.FC<HistogramProps>  = (
 
         const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
         const height =
-                Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
+            Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
         const activeArea = gWidth - MARGIN - Y_LABEL;
         const bucketPadding = activeArea < 480 ? 1 : 4;
 

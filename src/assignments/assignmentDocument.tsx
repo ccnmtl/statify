@@ -95,7 +95,7 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
         return (
             <>
                 <Text style={styles.questionTitle}>
-                Question {index + 1}
+                    Question {index + 1}
                 </Text>
                 <Text style={styles.question}>
                     {question}
@@ -142,7 +142,7 @@ export const AssignmentDocument: React.FC<AssignmentDocumentProps>  = (
                 {(screenshot.length > 0) && (
                     <>
                         <Text style={styles.answerTitle} break>
-                        Evidence (Screenshot)
+                            Evidence (Screenshot)
                         </Text>
                         {screenshot.map((image, key) =>
                             <Image
