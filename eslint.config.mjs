@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
+import stylistic from '@stylistic/eslint-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +29,7 @@ security.configs.recommended,
         security,
         pluginCypress,
         '@typescript-eslint': typescriptEslint,
+        '@stylistic': stylistic
     },
 
     languageOptions: {
@@ -45,7 +47,12 @@ security.configs.recommended,
     },
 
     rules: {
-        indent: ['error', 4],
+        '@stylistic/indent': ['error', 4],
+        '@stylistic/max-len': [2, {
+            code: 80,
+            tabWidth: 4,
+            ignoreUrls: true,
+        }],
         'linebreak-style': ['error', 'unix'],
 
         'no-unused-vars': ['error', {
@@ -55,13 +62,6 @@ security.configs.recommended,
 
         quotes: ['error', 'single'],
         semi: ['error', 'always'],
-
-        'max-len': [2, {
-            code: 80,
-            tabWidth: 4,
-            ignoreUrls: true,
-        }],
-
         'space-before-function-paren': ['error', 'never'],
         'space-in-parens': ['error', 'never'],
         'no-trailing-spaces': ['error'],

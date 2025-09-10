@@ -132,7 +132,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
                         <div>
                             <label htmlFor={'name-input'}
                                 className={'form-label'}>
-                                    Name:
+                                Name:
                             </label>
                             {nameError && (
                                 <span className={'text-danger fs-6 ms-5'}>
@@ -152,7 +152,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
                         <div>
                             <label htmlFor={'uni-input'}
                                 className={'form-label'}>
-                                    Uni:
+                                Uni:
                             </label>
                             {uniError && (
                                 <span className={'text-danger fs-6 ms-5'}>
@@ -182,8 +182,8 @@ export const Assignment: React.FC<AssignmentProps>  = (
                                         </p> :
                                         <p className='text-warning'>
                                             Must have at least 1 screenshot
-                                                before the assignment can be
-                                                created.
+                                            before the assignment can be
+                                            created.
                                         </p>
                                 }
                                 <button
@@ -198,7 +198,7 @@ export const Assignment: React.FC<AssignmentProps>  = (
                             disabled={pdfButton}
                             onClick={() => void generatePdfDocument()}
                             className={'btn btn-primary btn-statify col-4'}>
-                                    Create Assignment
+                            Create Assignment
                         </button>
                     </div>
                 </div>

@@ -27,7 +27,7 @@ export const Footer: React.FC<PageSelect> = (
                 <li className='nav-item'>
                     <a href={'mailto:ctl-statify@columbia.edu'}
                         className={'nav-link'}>
-                            Contact Us
+                        Contact Us
                     </a>
                 </li>
             </ul>

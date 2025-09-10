@@ -120,7 +120,7 @@ export const EstimatedDistribution: React.FC<EstimatedDistributionProps>  = (
         const se2 = stdError(data2, n), mean2 = mean(data2) ?? 0;
         const gWidth = Number.parseInt(svgGraph.style('width')) - MARGIN;
         const height =
-                Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
+            Number.parseInt(svgGraph.style('height')) - MARGIN * 2;
 
         // Data arrays must contain at least two datapoints
         const yScale = data1.length > 1  && data2.length > 1 ? Math.max(
